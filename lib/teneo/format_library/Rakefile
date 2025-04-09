@@ -1,0 +1,9 @@
+# frozen_string_literal: true
+
+require 'dotenv'
+Dotenv.load
+
+require 'teneo/format_library'
+
+path = File.expand_path(__dir__)
+Dir.glob(File.join(path, 'tasks', '*.rake')).each { |file| import file }

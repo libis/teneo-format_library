@@ -1,0 +1,6 @@
+/db/data/*/**
+!/db/data/*/.keep
+/vendor/**
+!/vendor/.keep
+.env.local
+.rspec_status

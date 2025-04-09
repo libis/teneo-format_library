@@ -1,0 +1,27 @@
+- uid: teneo/ead2
+  name: Encoded Archival Description
+  version: EAD 2002
+  source: Teneo
+  url: https://www.loc.gov/ead/
+  mimetypes:
+    - archive/ead
+  extensions:
+    - ead
+    - xml
+  parent_format: x-fmt/101
+  properties:
+    xsd: https://www.loc.gov/ead/ead.xsd
+- uid: teneo/ead3
+  name: Encoded Archival Description
+  version: EAD 3
+  source: Teneo
+  url: https://www.loc.gov/ead/
+  mimetypes:
+    - archive/ead
+  extensions:
+    - ead
+    - xml
+  parent_format: x-fmt/101
+  properties:
+    xsd: https://www.loc.gov/ead/ead3.xsd
+    

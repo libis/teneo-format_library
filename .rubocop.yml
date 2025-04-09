@@ -1,0 +1,31 @@
+# inherit_from: .rubocop_todo.yml
+
+Style/Documentation:
+  Enabled: false
+
+Lint/RescueException:
+  Enabled: false
+
+Naming/MemoizedInstanceVariableName:
+  Enabled: false
+
+Metrics/AbcSize:
+  Max: 124
+
+Metrics/BlockLength:
+  Max: 208
+
+Metrics/ClassLength:
+  Max: 465
+
+Metrics/CyclomaticComplexity:
+  Max: 41
+
+Metrics/MethodLength:
+  Max: 97
+
+Metrics/PerceivedComplexity:
+  Max: 37
+
+Layout/LineLength:
+  Max: 180

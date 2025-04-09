@@ -1,0 +1,101 @@
+name: teneo
+
+services:
+  db:
+    image: postgres:17-alpine
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    command:
+      - -c
+      - log_hostname=off
+    init: true
+    shm_size: 128mb
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    networks:
+      - db_net
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./db/data/pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
+      interval: 10s
+      timeout: 10s
+      retries: 20
+      start_period: 5s
+
+  db_admin:
+    image: dpage/pgadmin4
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    networks:
+      - db_net
+      - app_net
+    ports:
+      - "7004:5050"
+    environment:
+      TZ: "Europe/Brussels"
+      PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin@libis.be}
+      PGADMIN_DEFAULT_PASSWORD: ${DBADMIN_PWD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: "True"
+      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
+      PGADMIN_CONFIG_LOG_FILE: "'/var/lib/pgadmin/pgadmin4.log'"
+      PGADMIN_LISTEN_ADDRESS: "0.0.0.0"
+      PGADMIN_LISTEN_PORT: "5050"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - ./db/data/admin_data:/var/lib/pgadmin
+      - ./db/data/admin_logs:/var/log/pgadmin
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    restart: unless-stopped
+
+  db_tool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RUBY_VERSION: ${RUBY_VERSION}
+        RUBY_IMAGE: ${RUBY_IMAGE}
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    working_dir: /app
+    command: "irb"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
+      BUNDLE_COMMAND: install
+      GEMS_PATH: /app/vendor/bundle
+      BUNDLE_PATH: /app/vendor/bundle
+      GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
+      DB_ADAPTER: ${DB_ADAPTER}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - db_net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - .:/app
+    restart: no
+    profiles:
+      - db_tool
+
+networks:
+  app_net:
+    driver: bridge
+    attachable: true
+
+  db_net:
+    driver: bridge
+    attachable: true
