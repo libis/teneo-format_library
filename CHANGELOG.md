@@ -1,5 +1,9 @@
 # Changelog
 
+## [v0.1.1](https://github.com/libis/teneo-format_library/tree/v0.1.1) (11/04/2025)
+
+[Full Changelog](https://github.com/libis/teneo-format_library/compare/v0.1.0...v0.1.1)
+
 ## [v0.1.0](https://github.com/libis/teneo-format_library/tree/v0.1.0) (11/04/2025)
 
 [Full Changelog](https://github.com/libis/teneo-format_library/compare/d2d78780dfb6564b66e45db0157364e99e91a7ab...v0.1.0)
