@@ -1,0 +1,30 @@
+- tag: WEB_IMAGE
+  profile: web
+  name: Web safe image formats
+  tags: 
+    - JPG
+    - PNG
+    - GIF
+- tag: WEB_AUDIO
+  profile: web
+  name: Web safe audio formats
+  tags: 
+    - MP3
+    - WAV
+    - MP4A
+    - FLAC
+- tag: WEB_VIDEO
+  profile: web
+  name: Web safe video formats
+  tags: 
+    - MP4V
+    - OGGV
+    - WEBM
+- tag: WEB_TEXT
+  profile: web
+  name: Web safe text formats
+  tags: 
+    - HTML
+    - XML
+    - PLAIN_TEXT
+    - PDF
