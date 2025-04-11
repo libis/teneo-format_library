@@ -120,7 +120,7 @@ The tag linking supports creating infinite loops. It is not considered to be a g
 tag = Teneo::FormatLibrary::Tag['ROOT']
 # => #<Teneo::FormatLibrary::Tag @values={tag: "ROOT", name: "Root tag", profile: "infinite_loop", properties: nil, info: nil}>
 
-tag.tree.all
+tag.tree_ds.all
 # => 
 # [{tag: "ROOT", parent: nil, is_cycle: false, path: "{(ROOT)}"},
 #  {tag: "CHILD1", parent: "ROOT", is_cycle: false, path: "{(ROOT),(CHILD1)}"},

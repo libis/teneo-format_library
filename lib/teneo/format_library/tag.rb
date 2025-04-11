@@ -89,7 +89,7 @@ module Teneo
       # Returns a dataset of the tree of tag descendants
       #
       # @return [Sequel::Dataset] A dataset with {tag:, parent:} pairs.
-      def tree
+      def tree_ds
         db[:tag_tree]
           .with_recursive(
             :tag_tree,
@@ -104,7 +104,7 @@ module Teneo
       #
       # @return [DeepHash] a nested hash structure representing the tag tree.
       def tree_structure
-        tree.each_with_object(DeepHash.new) do |row, hash|
+        tree_ds.each_with_object(DeepHash.new) do |row, hash|
           # Skip the root node
           if row[:parent].nil?
             hash[row[:tag]] ||= DeepHash.new
@@ -115,6 +115,14 @@ module Teneo
         end.clear_empty
       end
 
+      # Builds a nested hash structure from the tag tree with formats.
+      #
+      # This method is similar to {#tree_structure}, but it adds a `formats` key to each
+      # node in the tree, with a hash of associated formats. The hash is keyed by format
+      # UID and has the format as the value. If a node has no associated formats, the
+      # `formats` key is not included.
+      #
+      # @return [DeepHash] a nested hash structure representing the tag tree with formats.
       def tree_formats
         tree_structure.transform do |tag, children|
           r = DeepHash.new
