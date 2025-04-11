@@ -3,16 +3,11 @@
 Sequel.seed(:production, :development, :test) do
   def run
     puts 'Loading Format tags ...'
-    seeds_data_dir = ENV.fetch('SEEDS_DATA_DIR', File.join(File.dirname(__FILE__), 'data'))
-    Teneo::FormatLibrary::Tag.from_yaml_file(file: File.join(seeds_data_dir, 'teneo_tags.yml'),
-                                             key: :tag) do |tag|
-      tag.profile = 'teneo'
-    end
-
-    puts 'Loading Web tags ...'
-    seeds_data_dir = ENV.fetch('SEEDS_DATA_DIR', File.join(File.dirname(__FILE__), 'data'))
-    Teneo::FormatLibrary::Tag.from_yaml_file(file: File.join(seeds_data_dir, 'web_tags.yml'),
-                                             key: :tag) do |tag|
+    seeds_data_dir = ENV.fetch('FORMAT_LIBRARY_SEEDS_TAG_DIR', File.join(File.dirname(__FILE__), 'data', 'tags'))
+    Dir.glob(File.join(seeds_data_dir, '*.yml')).each do |file|
+      puts "... from #{File.basename(file)} ..."
+      # Load the YAML file and create or update the tag in the database
+      Teneo::FormatLibrary::Tag.from_yaml_file(file:, key: :tag)
     end
   end
 end

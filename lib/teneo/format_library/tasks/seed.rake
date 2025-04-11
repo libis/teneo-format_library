@@ -10,7 +10,7 @@ namespace :teneo do
       Sequel.extension :seed
       $LOAD_PATH.unshift File.expand_path('lib', __dir__)
       Sequel::Seed.setup ENV.fetch('RUBY_ENV', 'development').to_sym
-      seeds_dir = ENV.fetch('SEEDS_DIR', File.join(__dir__, '..', '..', '..', '..', 'db', 'seeds'))
+      seeds_dir = ENV.fetch('FORMAT_LIBRARY_SEEDS_DIR', File.join(__dir__, '..', '..', '..', '..', 'db', 'seeds'))
       Sequel::Seeder.apply(::Teneo::FormatLibrary.db, seeds_dir)
     end
   end

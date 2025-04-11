@@ -37,7 +37,8 @@ module Teneo
               .select(Sequel.lit('tags.*')),
             db[:tags].join(:tagged_tags, parent: :tag)
               .join(:format_tags, tag: :tag)
-              .select(Sequel.lit('tags.*'))
+              .select_all(:tags),
+            cycle: { columns: :tag, cycle_value: true, noncycle_value: false }
           )
       end
 

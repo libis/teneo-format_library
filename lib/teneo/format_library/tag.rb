@@ -5,8 +5,6 @@ require_relative 'base'
 module Teneo
   module FormatLibrary
     class Tag < Teneo::FormatLibrary::Base
-      plugin :optimistic_locking
-
       many_to_many :formats, class: Teneo::FormatLibrary::Format, join_table: :tagged_formats, left_key: :tag, right_key: :format
       many_to_many :child_tags, class: self, join_table: :tagged_tags, left_key: :parent, right_key: :tag
       many_to_many :parent_tags, class: self, join_table: :tagged_tags, left_key: :tag, right_key: :parent
@@ -26,13 +24,15 @@ module Teneo
       #
       # @param collected [Set<Teneo::FormatLibrary::Tag>] a set of tags to avoid an infinite loop
       # @return [Hash<String, Teneo::FormatLibrary::Tag>] all descendant tags of this tag
-      def descendants_hash
-        collected = { tag => self }
-        child_tags.each do |child|
-          next if collected.include?(child)
+      def descendants_hash(collected = {})
+        return collected if collected.key?(tag)
 
-          # collected[child.tag] = child
-          collected.merge!(child.descendants_hash)
+        collected[tag] = self
+        child_tags.each do |child|
+          next if collected.key(child.tag)
+
+          # collected.merge!(child.descendants_hash(collected))
+          child.descendants_hash(collected)
         end
         collected
       end
@@ -41,13 +41,15 @@ module Teneo
       #
       # @param collected [Set<Teneo::FormatLibrary::Tag>] a set of tags to avoid an infinite loop
       # @return [Hash<String, Teneo::FormatLibrary::Tag>] all ancestor tags of this tag
-      def ancestors_hash
-        collected = { tag => self }
-        parent_tags.each do |parent|
-          next if collected.include?(parent)
+      def ancestors_hash(collected = {})
+        return collected if collected.key?(tag)
 
-          # collected[parent.tag] = parent
-          collected.merge!(parent.ancestors_hash)
+        collected[tag] = self
+        parent_tags.each do |parent|
+          next if collected.key?(parent.tag)
+
+          # collected.merge!(parent.ancestors_hash(collected))
+          parent.ancestors_hash(collected)
         end
         collected
       end
@@ -63,7 +65,8 @@ module Teneo
             db[:tags]
               .join(:tagged_tags, tag: :tag)
               .join(:child_tags, tag: :parent)
-              .select(Sequel.lit('tags.*'))
+              .select_all(:tags),
+            cycle: { columns: :tag, cycle_value: true, noncycle_value: false }
           )
       end
 
@@ -78,7 +81,8 @@ module Teneo
             db[:tags]
               .join(:tagged_tags, parent: :tag)
               .join(:parent_tags, tag: :tag)
-              .select(Sequel.lit('tags.*'))
+              .select_all(:tags),
+            cycle: { columns: :tag, cycle_value: true, noncycle_value: false }
           )
       end
 
@@ -89,9 +93,10 @@ module Teneo
         db[:tag_tree]
           .with_recursive(
             :tag_tree,
-            db[:tagged_tags].where(parent: tag).select(:tag, :parent),
+            db[:tags].where(tag: tag).select(:tag, Sequel[nil].as(:parent)),
             db[:tagged_tags].join(:tag_tree, tag: :parent)
-              .select(Sequel[:tagged_tags][:tag], Sequel[:tagged_tags][:parent])
+              .select(Sequel[:tagged_tags][:tag], Sequel[:tagged_tags][:parent]),
+            cycle: { columns: :tag, cycle_value: true, noncycle_value: false }
           )
       end
 
@@ -99,16 +104,15 @@ module Teneo
       #
       # @return [DeepHash] a nested hash structure representing the tag tree.
       def tree_structure
-        tree_hash = DeepHash.new
-        tree.each do |row|
-          r = tree_hash.deep_find(row[:parent])
-          if r
-            r[row[:tag]] ||= DeepHash.new
-          else
-            tree_hash[row[:parent]] = DeepHash[row[:tag], DeepHash.new]
+        tree.each_with_object(DeepHash.new) do |row, hash|
+          # Skip the root node
+          if row[:parent].nil?
+            hash[row[:tag]] ||= DeepHash.new
+            next
           end
-        end
-        tree_hash.clear_empty
+          *path, node = row[:path].gsub(/[{}()]/, '').split(',')
+          hash.dig(*path)[node] ||= DeepHash.new
+        end.clear_empty
       end
 
       def tree_formats
@@ -146,62 +150,57 @@ module Teneo
         children = data.delete(:children)
         uids = data.delete(:uids)
         tags = data.delete(:tags)
-        super data:, key: do |tag|
-          block.call(tag) if block_given?
-          children&.each do |child|
-            t = Teneo::FormatLibrary::Tag.from_hash(data: child, key: key, &block)
-            tag.add_child_tag t
+        new_tag = super data:, key:, &block
+        # puts "New tag: #{new_tag.tag}"
+        case uids
+        when String
+          uids&.split(/[\s,]+/)&.each do |uid|
+            format = Teneo::FormatLibrary::Format.find(uid: uid.strip)
+            raise "Format '#{uid}' not found" unless format
+
+            # puts "#{new_tag.tag} - Adding format: #{format.uid}"
+            new_tag.add_format format
           end
-          case uids
-          when String
-            uids&.split(/[\s,]+/)&.each do |uid|
-              format = Teneo::FormatLibrary::Format.find(uid: uid.strip)
-              raise "Format '#{uid}' not found" unless format
+        when Array
+          uids&.each do |uid|
+            format = Teneo::FormatLibrary::Format.find(uid: uid.strip)
+            raise "Format '#{uid}' not found" unless format
 
-              tag.add_format format
-            end
-          when Array
-            uids&.each do |uid|
-              format = Teneo::FormatLibrary::Format.find(uid: uid.strip)
-              raise "Format '#{uid}' not found" unless format
-
-              tag.add_format format
-            end
-          end
-          case tags
-          when String
-            tags&.split(/[\s,]+/)&.each do |t|
-              child = Teneo::FormatLibrary::Tag.find(tag: t.strip)
-              raise "Tag '#{t}' not found" unless child
-
-              tag.add_child_tag child
-            end
-          when Array
-            tags&.each do |t|
-              child = Teneo::FormatLibrary::Tag.find(tag: t.strip)
-              raise "Tag '#{t}' not found" unless child
-
-              tag.add_child_tag child
-            end
+            # puts "#{new_tag.tag} - Adding format: #{format.uid}"
+            new_tag.add_format format
           end
         end
+        case tags
+        when String
+          tags&.split(/[\s,]+/)&.each do |t|
+            child = Teneo::FormatLibrary::Tag.find(tag: t.strip)
+            raise "Tag '#{t}' not found" unless child
+
+            # puts "#{new_tag.tag} - Adding child tag: #{child.tag}"
+            new_tag.add_child_tag child
+          end
+        when Array
+          tags&.each do |t|
+            child = Teneo::FormatLibrary::Tag.find(tag: t.strip)
+            raise "Tag '#{t}' not found" unless child
+
+            # puts "#{new_tag.tag} - Adding child tag: #{child.tag}"
+            new_tag.add_child_tag child
+          end
+        end
+        children&.each do |child|
+          t = Teneo::FormatLibrary::Tag.from_hash(data: child, key: key, &block)
+          raise "Tag '#{child[:tag]}' not found" unless t
+
+          # puts "#{new_tag.tag} - Adding child tag: #{t.tag}"
+          new_tag.add_child_tag t
+        end
+        new_tag.save
+        new_tag
       end
 
       class DeepHash < Hash
-        # Recursively searches for a key in the hash and its nested hash
-        # values.
-        #
-        # @param key [Object] the key to search for
-        # @return [Object] the value associated with the key, or +nil+ if the
-        #   key is not found.
-        def deep_find(key)
-          return self[key] if key?(key)
-
-          r = nil
-          values.find { |x| r = x.deep_find(key) }
-          r
-        end
-
+        # Remove any empty hashes from the tree.
         def clear_empty
           each do |k, v|
             if v.is_a?(DeepHash)
@@ -214,6 +213,9 @@ module Teneo
           end
         end
 
+        # Recursively applies the given block to each key-value pair in the hash.
+        # If the value is itself a hash, the block is applied recursively.
+        # The return values of the block are used to build a new hash.
         def transform(&block)
           each_with_object(DeepHash.new) do |(k, v), h|
             v = v.transform(&block) if v.is_a?(DeepHash)

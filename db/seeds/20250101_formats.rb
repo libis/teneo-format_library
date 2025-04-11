@@ -19,8 +19,11 @@ Sequel.seed(:production, :development, :test) do
     puts 'Loading LOC Signatures data ...'
     Teneo::FormatLibrary::Format.load_loc_signatures
 
-    puts 'Loading Teneo formats data ...'
-    seeds_data_dir = ENV.fetch('SEEDS_DATA_DIR', File.join(File.dirname(__FILE__), 'data'))
-    Teneo::FormatLibrary::Format.from_yaml_file(file: File.join(seeds_data_dir, 'teneo_formats.yml'))
+    puts 'Loading extra formats data ...'
+    seeds_data_dir = ENV.fetch('FORMAT_LIBRARY_SEEDS_FORMAT_DIR', File.join(File.dirname(__FILE__), 'data', 'formats'))
+    Dir.glob(File.join(seeds_data_dir, '*.yml')).each do |file|
+      puts "... from #{File.basename(file)} ..."
+      Teneo::FormatLibrary::Format.from_yaml_file(file:)
+    end
   end
 end

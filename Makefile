@@ -5,7 +5,7 @@ export
 UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 
-IMAGE_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
+GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
 
 .SILENT:
 
@@ -16,8 +16,8 @@ update:
 	docker compose run --rm db_tool bundle update
 
 release:
-	git commit -am "Version bump: v$(IMAGE_VERSION)" || true
-	git tag --force "v$(IMAGE_VERSION)"
+	git commit -am "Version bump: v$(GEM_VERSION)" || true
+	git tag --force "v$(GEM_VERSION)"
 	git push --force --tags
 	bundle exec rake changelog
 	git commit -a -m "Changelog update" || true
@@ -33,6 +33,9 @@ down:
 clear: down
 	rm -fr db/data/pgdata/*
 
+build:
+	docker compose build db_tool
+	
 migrate: up
 	docker compose run --rm db_tool rake teneo:format_library:migrate
 
@@ -42,8 +45,8 @@ seed: up
 test: up
 	docker compose run --rm db_tool rspec
 
+console: up
+	docker compose run --rm db_tool console
+
 tool: up
 	docker compose run --rm db_tool bash
-
-build_tool:
-	docker compose build db_tool
