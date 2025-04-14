@@ -2,19 +2,57 @@
 
 This is the repository for the `teneo-format_library` gem.
 
-## Installation
-
-Install the gem and add to the application's Gemfile by executing:
-
-    $ bundle add teneo-format_library
-
-If bundler is not being used to manage dependencies, install the gem by executing:
-
-    $ gem install teneo-format_library
-
 ## The Format Library
 
 The Teneo Format Library is a registry of formats and tags that support the file format services for the Teneo tools and services. This gem provides the database storage and interface for the Teneo Format Library.
+
+## Installation
+
+This gem is available in the Github gem repository. In order to access the repository, it should be made available via a Gemfile. You should authenticate yourself to Github in order to [install the package](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-rubygems-registry#installing-a-package). There are many ways to authenticate, but setting the `BUNDLE_RUBYGEMS__PKG__GITHUB__COM` environment equal to a classic personal token with `read package` permissions is probably the easiest.
+
+Gemfile:
+```ruby
+source 'https://rubygems.org'
+
+source "https://rubygems.pkg.github.com/LIBIS" do
+  gem "teneo-format_library", ">= 0.1.0"
+end
+
+gem 'rake'
+gem 'nokogiri'   
+```
+
+The `rake` and `nokogiri` gems are required to run the Rakefile commands for migration and seeding of the database.
+
+Installing the gem will then be as easy as:
+```ruby
+bundle install
+```
+
+## Usage
+
+Then, the gem can be used like so:
+```ruby
+require 'teneo/format_library'
+```
+
+You will have access to the Format and Tag models:
+
+```ruby
+fmt = ::Teneo::FormatLibrary::Format['fmt/44']
+# => #<Teneo::FormatLibrary::Format @values={uid: "fmt/44", ...
+fmt.uid
+# => "fmt/44"
+fmt.name
+# => "JPEG File Interchange Format"
+fmt.version
+# => "1.02"
+
+tag = Teneo::FormatLibrary::Tag['PDF']
+# => #<Teneo::FormatLibrary::Tag @values={tag: "PDF", name: "Adobe Portable Document Format (PDF)", profile: "teneo", properties: nil, info: nil}>
+tag.name
+# => "Adobe Portable Document Format (PDF)"
+```
 
 ## Models
 The database storage is based on the [Sequel](https://rubygems.org/gems/sequel) gem and this gem provides [Models](https://sequel.jeremyevans.net/rdoc/classes/Sequel/Model.html) and [Datasets](https://sequel.jeremyevans.net/rdoc/classes/Sequel/Dataset.html) for the database objects.
@@ -23,11 +61,45 @@ The database storage is based on the [Sequel](https://rubygems.org/gems/sequel) 
 
 The Format model represents the file format information stored in the `formats` database table. A format has a unique identifier, descriptive name and optional version. Most formats also contain data about their provenance (`source` and `source_version`), the associated MIME types (`mimetypes`), preferred extensions (`extensions`) and their relationships with other formats (`parent_format` and `related_formats`). Whenever possible a link to the source documentation is added (`url`).
 
+```ruby
+fmt = ::Teneo::FormatLibrary::Format['fmt/44']
+# => #<Teneo::FormatLibrary::Format @values={uid: "fmt/44", ...
+fmt.uid
+# => "fmt/44"
+fmt.name
+# => "JPEG File Interchange Format"
+fmt.version
+# => "1.02"
+fmt.source
+# => "PRONOM"
+fmt.url
+# => "https://www.nationalarchives.gov.uk/PRONOM/fmt/44"
+fmt.mimetypes
+# => ["image/jpeg"]
+fmt.extensions
+# => ["jfi", "jfif", "jif", "jpe", "jpeg", "jpg"]
+```
+
 Additional information about the format can be available in the `properties` field. This is a structured JSON field which is also indexed and therefore can be used in searches and filters. It is intended for future enrichments of the file formats' data.
 
 A Format model instance has some convenience methods:
 - `all_tags_hash`: Returns a Hash with all tags associated with this format, directly or indirectly
 - `all_tags_ds`: Returns a dataset of all tags associated with this format, directly or indirectly
+
+```ruby
+fmt.tags
+# => [#<Teneo::FormatLibrary::Tag @values={tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil}>]
+fmt.tags.map(&:tag)
+# => ["JPG"]
+fmt.all_tags_hash
+# => {"JPG" => #<Teneo::FormatLibrary::Tag @values={tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil}>, "IMAGE" => #<Teneo::FormatLibrary::Tag @values={tag: "IMAGE", name: "Common image formats", profile: "teneo", properties: nil, info: nil}>, "WEB_IMAGE" => #<Teneo::FormatLibrary::Tag @values={tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}>}
+fmt.all_tags_ds
+# => #<Sequel::Dataset::_Subclass: "WITH RECURSIVE \"format_tags\" AS (SELECT tags.* FROM \"tags\" INNER JOIN \"tagged_formats\" ON (\"tagged_formats\".\"tag\" = \"tags\".\"tag\") WHERE (\"tagged_formats\".\"format\" = $1) UNION ALL (SELECT tags.* FROM \"tags\" INNER JOIN \"tagged_tags\" ON (\"tagged_tags\".\"parent\" = \"tags\".\"tag\") INNER JOIN \"format_tags\" ON (\"format_tags\".\"tag\" = \"tagged_tags\".\"tag\"))) SELECT * FROM \"format_tags\"; [\"fmt/44\"]">
+fmt.all_tags_ds.all
+# => [{tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil},{tag: "IMAGE", name: "Common image formats", profile: "teneo", properties: nil, info: nil},{tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}]
+fmt.all_tags_ds.where(profile: 'web').all
+# => [{tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}]
+```
 
 The Format model class provides these methods, used for loading the format descriptions:
 - `load_pronom_signatures`: downloads the latest PRONOM signatures from the PRONOM website and loads them into the database
@@ -41,6 +113,15 @@ The Tag is identified by a unique short text (`tag`) and it also has a more desc
 
 Addtional information for a Tag is stored in two fields: `properties` and `info`. Both a structured JSON fields, but the `properties` field is indexed and can be used for searching and/or filtering, while the `info` field is not indexed and is intended for less structured data like links to documentation, notes, etc.
 
+```ruby
+tag = Teneo::FormatLibrary::Tag['PDF']
+# => #<Teneo::FormatLibrary::Tag @values={tag: "PDF", name: "Adobe Portable Document Format (PDF)", profile: "teneo", properties: nil, info: nil}>
+tag.name
+# => "Adobe Portable Document Format (PDF)"
+tag.profile
+# => nil
+```
+
 The Tag model instance has the following methods:
 - `descendants_hash`: Creates a hash of tags that are descendants of this tag
 - `ancestors_hash`: Creates a hash of tags that are ancestors of this tag
@@ -51,6 +132,51 @@ The Tag model instance has the following methods:
 - `tree_formats`: Builds a nested hash structure from the tag tree with formats
 - `all_formats_hash`: Returns a hash with all formats that are associated with this tag or any of its descendant tags
 - `all_formats_ds`: Returns a dataset of all formats that are associated with this tag or any of its descendant tags
+
+```ruby
+tag.descendants_hash
+# => 
+# {"PDF" => #<Teneo::FormatLibrary::Tag @values={tag: "PDF", name: [...]]}>,
+#  "PDFA" => #<Teneo::FormatLibrary::Tag @values={tag: "PDFA", name: [...]}>,
+#  "PDFX" => #<Teneo::FormatLibrary::Tag @values={tag: "PDFX", name: [...]}>,
+#  "PDFE" => #<Teneo::FormatLibrary::Tag @values={tag: "PDFE", name: [...]]}>}
+
+tag.ancestors_ds.all
+# => 
+# [{tag: "PDF", name: [...], is_cycle: false, path: "{(PDF)}"]},
+#  {tag: "FORMATTED_TEXT", name: [...], is_cycle: false, path: "{(PDF),(FORMATTED_TEXT)}"},
+#  {tag: "WEB_TEXT", name: [...], is_cycle: false, path: "{(PDF),(WEB_TEXT)}"},
+#  {tag: "TEXT", name: [...], is_cycle: false, path: "{(PDF),(FORMATTED_TEXT),(TEXT)}"}]
+
+tag.all_formats_hash
+# =>
+# {"fmt/14" => #<Teneo::FormatLibrary::Format @values={uid: "fmt/14", name: [...]>}>,
+#  "fmt/15" => #<Teneo::FormatLibrary::Format @values={uid: "fmt/15", name: [...]>}>,
+#  "fmt/16" => #<Teneo::FormatLibrary::Format @values={uid: "fmt/16", name: [...]>}>,
+# [...]
+
+tag.tree_ds.all
+# => 
+# [{tag: "PDF", parent: nil, is_cycle: false, path: "{(PDF)}"},
+#  {tag: "PDFA", parent: "PDF", is_cycle: false, path: "{(PDF),(PDFA)}"},
+#  {tag: "PDFX", parent: "PDF", is_cycle: false, path: "{(PDF),(PDFX)}"},
+#  {tag: "PDFE", parent: "PDF", is_cycle: false, path: "{(PDF),(PDFE)}"}]
+
+tag.tree_structure
+# => {"PDF" => {"PDFA" => nil, "PDFX" => nil, "PDFE" => nil}}
+
+tag.tree_formats
+# => 
+# {"PDF" =>
+#   {tags:
+#     {"PDFA" =>
+#       {formats:
+#         {"fmt/95" =>
+#           #<Teneo::FormatLibrary::Format @values={uid: "fmt/95", name: [...]]>,
+#          "fmt/354" =>
+#           #<Teneo::FormatLibrary::Format @values={uid: "fmt/354", name: [...]]>,
+# [...]
+```
 
 ### Datasets vs Hashes
 
@@ -147,45 +273,6 @@ tag.descendants_ds.all
 #  {tag: "PDFX", name: "Acrobat PDF/X - Portable Document Format", profile: "teneo", properties: nil, info: nil, is_cycle: false, path: "{(PDF),(PDFX)}"},
 #  {tag: "PDFE", name: "Acrobat PDF/E - Portable Document Format for Engineering", profile: "teneo", properties: nil, info: nil, is_cycle: false, path: "{(PDF),(PDFE)}"}]
 ```
-## Usage
-
-The gem can be used like so:
-```ruby
-require 'teneo/format_library'
-```
-
-You will have access to the Format and Tag models:
-```ruby
-fmt = ::Teneo::FormatLibrary::Format['fmt/44']
-# => #<Teneo::FormatLibrary::Format @values={uid: "fmt/44", ...
-fmt.uid
-# => "fmt/44"
-fmt.name
-# => "JPEG File Interchange Format"
-fmt.version
-# => "1.02"
-fmt.source
-# => "PRONOM"
-fmt.url
-# => "https://www.nationalarchives.gov.uk/PRONOM/fmt/44"
-fmt.mimetypes
-# => ["image/jpeg"]
-fmt.extensions
-# => ["jfi", "jfif", "jif", "jpe", "jpeg", "jpg"]
-fmt.tags
-# => [#<Teneo::FormatLibrary::Tag @values={tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil}>]
-fmt.tags.map(&:tag)
-# => ["JPG"]
-fmt.all_tags_hash
-# => {"JPG" => #<Teneo::FormatLibrary::Tag @values={tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil}>, "IMAGE" => #<Teneo::FormatLibrary::Tag @values={tag: "IMAGE", name: "Common image formats", profile: "teneo", properties: nil, info: nil}>, "WEB_IMAGE" => #<Teneo::FormatLibrary::Tag @values={tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}>}
-fmt.all_tags_ds
-# => #<Sequel::Dataset::_Subclass: "WITH RECURSIVE \"format_tags\" AS (SELECT tags.* FROM \"tags\" INNER JOIN \"tagged_formats\" ON (\"tagged_formats\".\"tag\" = \"tags\".\"tag\") WHERE (\"tagged_formats\".\"format\" = $1) UNION ALL (SELECT tags.* FROM \"tags\" INNER JOIN \"tagged_tags\" ON (\"tagged_tags\".\"parent\" = \"tags\".\"tag\") INNER JOIN \"format_tags\" ON (\"format_tags\".\"tag\" = \"tagged_tags\".\"tag\"))) SELECT * FROM \"format_tags\"; [\"fmt/44\"]">
-fmt.all_tags_ds.all
-# => [{tag: "JPG", name: "Joint Photographic Experts Group (JPEG) images", profile: "teneo", properties: nil, info: nil},{tag: "IMAGE", name: "Common image formats", profile: "teneo", properties: nil, info: nil},{tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}]
-fmt.all_tags_ds.where(profile: 'web').all
-# => [{tag: "WEB_IMAGE", name: "Web safe image formats", profile: "web", properties: nil, info: nil}]
-```
-
 ## Initialization
 The format library database needs to be created and filled with data. The gem can assist with that.
 
@@ -195,14 +282,14 @@ It is up to you to provide a database server with PostgreSQL installed and runni
 
 The gem does need to know the database configuration in order to connect to the database. It relies on the following environment variables and it provides some reasonable defaults.
 
-|Variable name|default value|description|
------------------------------------------
-|`DB_HOST`|localhost|name or IP address of the database server|
-|`DB_PORT`|5432|port number where PostgreSQL is listening on|
-|`DB_NAME`|teneo|database name|
-|`DB_USER`|teneo|database account name|
-|`DB_PASSWORD`|teneo|database account password|
-|`DB_MAX_CONNECTIONS`|10|maximum number of concurrent connections to the database|
+| Variable name | default value | description |
+| ---| ---| --- |
+| `DB_HOST` | localhost | name or IP address of the database server |
+| `DB_PORT` | 5432 | port number where PostgreSQL is listening on |
+| `DB_NAME` | teneo | database name |
+| `DB_USER` | teneo | database account name |
+| `DB_PASSWORD` | teneo | database account password |
+| `DB_MAX_CONNECTIONS` | 10 | maximum number of concurrent connections to the database |
 
 ### Migrating and seeding the database
 
