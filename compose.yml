@@ -74,6 +74,7 @@ services:
       BUNDLE_COMMAND: install
       GEMS_PATH: /app/vendor/bundle
       BUNDLE_PATH: /app/vendor/bundle
+      RUBY_ENV: production
       GIT_DISCOVERY_ACROSS_FILESYSTEM: 1
       DB_ADAPTER: ${DB_ADAPTER}
       DB_HOST: db
