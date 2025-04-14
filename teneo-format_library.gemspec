@@ -25,7 +25,7 @@ Gem::Specification.new do |spec|
   spec.files =
     Dir.glob('lib/**/*') +
     Dir.glob('db/migrations/*') +
-    Dir.glob('db/seeds/*') +
+    Dir.glob('db/seeds/**') +
     [
       'teneo-format_library.gemspec',
       'Gemfile',
