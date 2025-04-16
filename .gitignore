@@ -5,3 +5,4 @@
 .env.local
 .rspec_status
 /pkg
+/bin/*
