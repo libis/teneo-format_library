@@ -34,7 +34,7 @@ Gem::Specification.new do |spec|
       'CHANGELOG.md',
       'LICENSE'
     ]
-  spec.bindir = 'bin'
+  spec.bindir = 'exe'
   spec.executables = spec.files.grep(%r{\Aexe/}) { |f| File.basename(f) }
   spec.require_paths = ['lib']
 
@@ -45,15 +45,9 @@ Gem::Specification.new do |spec|
   spec.add_runtime_dependency 'rubyzip', '~> 2.0', '>= 2.4.1'
   spec.add_runtime_dependency 'sequel', '~> 5.0', '>= 5.76'
   spec.add_runtime_dependency 'sequel_pg', '~> 1.0', '>= 1.17.2'
-  spec.add_runtime_dependency 'sequel_secure_password', '~> 0.0', '>= 0.2.15'
   spec.add_runtime_dependency 'sequel-seed', '~> 1.0', '>= 1.1'
 
   spec.add_runtime_dependency 'dotenv', '~> 3.0', '>= 3.1.7'
-  spec.add_runtime_dependency 'dry-configurable', '~> 1.0', '>= 1.3.0'
-  spec.add_runtime_dependency 'dry-struct', '~> 1.0', '>= 1.8.0'
-  spec.add_runtime_dependency 'dry-types', '~> 1.0', '>= 1.8.2'
-  spec.add_runtime_dependency 'method_source', '~> 1.0', '>= 1.1.0'
 
   spec.add_development_dependency 'nokogiri', '~> 1.0', '>= 1.18.4'
-  spec.add_development_dependency 'rexml', '~> 3.0', '>= 3.4.1'
 end
