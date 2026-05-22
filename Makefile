@@ -5,6 +5,8 @@ export
 UID ?= $(shell id -u)
 GID ?= $(shell id -g)
 
+include help.mk
+
 GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
 
 .SILENT:
