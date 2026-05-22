@@ -6,6 +6,9 @@ Style/Documentation:
 Lint/RescueException:
   Enabled: false
 
+Lint/SuppressedException:
+  Enabled: false
+
 Naming/MemoizedInstanceVariableName:
   Enabled: false
 
