@@ -17,7 +17,7 @@ services:
     networks:
       - db_net
     ports:
-      - "${DB_PORT}:5432"
+      - "${DB_PUBLIC_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - ./db/data/pgdata:/var/lib/postgresql/data
@@ -36,7 +36,7 @@ services:
       - db_net
       - app_net
     ports:
-      - "7004:5050"
+      - "${DBADMIN_PUBLIC_PORT}:5050"
     environment:
       TZ: "Europe/Brussels"
       PGADMIN_DEFAULT_EMAIL: ${DBADMIN_USER:-admin@libis.be}
