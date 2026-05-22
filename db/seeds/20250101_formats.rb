@@ -2,7 +2,7 @@
 
 require 'teneo/format_library/format'
 
-Sequel.seed(:production, :development, :test) do
+Sequel.seed do
   # Seeds the database with all formats from PRONOM and LOC signature files and
   # extra formats from the directory specified by the `FORMAT_LIBRARY_SEEDS_FORMAT_DIR`
   # environment variable (defaulting to `db/seeds/data/formats/`).

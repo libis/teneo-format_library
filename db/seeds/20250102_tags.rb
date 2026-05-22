@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Sequel.seed(:production, :development, :test) do
+Sequel.seed do
   # Load all YAML files in the seeds directory and create or update the tags in
   # the database. The seeds directory is determined by the
   # `FORMAT_LIBRARY_SEEDS_TAG_DIR` environment variable. If this variable is not
