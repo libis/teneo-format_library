@@ -11,13 +11,15 @@ GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/versi
 
 .SILENT:
 
-install:
-	docker compose run --rm db_tool bundle install
+### GEM tasks
 
-update:
-	docker compose run --rm db_tool bundle update
+install: ## Install the gem dependencies
+	docker compose run --rm gem bundle install
 
-release:
+update: ## Update the gem dependencies
+	docker compose run --rm gem bundle update
+
+release: ## Release the gem
 	git commit -am "Version bump: v$(GEM_VERSION)" || true
 	git tag --force "v$(GEM_VERSION)"
 	git push --force --tags
@@ -26,29 +28,33 @@ release:
 	git push --force
 	bundle exec rake release
 
-up:
+### DATABASE tasks
+
+status: ## Show the status of the services
+	docker compose ps
+
+up: ## Start the database
 	docker compose up -d
 
-down:
+down: ## Stop the database
 	docker compose down
 
-clear: down
-	rm -fr db/data/pgdata/*
+clear: down ### Stop and remove the database
+	rm -fr db_data/db/pgdata
 
-build:
-	docker compose build db_tool
-	
-migrate: up
-	docker compose run --rm db_tool rake teneo:format_library:migrate
+reset: clear up migrate seed ### Recreate the database to initial content
 
-seed: up
-	docker compose run --rm db_tool rake teneo:format_library:seed
+migrate: up ## Run the database migrations
+	docker compose run --rm gem rake teneo:format_library:migrate
 
-test: up
-	docker compose run --rm db_tool rspec
+seed: up ## Run the database seeds
+	docker compose run --rm gem rake teneo:format_library:seed
 
-console: up
-	docker compose run --rm db_tool console
+test: up ## Run the test suite
+	docker compose run --rm gem rake spec
 
-tool: up
-	docker compose run --rm db_tool bash
+console: up ## Start a console in the gem container
+	docker compose run --rm gem console
+
+gem: up ## Run a shell in the gem container
+	docker compose run --rm gem bash

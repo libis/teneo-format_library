@@ -56,13 +56,8 @@ services:
         restart: true
     restart: unless-stopped
 
-  db_tool:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      args:
-        RUBY_VERSION: ${RUBY_VERSION}
-        RUBY_IMAGE: ${RUBY_IMAGE}
+  gem:
+    image: ${RUBY_IMAGE}:${RUBY_VERSION}
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     working_dir: /app
     command: "irb"
@@ -90,7 +85,7 @@ services:
       - .:/app
     restart: no
     profiles:
-      - db_tool
+      - gem
 
 networks:
   app_net:
