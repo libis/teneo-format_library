@@ -1,12 +1,9 @@
-/db/data/**
+/db_data/
 /db/*.pdf
 
 /Makefile
 /compose.yml
 
 /.*
-!/.env
-!/.env.local
-
 
 /*.md

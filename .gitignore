@@ -1,8 +1,15 @@
-/db/data/*/**
-!/db/data/*/.keep
+/db_data/*/*
+!/db_data/admin_data/.keep
+!/db_data/admin_logs/.keep
+!/db_data/db/.keep
+
 /vendor/**
 !/vendor/.keep
+
 .env.local
+
 .rspec_status
+
 /pkg
+
 /bin/*

@@ -20,7 +20,7 @@ services:
       - "${DB_PUBLIC_PORT}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./db/data/pgdata:/var/lib/postgresql/data
+      - ./db_data/db:/var/lib/postgresql/data
     restart: unless-stopped
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
@@ -48,8 +48,8 @@ services:
       PGADMIN_LISTEN_PORT: "5050"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./db/data/admin_data:/var/lib/pgadmin
-      - ./db/data/admin_logs:/var/log/pgadmin
+      - ./db_data/admin_data:/var/lib/pgadmin
+      - ./db_data/admin_logs:/var/log/pgadmin
     depends_on:
       db:
         condition: service_healthy
