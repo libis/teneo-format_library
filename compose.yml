@@ -1,4 +1,4 @@
-name: teneo
+name: teneo-format_library
 
 services:
   db:
