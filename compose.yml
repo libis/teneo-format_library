@@ -57,8 +57,14 @@ services:
     restart: unless-stopped
 
   gem:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        RUBY_IMAGE: ${RUBY_IMAGE}
+        RUBY_VERSION: ${RUBY_VERSION}
     image: ${RUBY_IMAGE}:${RUBY_VERSION}
-    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    user: "${UID:-1000}:${GID:-1000}"
     working_dir: /app
     command: "irb"
     depends_on:

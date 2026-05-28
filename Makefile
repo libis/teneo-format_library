@@ -13,6 +13,9 @@ GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/versi
 
 ### GEM tasks
 
+build: ## Build the gem container
+	docker compose build gem
+
 install: ## Install the gem dependencies
 	docker compose run --rm gem bundle install
 
