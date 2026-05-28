@@ -14,12 +14,6 @@ Sequel.migration do
 
       String :url
 
-      column :mimetypes, 'text[]', null: false, default: [], index: { type: :gin }
-      column :extensions, 'text[]', null: false, default: [], index: { type: :gin }
-
-      foreign_key :parent_format, :formats, type: String, null: true, on_delete: :cascade, on_update: :cascade
-      column :related_formats, 'text[]', null: false, default: [], index: { type: :gin }
-
       column :properties, 'jsonb', null: false, default: '{}', index: { type: :gin }
 
       Date :created_at, null: false, default: Sequel::CURRENT_TIMESTAMP

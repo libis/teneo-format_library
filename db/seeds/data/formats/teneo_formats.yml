@@ -2,26 +2,29 @@
   name: Encoded Archival Description
   version: EAD 2002
   source: Teneo
-  url: https://www.loc.gov/ead/
+  source_version: 1
+  url: 'https://www.loc.gov/ead/'
+  created_at: '2025-01-01'
   mimetypes:
     - archive/ead
   extensions:
     - ead
     - xml
-  parent_format: x-fmt/101
   properties:
-    xsd: https://www.loc.gov/ead/ead.xsd
+    base_format: x-fmt/101
+    xsd: 'https://www.loc.gov/ead/ead.xsd'
 - uid: teneo/ead3
   name: Encoded Archival Description
   version: EAD 3
   source: Teneo
-  url: https://www.loc.gov/ead/
+  source_version: 1
+  url: 'https://www.loc.gov/ead/'
+  created_at: '2025-01-01'
   mimetypes:
     - archive/ead
   extensions:
     - ead
     - xml
-  parent_format: x-fmt/101
   properties:
-    xsd: https://www.loc.gov/ead/ead3.xsd
-    
+    base_format: x-fmt/101
+    xsd: 'https://www.loc.gov/ead/ead3.xsd'

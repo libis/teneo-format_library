@@ -78,13 +78,16 @@ module Teneo
           key = [key].flatten.compact.map(&:to_sym)
           pk = [primary_key].flatten
           key = pk if key.empty?
-          obj = find(data.slice(*key)) || new # find or create
-          data_pk = data.slice(*pk)
-          data_pk.each { |k, v| obj.send("#{k}=", v) }
-          data_other = data.except(*pk)
-          obj.set_fields(data_other, data_other.keys)
-          block.call(obj) if block_given?
-          obj.save
+          obj = nil
+          db.transaction do
+            obj = find(data.slice(*key)) || new # find or create
+            data_pk = data.slice(*pk)
+            data_pk.each { |k, v| obj.send("#{k}=", v) }
+            data_other = data.except(*pk)
+            obj.set_fields(data_other, data_other.keys)
+            block.call(obj) if block_given?
+            obj.save
+          end
           obj
         end
       end
