@@ -1,0 +1,340 @@
+- tag: be.libis.teneo:IMAGE
+  name: Common image formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:TIFF
+      name: Tagged Image File Format (TIFF) images
+      profile: classification
+      formats: fmt/353 fmt/154 fmt/153 fmt/156 fmt/155 fmt/152 x-fmt/399 x-fmt/388 x-fmt/387 fmt/202
+    - tag: be.libis.teneo:JP2
+      name: Joint Photographic Experts Group 2000 (JPEG 2000) images
+      profile: classification
+      formats: fmt/463 fmt/151 x-fmt/392
+    - tag: be.libis.teneo:JPG
+      name: Joint Photographic Experts Group (JPEG) images
+      profile: classification
+      formats: fmt/42 fmt/43 fmt/44 fmt/41 x-fmt/398 x-fmt/390 x-fmt/391 fmt/645
+    - tag: be.libis.teneo:PNG
+      name: Portable Network Graphics (PNG) images
+      profile: classification
+      formats: fmt/11 fmt/12 fmt/13
+    - tag: be.libis.teneo:APNG
+      name: Animate Portable Network Graphics (APNG) images
+      profile: classification
+      formats: fmt/935
+    - tag: be.libis.teneo:BMP
+      name: Device Independent Bitmap (DIP/BMP) images
+      profile: classification
+      formats: fmt/115 fmt/118 fmt/119 fmt/114 fmt/116 fmt/117 x-fmt/270
+    - tag: be.libis.teneo:GIF
+      name: Graphics Interchange Format (GIF) images
+      profile: classification
+      formats: fmt/3 fmt/4
+    - tag: be.libis.teneo:PBM
+      name: Portable Bitmap Format (PBM) images
+      profile: classification
+      formats: fmt/409 x-fmt/164
+    - tag: be.libis.teneo:PGM
+      name: Portable GrayMap Format (PGM) images
+      profile: classification
+      formats: fmt/406 fmt/407
+    - tag: be.libis.teneo:PPM
+      name: Portable Pixel Map (PPM) images
+      profile: classification
+      formats: fmt/408 x-fmt/178
+    - tag: be.libis.teneo:OO_DRAW
+      name: OpenDocument Graphics (ODG) images
+      profile: classification
+      formats: fmt/139 fmt/296 fmt/297
+
+- tag: be.libis.teneo:AUDIO
+  name: Common audio formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:MP3
+      name: MPEG-1 or MPEG-2 Audio Layer III (MP3)
+      profile: classification
+      formats: fmt/134
+    - tag: be.libis.teneo:FLAC
+      name: Free Lossless Audio Codec (FLAC)
+      profile: classification
+      formats: fmt/279
+    - tag: be.libis.teneo:AC3
+      name: Dolby Digital AC-3
+      profile: classification
+      formats: fmt/735
+    - tag: be.libis.teneo:AAC
+      name: Audio Data Transport Stream
+      profile: classification
+      formats: fmt/1812
+    - tag: be.libis.teneo:WMA
+      name: Windows Media Audio (WMA)
+      profile: classification
+      formats: fmt/132
+    - tag: be.libis.teneo:ALAC
+      name: Apple Lossless Audio Codec (ALAC)
+      profile: classification
+      formats: fmt/596
+    - tag: be.libis.teneo:WAV
+      name: Waveform Audio File Format (WAVE)
+      profile: classification
+      formats: fmt/6 fmt/141 fmt/142 fmt/143 fmt/1 fmt/703 fmt/706 fmt/709 fmt/2 fmt/704 fmt/707 fmt/710 fmt/527 fmt/705 fmt/708 fmt/711 x-fmt/397 x-fmt/389 x-fmt/396 fmt/712 fmt/713
+    - tag: be.libis.teneo:AIFF
+      name: Audio Interchange File Format (AIFF)
+      profile: classification
+      formats: fmt/414 x-fmt/135 x-fmt/136
+    - tag: be.libis.teneo:AMR
+      name: Adaptive Multi-Rate Audio (AMR)
+      profile: classification
+      formats: fmt/954
+    - tag: be.libis.teneo:AU
+      name: NeXT/Sun sound (AU)
+      profile: classification
+      formats: x-fmt/139 x-fmt/140
+    - tag: be.libis.teneo:OGG
+      name: Ogg Vorbis
+      profile: classification
+      formats: fmt/945
+    - tag: be.libis.teneo:MP4A
+      name: MPEG-4 Audio
+      profile: classification
+      formats: fmt/199 fmt/596 fmt/597 fmt/598 fmt/599
+
+- tag: be.libis.teneo:VIDEO
+  name: Common video formats and containers
+  profile: classification
+  children:
+    - tag: be.libis.teneo:AVI
+      name: Audio Video Interleave (AVI)
+      profile: classification
+      formats: fmt/5
+    - tag: be.libis.teneo:OGGV
+      name: OGG Video (OGGV)
+      profile: classification
+      formats: fmt/945
+    - tag: be.libis.teneo:WMV
+      name: Windows Media Video (WMV)
+      profile: classification
+      formats: fmt/133 fmt/441
+    - tag: be.libis.teneo:DV
+      name: Digital Video (DV)
+      profile: classification
+      formats: x-fmt/152
+    - tag: be.libis.teneo:FLV
+      name: Flash video (FLV)
+      profile: classification
+      formats: x-fmt/382
+    - tag: be.libis.teneo:SWF
+      name: Macromedia Flash
+      profile: classification
+      formats: fmt/104 fmt/105 fmt/106 fmt/107 fmt/108 fmt/109 fmt/110
+    - tag: be.libis.teneo:MPG
+      name: Moving Picture Experts Group (MPEG-1/MPEG-2)
+      profile: classification
+      formats: x-fmt/385 x-fmt/386 fmt/425 fmt/649 fmt/640
+    - tag: be.libis.teneo:MP4V
+      name: Moving Picture Experts Group (MPEG-4)
+      profile: classification
+      formats: fmt/199
+    - tag: be.libis.teneo:WEBM
+      name: Webm
+      profile: classification
+      formats:  fmt/573
+    - tag: be.libis.teneo:MKV
+      name: Matroska Multimedia Container (MKV)
+      profile: classification
+      formats: fmt/569
+    - tag: be.libis.teneo:MJP2
+      name: Motion JPEG 2000 (MJP2)
+      profile: classification
+      formats: fmt/337
+    - tag: be.libis.teneo:QTFF
+      name: QuickTime File Format (QTFF)
+      profile: classification
+      formats: x-fmt/384
+
+- tag: be.libis.teneo:TEXT
+  name: Common text formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:PLAIN_TEXT
+      name: Unformatted text
+      profile: classification
+      formats: x-fmt/111
+    - tag: be.libis.teneo:ANNOTATED_TEXT
+      name: Annotated text
+      profile: classification
+      children:
+      - tag: be.libis.teneo:RTF
+        name: Rich Text Format (RTF)
+        profile: classification
+        formats: fmt/45
+      - tag: be.libis.teneo:XML
+        name: Extensible Markup Language (XML)
+        profile: classification
+        formats: fmt/101
+      - tag: be.libis.teneo:HTML
+        name: HyperText Markup Language (HTML)
+        profile: classification
+        formats: fmt/96 fmt/97 fmt/98 fmt/99 fmt/100 fmt/102 fmt/103 fmt/471
+    - tag: be.libis.teneo:FORMATTED_TEXT
+      name: Formatted text
+      profile: classification
+      children:
+      - tag: be.libis.teneo:MS_WORD
+        name: Microsoft Word
+        profile: classification
+        children:
+        - tag: be.libis.teneo:MSDOC
+          name: Microsoft Word Document
+          profile: classification
+          formats: fmt/609 fmt/39 x-fmt/273 x-fmt/274 x-fmt/275 x-fmt/276 fmt/37 fmt/38 fmt/40 fmt/754 fmt/412 fmt/523
+        - tag: be.libis.teneo:MSDOT
+          name: Microsoft Word Document Template
+          profile: classification
+          formats: x-fmt/45 fmt/755 fmt/597 fmt/599
+      - tag: be.libis.teneo:PDF
+        name: Adobe Portable Document Format (PDF)
+        profile: classification
+        formats: fmt/14 fmt/15 fmt/16 fmt/17 fmt/18 fmt/19 fmt/20 fmt/276 fmt/1129 fmt/1451
+        children:
+        - tag: be.libis.teneo:PDFA
+          name: Adobe Portable Document Format for Archives (PDFA)
+          profile: classification
+          formats: fmt/95 fmt/354 fmt/476 fmt/477 fmt/478 fmt/479 fmt/480 fmt/481 fmt/1910 fmt/1911 fmt/1912
+        - tag: be.libis.teneo:PDFX
+          name: Acrobat PDF/X - Portable Document Format
+          profile: classification
+          formats: fmt/144 fmt/145 fmt/146 fmt/147 fmt/148 fmt/157 fmt/158 fmt/488 fmt/489 fmt/490 fmt/491 fmt/492
+        - tag: be.libis.teneo:PDFE
+          name: Acrobat PDF/E - Portable Document Format for Engineering
+          profile: classification
+          formats: fmt/493 
+      - tag: be.libis.teneo:WORDPERFECT
+        name: WordPerfect Document (WPD)
+        profile: classification
+        formats: x-fmt/44 x-fmt/394
+      - tag: be.libis.teneo:OO_WRITER
+        name: OpenDocument Text (ODT)
+        profile: classification
+        formats: fmt/136 fmt/290 fmt/291 fmt/1756
+
+- tag: be.libis.teneo:TABULAR
+  name: Tabular data fdormats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:CSV
+      name: Comma Separated Values (CSV)
+      profile: classification
+      formats: x-fmt/18
+    - tag: be.libis.teneo:TSV
+      name: Tab Separated Values (TSV)
+      profile: classification
+      formats: x-fmt/13
+    - tag: be.libis.teneo:XLS
+      name: Microsoft Excel Spreadsheet
+      profile: classification
+      children:
+      - tag: be.libis.teneo:MSXLS
+        name: Microsoft Excel Spreadsheet (XLS)
+        profile: classification
+        formats: fmt/55 fmt/56 fmt/57 fmt/175 fmt/176 fmt/177 fmt/61 fmt/445
+      - tag: be.libis.teneo:MSXLSX
+        name: Microsoft Excel OpenXML Spreadheet (XSLX)
+        profile: classification
+        formats: fmt/214
+      - tag: be.libis.teneo:MSXLSB
+        name: Microsoft Excel Non-XML Binary Workbook (XLSB)
+        profile: classification
+        formats: fmt/595
+    - tag: be.libis.teneo:OO_CALC
+      name: OpenDocument Spreadsheet (ODS)
+      profile: classification
+      formats: fmt/137 fmt/294 fmt/295 fmt/1755
+
+- tag: be.libis.teneo:PRESENTATION
+  name: Presentation formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:MSPPS
+      name: Microsoft Powerpoint Presentation Show
+      profile: classification
+      formats: x-fmt/87
+    - tag: be.libis.teneo:MSPPT
+      name: Microsoft Powerpoint Presentation (PPT)
+      profile: classification
+      formats: fmt/181 fmt/179 fmt/1747 fmt/1748 x-fmt/88 fmt/125 fmt/126
+    - tag: be.libis.teneo:MSPPTX
+      name: Microsoft Powerpoint OpenXML Presentation (PPTX)
+      profile: classification
+      formats: fmt/215 
+    - tag: be.libis.teneo:OO_IMPRESS
+      name: OpenDocument Presentation (ODP)
+      profile: classification
+      formats: fmt/138 fmt/292 fmt/293 fmt/1754
+
+- tag: be.libis.teneo:ARCHIVE
+  name: Archive formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:RAR
+      name: RAR Archive
+      profile: classification
+      formats: x-fmt/264 fmt/411 fmt/613
+    - tag: be.libis.teneo:ZIP
+      name: ZIP Archive
+      profile: classification
+      formats: x-fmt/263
+    - tag: be.libis.teneo:TAR
+      name: TAR Archive
+      profile: classification
+      formats: x-fmt/265
+    - tag: be.libis.teneo:GZIP
+      name: GZIP Archive
+      profile: classification
+      formats: x-fmt/266
+    - tag: be.libis.teneo:BZIP
+      name: BZIP Archive
+      profile: classification
+      formats: x-fmt/267
+    - tag: be.libis.teneo:BZIP2
+      name: BZIP2 Archive (BZ2)
+      profile: classification
+      formats: x-fmt/268
+
+- tag: be.libis.teneo:EMAIL
+  name: Email formats
+  profile: classification
+  children:
+    - tag: be.libis.teneo:MSG
+      name: Outlook email message (MSG)
+      profile: classification
+      formats: x-fmt/430
+    - tag: be.libis.teneo:EML
+      name: Internet Message Format (EML)
+      profile: classification
+      formats: fmt/278 fmt/950
+    - tag: be.libis.teneo:PST
+      name: Microsoft Outlook Personal Folders (PST)
+      profile: classification
+      formats: x-fmt/248 x-fmt/249
+
+- tag: be.libis.teneo:EAD
+  name: Encoded Archival Description (EAD)
+  profile: classification
+  formats: teneo/ead2 teneo/ead3
+
+- tag: be.libis.teneo:ENCRYPTED
+  name: Encrypted formats
+  profile: classification
+  formats: fmt/494 fmt/843 fmt/1424 fmt/1807 fmt/1808 fmt/1809 
+
+- tag: be.libis.teneo:PASSWORD_PROTECTED
+  name: Password protected formats
+  profile: classification
+  formats: fmt/754 fmt/755 
+
+- tag: be.libis.teneo:MACRO_ENABLED
+  name: Macro enabled formats
+  profile: classification
+  formats: fmt/445 fmt/487 fmt/523 fmt/595 fmt/599 fmt/627 fmt/628 fmt/630 fmt/632 fmt/633 fmt/636 fmt/927 fmt/928 fmt/929

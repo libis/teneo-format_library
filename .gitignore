@@ -5,6 +5,7 @@
 
 /vendor/**
 !/vendor/.keep
+.bundle
 
 .env.local
 

@@ -7,57 +7,61 @@ GID ?= $(shell id -g)
 
 include help.mk
 
-GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
+GEM_VERSION := $(shell ruby -e 'require_relative "gem/lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
 
 .SILENT:
 
-### GEM tasks
+build: build-tools build-app ## Build the app and tools containers
 
-build: ## Build the gem container
-	docker compose build gem
+### APP tasks
 
-install: ## Install the gem dependencies
-	docker compose run --rm gem bundle install
+build-app: ## Build the app container
+	docker compose build app
 
-update: ## Update the gem dependencies
-	docker compose run --rm gem bundle update
+push: build ## Push the app image to the registry
+	docker compose push app
 
-release: ## Release the gem
-	git commit -am "Version bump: v$(GEM_VERSION)" || true
-	git tag --force "v$(GEM_VERSION)"
-	git push --force --tags
-	bundle exec rake changelog
-	git commit -a -m "Changelog update" || true
-	git push --force
-	bundle exec rake release
+app: build ## Run as shell in the app container
+	docker compose run --rm app bash
 
-### DATABASE tasks
+### STACK tasks
 
 status: ## Show the status of the services
 	docker compose ps
 
-up: ## Start the database
+up: ## Start the stack
 	docker compose up -d
 
-down: ## Stop the database
+down: ## Stop the stack
 	docker compose down
 
-clear: down ### Stop and remove the database
+### DEVELOPMENT tasks
+
+build-tools: ## Build the tools container
+	docker compose build tools
+
+clear: down ### Stop the services and remove the database data
 	rm -fr db_data/db/pgdata
 
 reset: clear up migrate seed ### Recreate the database to initial content
 
 migrate: up ## Run the database migrations
-	docker compose run --rm gem rake teneo:format_library:migrate
+	docker compose run --rm tools rake teneo:format_library:migrate
 
 seed: up ## Run the database seeds
-	docker compose run --rm gem rake teneo:format_library:seed
+	docker compose run --rm tools rake teneo:format_library:seed
 
 test: up ## Run the test suite
-	docker compose run --rm gem rake spec
+	docker compose run --rm tools rake spec
 
-console: up ## Start a console in the gem container
-	docker compose run --rm gem console
+install: ## Install the gems in the tools container
+	docker compose run --rm tools bundle install
 
-gem: up ## Run a shell in the gem container
-	docker compose run --rm gem bash
+update: ## Update the gems in the tools container
+	docker compose run --rm tools bundle update
+
+console: up ## Start a console in the tools container
+	docker compose run --rm tools irb -I lib -r teneo/format_library
+
+tools: up ## Run a shell in the tools container
+	docker compose run --rm tools bash

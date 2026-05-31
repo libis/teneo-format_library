@@ -1,0 +1,7 @@
+# frozen_string_literal: true
+
+load 'Rakefile.test'
+load 'Rakefile.gem'
+
+rakefile = './lib/teneo/format_library/Rakefile'
+load rakefile

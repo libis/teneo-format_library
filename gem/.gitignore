@@ -1,0 +1,10 @@
+/data
+!/data/admin/data/.keep
+!/data/admin/logs/.keep
+!/data/db/.keep
+
+*.gem
+
+.*
+!.env
+!.gitignore

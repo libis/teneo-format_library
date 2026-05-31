@@ -55,24 +55,60 @@ services:
         condition: service_healthy
         restart: true
     restart: unless-stopped
+    profiles:
+      - tools
 
-  gem:
+  app:
+    image: ${APP_IMAGE}:${APP_VERSION}
+    pull_policy: build
     build:
       context: .
       dockerfile: Dockerfile
+      target: app
       args:
         RUBY_IMAGE: ${RUBY_IMAGE}
         RUBY_VERSION: ${RUBY_VERSION}
-    image: ${RUBY_IMAGE}:${RUBY_VERSION}
     user: "${UID:-1000}:${GID:-1000}"
-    working_dir: /app
-    command: "irb"
     depends_on:
       db:
         condition: service_healthy
         restart: true
     environment:
-      BUNDLE_COMMAND: install
+      GEMS_PATH: /app/vendor/bundle
+      BUNDLE_PATH: /app/vendor/bundle
+      RUBY_ENV: production
+      DB_ADAPTER: ${DB_ADAPTER}
+      DB_HOST: db
+      DB_PORT: ${DB_PORT}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+    networks:
+      - db_net
+      - app_net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+    restart: unless-stopped
+    profiles:
+      - app
+
+  tools:
+    image: ${TOOLS_IMAGE}:${TOOLS_VERSION}
+    pull_policy: build
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: tools
+      args:
+        RUBY_IMAGE: ${RUBY_IMAGE}
+        RUBY_VERSION: ${RUBY_VERSION}
+    user: "${UID:-1000}:${GID:-1000}"
+    depends_on:
+      db:
+        condition: service_healthy
+        restart: true
+    environment:
       GEMS_PATH: /app/vendor/bundle
       BUNDLE_PATH: /app/vendor/bundle
       RUBY_ENV: production
@@ -91,7 +127,7 @@ services:
       - .:/app
     restart: no
     profiles:
-      - gem
+      - tools
 
 networks:
   app_net:

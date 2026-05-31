@@ -1,0 +1,26 @@
+[tools]
+ruby = "{{env.RUBY_VERSION}}"
+
+[env]
+DB_ADAPTER = 'postgres'
+
+DB_HOST = 'db'
+DB_PORT = 5432
+DB_PUBLIC_PORT = 5432
+
+DB_USER = 'teneo'
+DB_PASSWORD = 'teneo'
+DB_NAME = 'teneo'
+
+DBADMIN_PUBLIC_PORT = 5433
+DBADMIN_USER = 'admin@example.com'
+DBADMIN_PWD = 'admin123'
+
+RUBY_IMAGE = 'registry.docker.libis.be/teneo/ruby-base'
+RUBY_VERSION = '3.4.9'
+
+APP_IMAGE = 'registry.docker.libis.be/teneo/format_library'
+APP_VERSION = '0.1.0'
+
+TOOLS_IMAGE = 'registry.docker.libis.be/teneo/format_library-tools'
+TOOLS_VERSION = '0.1.0'

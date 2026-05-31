@@ -1,0 +1,47 @@
+current directory: /app/vendor/bundle/ruby/3.4.0/gems/sequel_pg-1.19.0/ext/sequel_pg
+/usr/local/bin/ruby extconf.rb
+checking for -lpq... yes
+checking for libpq-fe.h... yes
+checking for rb_hash_new_capa()... yes
+checking for rb_set_new_capa()... no
+checking for PQsetSingleRowMode()... yes
+checking for PQcancelCreate()... yes
+checking for timegm()... yes
+creating Makefile
+
+current directory: /app/vendor/bundle/ruby/3.4.0/gems/sequel_pg-1.19.0/ext/sequel_pg
+make -j4 DESTDIR\= sitearchdir\=./.gem.20260528-7-5ismgu sitelibdir\=./.gem.20260528-7-5ismgu clean
+
+current directory: /app/vendor/bundle/ruby/3.4.0/gems/sequel_pg-1.19.0/ext/sequel_pg
+make -j4 DESTDIR\= sitearchdir\=./.gem.20260528-7-5ismgu sitelibdir\=./.gem.20260528-7-5ismgu
+compiling sequel_pg.c
+In function ‘spg_array_value’,
+    inlined from ‘spg__col_value’ at sequel_pg.c:1256:14:
+sequel_pg.c:974:11: warning: ‘array_type’ may be used uninitialized [-Wmaybe-uninitialized]
+  974 |   args[1] = array_type;
+      |   ~~~~~~~~^~~~~~~~~~~~
+sequel_pg.c: In function ‘spg__col_value’:
+sequel_pg.c:1041:9: note: ‘array_type’ was declared here
+ 1041 |   VALUE array_type;
+      |         ^~~~~~~~~~
+In function ‘spg_array_value’,
+    inlined from ‘spg__col_value’ at sequel_pg.c:1256:14:
+sequel_pg.c:983:13: warning: ‘scalar_oid’ may be used uninitialized [-Wmaybe-uninitialized]
+  983 |   args[0] = read_array(&index, c_pg_array_string, array_string_length, buf, converter, enc_index, oid, self);
+      |             ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+sequel_pg.c: In function ‘spg__col_value’:
+sequel_pg.c:1042:7: note: ‘scalar_oid’ was declared here
+ 1042 |   int scalar_oid;
+      |       ^~~~~~~~~~
+At top level:
+cc1: note: unrecognized command-line option ‘-Wno-self-assign’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-parentheses-equality’ may have been intended to silence earlier diagnostics
+cc1: note: unrecognized command-line option ‘-Wno-constant-logical-operand’ may have been intended to silence earlier diagnostics
+linking shared-object sequel_pg.so
+
+current directory: /app/vendor/bundle/ruby/3.4.0/gems/sequel_pg-1.19.0/ext/sequel_pg
+make -j4 DESTDIR\= sitearchdir\=./.gem.20260528-7-5ismgu sitelibdir\=./.gem.20260528-7-5ismgu install
+/usr/bin/install -c -m 0755 sequel_pg.so ./.gem.20260528-7-5ismgu
+
+current directory: /app/vendor/bundle/ruby/3.4.0/gems/sequel_pg-1.19.0/ext/sequel_pg
+make DESTDIR\= sitearchdir\=./.gem.20260528-7-5ismgu sitelibdir\=./.gem.20260528-7-5ismgu clean
