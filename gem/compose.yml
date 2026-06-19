@@ -50,6 +50,7 @@ services:
       PGADMIN_LISTEN_PORT: "5050"
     volumes:
       - /etc/localtime:/etc/localtime:ro
+      # - /etc/passwd:/etc/passwd:ro
       - ./data/admin/data:/var/lib/pgadmin
       - ./data/admin/logs:/var/log/pgadmin
     depends_on:

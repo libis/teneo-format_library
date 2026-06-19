@@ -14,11 +14,11 @@ RSpec.describe 'Format Library' do
   it 'has tags attached to formats' do
     fmt = Teneo::FormatLibrary::Format['fmt/114']
     expect(fmt.tags.size).to be >= 1
-    expect(fmt.tags.map(&:tag)).to include('BMP')
-    expect(fmt.tags.map(&:tag)).not_to include('IMAGE')
-    expect(fmt.all_tags_hash.keys).to include('BMP')
-    expect(fmt.all_tags_hash.keys).to include('IMAGE')
-    expect(fmt.all_tags_ds.map { |t| t[:tag] }).to include('BMP')
-    expect(fmt.all_tags_ds.map { |t| t[:tag] }).to include('IMAGE')
+    expect(fmt.tags.map(&:tag)).to include('be.libis.teneo:BMP')
+    expect(fmt.tags.map(&:tag)).not_to include('be.libis.teneo:IMAGE')
+    expect(fmt.all_tags_hash.keys).to include('be.libis.teneo:BMP')
+    expect(fmt.all_tags_hash.keys).to include('be.libis.teneo:IMAGE')
+    expect(fmt.all_tags_ds.map { |t| t[:tag] }).to include('be.libis.teneo:BMP')
+    expect(fmt.all_tags_ds.map { |t| t[:tag] }).to include('be.libis.teneo:IMAGE')
   end
 end
