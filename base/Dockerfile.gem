@@ -1,0 +1,24 @@
+FROM ruby_base
+
+# Silence apt
+RUN dpkg-reconfigure debconf --frontend=noninteractive
+
+# Install common packages
+RUN apt-get update -qq \
+ && apt-get install -qqy --no-install-recommends \
+        build-essential \
+        gnupg2 \
+        curl \
+        less \
+        git \
+        wget \
+        libsqlite3-dev \
+        vim \
+        libyaml-dev \
+        libpq-dev \
+ && apt-get -qqy upgrade \
+ && apt-get -qqy autoremove \
+ && apt-get clean \
+ && rm -fr /var/cache/apt/archives/* \
+ && rm -fr /var/lib/apt/lists/* /tmp/* /var/tmp* \
+ && truncate -s 0 /var/log/*log
