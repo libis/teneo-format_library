@@ -3,7 +3,7 @@
 require 'dotenv'
 Dotenv.load('.env.local', '.env')
 
-$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '..', '..' ))
+$LOAD_PATH.unshift File.expand_path(File.join(__dir__, '..', '..'))
 require 'teneo/format_library'
 
 path = File.expand_path(__dir__)
