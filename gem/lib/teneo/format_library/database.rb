@@ -19,17 +19,12 @@ module Teneo
     # - reconnect(**opts): Reconfigures the database connection with the provided options and reconnects to the database.
     #
     # Instance Methods
-    # - reconnect: Disconnects from the current database connection, resets the connection, and reconnects.
-    # - connect: Establishes a connection to the database using the current configuration.
     # - config(**opts): Configures the database connection settings with the provided options.
+    # - connect: Establishes a connection to the database using the current configuration.
     # - disconnect: Disconnects from the current database connection if it is valid.
-    # - initialize: Initializes the database connection settings with default values.
-    #
-    # Note that the initialize method is private, meaning it can only be called internally by the class.
+    # - reconnect: Disconnects from the current database connection, resets the connection, and reconnects.
     class Database
       include Singleton
-
-      attr_reader :adapter, :user, :password, :host, :port, :database, :max_connections, :extensions, :db
 
       # Connects to the database using the current configuration.
       def self.connect
@@ -56,15 +51,15 @@ module Teneo
       # logs all queries to a logger that outputs to $stdout.
       def connect
         @db ||= Sequel.connect(
-          adapter: @adapter,
-          user: @user,
-          password: @password,
-          host: @host,
-          port: @port,
+          adapter: adapter,
+          user: user,
+          password: password,
+          host: host,
+          port: port,
           ssl_mode: 'prefer',
-          database: @database,
-          max_connections: @max_connections,
-          extensions: @extensions
+          database: database,
+          max_connections: max_connections,
+          extensions: extensions
         ) do |database|
           database.stream_all_queries = true
           database.sql_log_level = :debug if ENV['LOGGING']&.downcase == 'debug'
@@ -80,47 +75,90 @@ module Teneo
       #
       # The options available are:
       # - adapter: The database adapter to use.
-      #     Defaults to environment variable "DB_ADAPTER" or :postgres.
       # - user: The database user to connect as.
-      #     Defaults to environment variable "DB_USER" or "teneo".
       # - password: The password to use for the database user.
-      #     Defaults environment variable "DB_PASSWORD" or "teneo".
       # - database: The name of the database to connect to.
-      #     Defaults to environment variable "DB_NAME" or "teneo".
       # - host: The hostname or IP address of the database host.
-      #     Defaults to environment variable "DB_HOST" or "localhost".
       # - port: The port number to use for the database connection.
-      #     Defaults to environment variable "DB_PORT" or 5432.
       # - max_connections: The maximum number of connections to allow in the connection pool.
-      #     Defaults to environment variable "DB_MAX_CONNECTIONS" or 10.
       # - extensions: An array of extensions to enable for the database connection.
-      #     Always loaded are :async_thread_pool, :pg_array, :pg_json, :pg_streaming and :pg_auto_parameterize.
       def config(**opts)
-        @adapter = opts[:adapter] || ENV.fetch('DB_ADAPTER', :postgres).to_sym
-        @user = opts[:user] || ENV.fetch('DB_USER', 'teneo')
-        @password = opts[:password] || ENV.fetch('DB_PASSWORD', 'teneo')
-        @database = opts[:database] || ENV.fetch('DB_NAME', 'teneo')
-        @host = opts[:host] || ENV.fetch('DB_HOST', 'localhost')
-        @port = opts[:port] || ENV.fetch('DB_PORT', 5432).to_i
-        @max_connections = opts[:max_connections] || ENV.fetch('DB_MAX_CONNECTIONS', 10).to_i
-        @extensions = %i[async_thread_pool pg_array pg_json pg_streaming pg_auto_parameterize] | (opts[:extensions] || [])
+        (opts || {}).each do |key, value|
+          case key
+          when :adapter
+            @adapter = value
+          when :user
+            @user = value
+          when :password
+            @password = value
+          when :database
+            @database = value
+          when :host
+            @host = value
+          when :port
+            @port = value
+          when :max_connections
+            @max_connections = value
+          when :extensions
+            value = value.split(/[\t, ]+/) if value.is_a?(String)
+            @extensions += [value].flatten.compact.map(&:to_sym)
+          end
+        end
+      end
+
+      def adapter
+        @adapter ||= ENV.fetch('DB_ADAPTER', :postgres).to_sym
+      end
+
+      def user
+        @user ||= ENV.fetch('DB_USER', 'teneo')
+      end
+
+      def password
+        @password ||= ENV.fetch('DB_PASSWORD', 'teneo')
+      end
+
+      def database
+        @database ||= ENV.fetch('DB_NAME', 'teneo')
+      end
+
+      def host
+        @host ||= ENV.fetch('DB_HOST', 'localhost')
+      end
+
+      def port
+        @port ||= ENV.fetch('DB_PORT', 5432).to_i
+      end
+
+      def max_connections
+        @max_connections ||= ENV.fetch('DB_MAX_CONNECTIONS', 10).to_i
+      end
+
+      def extensions
+        @extensions ||= %i[async_thread_pool pg_array pg_json pg_streaming pg_auto_parameterize]
+      end
+
+      def db
+        connect
       end
 
       # Disconnects from the current database connection if it is valid.
       #
       # @return [Boolean] True if the connection was valid and disconnected, false otherwise.
       def disconnect
-        return unless @db.is_a?(Sequel::Database) && @db.valid_connection?
+        return unless @db.is_a?(Sequel::Database)
+
+        begin
+          return unless @db.valid_connection?
+        rescue ArgumentError
+          # Sequel 5.105+ requires argument for valid_connection?
+          # If it fails, assume connection is valid and try to disconnect
+        end
 
         @db.disconnect
       end
 
       private
-
-      # Initializes the database connection settings with default values.
-      def initialize
-        config
-      end
 
       # Delegate any undefined method call to the underlying Sequel::Database instance.
       #
