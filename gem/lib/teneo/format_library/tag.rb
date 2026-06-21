@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require_relative 'base'
+require 'active_support/core_ext/object/blank'
 
 module Teneo
   module FormatLibrary
@@ -148,7 +149,7 @@ module Teneo
       def tree_formats
         tree_structure.transform do |tag, children|
           r = DeepHash.new
-          r[:tags] = children unless children&.empty?
+          r[:tags] = children if children.present?
           r[:formats] = Tag.find(tag: tag)&.formats&.each_with_object(DeepHash.new) do |format, h|
             h[format.uid] = format
           end
