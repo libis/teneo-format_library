@@ -1,0 +1,165 @@
+syntax = "proto3";
+
+package teneo.format_library.v1;
+
+option ruby_package = "Teneo::FormatLibrary::V1";
+option go_package = "github.com/teneo/format_library/grpc";
+
+// Health check service
+service HealthService {
+  rpc Check(HealthCheckRequest) returns (HealthCheckResponse);
+}
+
+// Format service
+service FormatService {
+  rpc ListFormats(ListFormatsRequest) returns (ListFormatsResponse);
+  rpc SearchFormats(SearchFormatsRequest) returns (SearchFormatsResponse);
+  rpc GetFormat(GetFormatRequest) returns (Format);
+  rpc GetFormatRelations(GetFormatRelationsRequest) returns (FormatRelationsResponse);
+  rpc GetRelatedFormats(GetRelatedFormatsRequest) returns (RelatedFormatsResponse);
+  rpc GetFormatTags(GetFormatTagsRequest) returns (FormatTagsResponse);
+}
+
+// Tag service
+service TagService {
+  rpc ListTags(ListTagsRequest) returns (ListTagsResponse);
+  rpc GetTag(GetTagRequest) returns (Tag);
+  rpc GetTagFormats(GetTagFormatsRequest) returns (ListFormatsResponse);
+}
+
+// Common pagination
+message PaginationRequest {
+  int32 page = 1;
+  int32 per_page = 2;
+}
+
+message PaginationResponse {
+  int32 page = 1;
+  int32 per_page = 2;
+  int64 total = 3;
+  int32 total_pages = 4;
+}
+
+// Health messages
+message HealthCheckRequest {}
+message HealthCheckResponse {
+  string status = 1;
+  string timestamp = 2;
+}
+
+// Format messages
+message Format {
+  string uid = 1;
+  string name = 2;
+  string version = 3;
+  string source = 4;
+  string source_version = 5;
+  string url = 6;
+  map<string, string> properties = 7;
+  repeated string mimetypes = 8;
+  repeated string extensions = 9;
+  string created_at = 10;
+}
+
+message ListFormatsRequest {
+  PaginationRequest pagination = 1;
+  string source = 2;
+  string mimetype = 3;
+  string extension = 4;
+  string query = 5;
+}
+
+message ListFormatsResponse {
+  repeated Format items = 1;
+  PaginationResponse pagination = 2;
+}
+
+message SearchFormatsRequest {
+  string query = 1;
+}
+
+message SearchFormatsResponse {
+  repeated Format items = 1;
+}
+
+message GetFormatRequest {
+  string uid = 1;
+}
+
+message GetFormatRelationsRequest {
+  string uid = 1;
+  repeated string relation_types = 2;
+  repeated string sources = 3;
+  repeated string formats = 4;
+}
+
+message FormatRelationsResponse {
+  map<string, RelationSources> relations = 1;
+}
+
+message RelationSources {
+  map<string, StringList> sources = 1;
+}
+
+message StringList {
+  repeated string values = 1;
+}
+
+message GetRelatedFormatsRequest {
+  string uid = 1;
+  repeated string relation_types = 2;
+  repeated string sources = 3;
+  repeated string formats = 4;
+}
+
+message RelatedFormatsResponse {
+  map<string, RelatedSources> related = 1;
+}
+
+message RelatedSources {
+  map<string, StringList> sources = 1;
+}
+
+message GetFormatTagsRequest {
+  string uid = 1;
+  string namespace = 2;
+  string profile = 3;
+}
+
+message FormatTagsResponse {
+  repeated Tag tags = 1;
+}
+
+// Tag messages
+message Tag {
+  string tag = 1;
+  string name = 2;
+  string profile = 3;
+  string namespace = 4;
+  repeated Format formats = 5;
+  repeated Tag ancestors = 6;
+  repeated Tag descendants = 7;
+}
+
+message ListTagsRequest {
+  PaginationRequest pagination = 1;
+  string namespace = 2;
+  string profile = 3;
+}
+
+message ListTagsResponse {
+  repeated Tag items = 1;
+  PaginationResponse pagination = 2;
+}
+
+message GetTagRequest {
+  string tag = 1;
+  bool include_formats = 2;
+  bool include_ancestors = 3;
+  bool include_descendants = 4;
+}
+
+message GetTagFormatsRequest {
+  string tag = 1;
+  PaginationRequest pagination = 2;
+}
