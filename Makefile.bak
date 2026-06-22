@@ -1,0 +1,154 @@
+include .env
+-include .env.local
+export
+
+include help.mk
+
+USER_ID ?= $(shell id -u)
+GROUP_ID ?= $(shell id -g)
+
+GEM_VERSION := $(shell ruby -e 'require_relative "gem/lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
+
+RUN_TOOL := docker compose --profile gem_tool run --rm gem_tools
+RUN_TEST := docker compose --profile gem_test run --rm gem_test
+RUN_API := docker compose --profile api run --rm -e OPENAPI=1 -v ./api/doc/:/app/api/doc/ api
+RUN_GRPC := docker compose --profile grpc run --rm grpc
+EXEC_API := docker compose --profile api exec api
+
+.SILENT:
+
+### Dependencies
+
+bundle-install: ## Install the gem dependencies
+	$(RUN_TOOL) bundle install
+
+bundle-update: ## Update the gem dependencies
+	$(RUN_TOOL) bundle update
+
+### Gem actions
+
+gem-build: bundle-install ## Build the gem
+	$(RUN_TOOL) gem build teneo-format_library.gemspec
+
+gem-release: gem-build ## Build and release the gem
+	$(RUN_TOOL) '(git commit -am "Version bump: v$(GEM_VERSION)" || true) && \
+	(git tag --force "v$(GEM_VERSION)") && \
+	(git push --force --tags) && \
+	(bundle exec rake changelog) && \
+	(git commit -a -m "Changelog update" || true) && \
+	(git push --force) && \
+	(bundle exec rake release)'
+
+### Gem actions that need the database
+
+gem-test: db-up ## Run the test suite
+	$(RUN_TEST) rake spec
+
+gem-shell:
+	$(RUN_TEST) bash
+
+gem-console: db-up ## Start a console with the gem loaded
+	$(RUN_TEST) irb -I lib -r teneo/format_library
+
+### Database actions
+
+db-clear: db-down ## Remove the database storage
+	rm -fr data/db/pgdata
+
+db-migrate: ## Create the database tables - make sure the DB is running
+	$(RUN_TEST) rake teneo:format_library:migrate
+
+db-seed: ## Populate the database - run migration first
+	$(RUN_TEST) rake teneo:format_library:seed
+
+db-reset: db-down db-clear db-up db-migrate db-seed ## Reset the database
+
+### API actions
+
+api-shell: ## Open a shell in the API container
+	$(EXEC_API) bash
+
+api-build: gem-build ## Build the gem and API image
+	docker compose --profile api build api
+
+api-update: api-build api-up ## Rebuild the image and update the API container
+
+api-test: api-update ## Run the test suite in the API container
+	$(RUN_API) bundle exec rspec
+
+### gRPC actions
+
+grpc-shell: ## Open a shell in the gRPC container
+	docker compose --profile grpc exec grpc bash
+
+grpc-build: gem-build ## Build the gem and gRPC image
+	docker compose --profile grpc build grpc
+
+grpc-up: ## Start the gRPC server
+	docker compose --profile grpc up -d
+
+grpc-down: ## Stop the gRPC server
+	docker compose --profile grpc down
+
+grpc-logs: ## Show gRPC server logs
+	docker compose --profile grpc logs -f grpc || true
+
+grpc-restart: grpc-down grpc-up ## Restart the gRPC server
+
+grpc-generate: ## Generate gRPC Ruby code from protobuf
+	cd api && bundle exec rake grpc:generate
+
+### Docker container actions
+
+db-up: ## Start the database and pgadmin containers
+	mkdir -p data/db/pgdata
+	docker compose --profile db up -d
+
+db-down: ## Stop the database and pgadmin containers
+	docker compose --profile db down
+
+db-status: ## container status
+	docker compose --profile db ps
+
+db-logs: ## Show container logs
+	docker compose --profile db logs -f || true
+
+db-restart: db-down db-up ## Restart the database containers
+
+api-up: ## Start the API server
+	docker compose --profile api up -d
+
+api-down: ## Stop the API server
+	docker compose --profile api down
+
+api-status: ## Show container logs
+	docker compose --profile api ps
+
+api-logs: ## Show API server logs
+	docker compose --profile api logs -f api || true
+
+api-restart: api-down api-up ## Restart the API server
+
+up: db-up api-up ## Start all the containers
+
+up-grpc: db-up api-up grpc-up ## Start all containers including gRPC
+
+down: api-down db-down ## Stop all the containers
+
+down-grpc: api-down db-down grpc-down ## Stop all containers including gRPC
+
+status:  ## Show all the containers' status
+	docker compose --profile db --profile api ps
+
+status-grpc:  ## Show all containers including gRPC
+	docker compose --profile db --profile api --profile grpc ps
+
+logs: ## Show container logs
+	docker compose --profile db,api logs -f || true
+
+logs-grpc: ## Show container logs including gRPC
+	docker compose --profile db,api,grpc logs -f || true
+
+restart: down up ## Restart all the containers
+
+restart-grpc: down-grpc up-grpc ## Restart all containers including gRPC
