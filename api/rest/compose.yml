@@ -1,0 +1,33 @@
+name: fl_api_rest
+
+services:
+  dev:
+    container_name: api_rest_dev
+    image: api/rest
+    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
+    environment:
+      DB_ADAPTER: postgresql
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: "${DB_NAME:-teneo}"
+      DB_USER: "${DB_USER:-teneo}"
+      DB_PASSWORD: "${DB_PASSWORD:-teneo}"
+      OPENAPI: 1
+    ports:
+      - "${API_REST_PORT}:3000"
+      - "${API_REST_CTRL_PORT}:3001"
+    networks:
+      - app_net
+      - db_net
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /etc/timezone:/etc/timezone:ro
+      - ../..:/app
+    restart: unless-stopped
+
+networks:
+
+  app_net:
+    external: true
+  db_net:
+    external: true

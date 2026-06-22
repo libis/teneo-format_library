@@ -1,0 +1,1441 @@
+---
+openapi: 3.0.3
+info:
+  title: api
+  version: 1.0.0
+servers: []
+paths:
+  "/":
+    get:
+      summary: GET /
+      responses:
+        '200':
+          description: returns API info
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  version:
+                    type: string
+                required:
+                - message
+                - version
+              example:
+                message: Teneo Format Library API
+                version: 0.2.0
+  "/formats":
+    get:
+      summary: GET /formats
+      parameters:
+      - name: extension
+        in: query
+        required: false
+        schema:
+          type: string
+        example: pdf
+      - name: mimetype
+        in: query
+        required: false
+        schema:
+          type: string
+        example: image/jpeg
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: 10
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+        example: WAVE
+      - name: source
+        in: query
+        required: false
+        schema:
+          type: string
+        example: PRONOM
+      responses:
+        '200':
+          description: searches by query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uid:
+                          type: string
+                        name:
+                          type: string
+                        version:
+                          nullable: true
+                          type: string
+                        source:
+                          type: string
+                        source_version:
+                          type: string
+                        url:
+                          type: string
+                        properties:
+                          type: object
+                          properties: {}
+                        mimetypes:
+                          type: array
+                          items:
+                            type: string
+                        extensions:
+                          type: array
+                          items:
+                            type: string
+                        created_at:
+                          type: string
+                      required:
+                      - uid
+                      - name
+                      - version
+                      - source
+                      - source_version
+                      - url
+                      - properties
+                      - mimetypes
+                      - extensions
+                      - created_at
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      per_page:
+                        type: integer
+                      total:
+                        type: integer
+                      total_pages:
+                        type: integer
+                    required:
+                    - page
+                    - per_page
+                    - total
+                    - total_pages
+                required:
+                - items
+                - pagination
+              example:
+                items:
+                - uid: fdd000001
+                  name: WAVE Audio File Format
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000001.shtml
+                  properties: {}
+                  mimetypes:
+                  - audio/wav
+                  - audio/wave
+                  - audio/x-pn-wav
+                  - audio/x-wav
+                  - audio/vnd.wave
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000002
+                  name: WAVE Audio File Format with LPCM audio
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000002.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions: []
+                  created_at: '2024-04-23'
+                - uid: fdd000003
+                  name: Broadcast WAVE File Format, Version 1, with LPCM Audio
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000003.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000356
+                  name: Broadcast WAVE Audio File Format, Version 1
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000356.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000357
+                  name: Broadcast WAVE Audio File Format, Version 2
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000357.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000359
+                  name: Broadcast WAVE File Format, Version 2, with LPCM Audio
+                  version:
+                  source: LOC
+                  source_version: '2024-04-21'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000359.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-21'
+                - uid: fdd000507
+                  name: Wavefront OBJ File Format
+                  version:
+                  source: LOC
+                  source_version: '2025-02-18'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000507.shtml
+                  properties: {}
+                  mimetypes:
+                  - model/obj
+                  extensions:
+                  - obj
+                  created_at: '2025-02-18'
+                - uid: fdd000508
+                  name: Wavefront Material Template Library (MTL) File Format
+                  version:
+                  source: LOC
+                  source_version: '2019-10-04'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000508.shtml
+                  properties: {}
+                  mimetypes:
+                  - model/mtl
+                  extensions:
+                  - mtl
+                  created_at: '2019-10-04'
+                - uid: fdd000648
+                  name: Enhanced Compression Wavelet (ECW)
+                  version:
+                  source: LOC
+                  source_version: '2025-12-09'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000648.shtml
+                  properties: {}
+                  mimetypes:
+                  - application/x-ecw
+                  extensions:
+                  - ecw
+                  created_at: '2025-12-09'
+                - uid: fmt/1
+                  name: Broadcast WAVE
+                  version: 0 Generic
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/1
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                pagination:
+                  page: 1
+                  per_page: 10
+                  total: 37
+                  total_pages: 4
+  "/formats/detail":
+    get:
+      summary: GET /formats/detail
+      parameters:
+      - name: uid
+        in: query
+        required: false
+        schema:
+          type: string
+        example: unknown/uid
+      responses:
+        '200':
+          description: returns format details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:
+                    type: string
+                  name:
+                    type: string
+                  version:
+                    type: string
+                  source:
+                    type: string
+                  source_version:
+                    type: string
+                  url:
+                    type: string
+                  properties:
+                    type: object
+                    properties: {}
+                  mimetypes:
+                    type: array
+                    items:
+                      type: string
+                  extensions:
+                    type: array
+                    items:
+                      type: string
+                  created_at:
+                    type: string
+                required:
+                - uid
+                - name
+                - version
+                - source
+                - source_version
+                - url
+                - properties
+                - mimetypes
+                - extensions
+                - created_at
+              example:
+                uid: x-fmt/1
+                name: Microsoft Word for Macintosh Document
+                version: '3.0'
+                source: PRONOM
+                source_version: '124'
+                url: https://www.nationalarchives.gov.uk/PRONOM/x-fmt/1
+                properties: {}
+                mimetypes:
+                - application/msword
+                extensions:
+                - mcw
+                created_at: '2026-06-09'
+        '400':
+          description: returns 400 without uid parameter
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '{"error":"Query parameter \"uid\" is required"}'
+        '404':
+          description: returns 404 for unknown format
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '{"error":"Format ''unknown/uid'' not found"}'
+  "/formats/related":
+    get:
+      summary: GET /formats/related
+      parameters:
+      - name: uid
+        in: query
+        required: false
+        schema:
+          type: string
+        example: x-fmt/1
+      responses:
+        '200':
+          description: returns related formats
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  fdd000509:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fdd000567:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/37:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/38:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/39:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/40:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/346:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                      same_extension:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                    - same_extension
+                  fmt/609:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/754:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/755:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/1688:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/1689:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/1690:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  fmt/1691:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  x-fmt/64:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                      same_extension:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                    - same_extension
+                  x-fmt/65:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                      same_extension:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                    - same_extension
+                  x-fmt/274:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  x-fmt/275:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                  x-fmt/276:
+                    type: object
+                    properties:
+                      same_mimetype:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - same_mimetype
+                required:
+                - fdd000509
+                - fdd000567
+                - fmt/37
+                - fmt/38
+                - fmt/39
+                - fmt/40
+                - fmt/346
+                - fmt/609
+                - fmt/754
+                - fmt/755
+                - fmt/1688
+                - fmt/1689
+                - fmt/1690
+                - fmt/1691
+                - x-fmt/64
+                - x-fmt/65
+                - x-fmt/274
+                - x-fmt/275
+                - x-fmt/276
+              example:
+                fdd000509:
+                  same_mimetype:
+                  - application/msword
+                fdd000567:
+                  same_mimetype:
+                  - application/msword
+                fmt/37:
+                  same_mimetype:
+                  - application/msword
+                fmt/38:
+                  same_mimetype:
+                  - application/msword
+                fmt/39:
+                  same_mimetype:
+                  - application/msword
+                fmt/40:
+                  same_mimetype:
+                  - application/msword
+                fmt/346:
+                  same_mimetype:
+                  - application/msword
+                  same_extension:
+                  - mcw
+                fmt/609:
+                  same_mimetype:
+                  - application/msword
+                fmt/754:
+                  same_mimetype:
+                  - application/msword
+                fmt/755:
+                  same_mimetype:
+                  - application/msword
+                fmt/1688:
+                  same_mimetype:
+                  - application/msword
+                fmt/1689:
+                  same_mimetype:
+                  - application/msword
+                fmt/1690:
+                  same_mimetype:
+                  - application/msword
+                fmt/1691:
+                  same_mimetype:
+                  - application/msword
+                x-fmt/64:
+                  same_mimetype:
+                  - application/msword
+                  same_extension:
+                  - mcw
+                x-fmt/65:
+                  same_mimetype:
+                  - application/msword
+                  same_extension:
+                  - mcw
+                x-fmt/274:
+                  same_mimetype:
+                  - application/msword
+                x-fmt/275:
+                  same_mimetype:
+                  - application/msword
+                x-fmt/276:
+                  same_mimetype:
+                  - application/msword
+  "/formats/relations":
+    get:
+      summary: GET /formats/relations
+      parameters:
+      - name: relation_types
+        in: query
+        required: false
+        schema:
+          type: string
+        example: has_format
+      - name: uid
+        in: query
+        required: false
+        schema:
+          type: string
+        example: x-fmt/1
+      responses:
+        '200':
+          description: filters relations by type
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  same_mimetype:
+                    type: object
+                    properties:
+                      application/msword:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - application/msword
+                  same_extension:
+                    type: object
+                    properties:
+                      mcw:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                    - mcw
+              example:
+                same_mimetype:
+                  application/msword:
+                  - fdd000509
+                  - fdd000567
+                  - fmt/37
+                  - fmt/38
+                  - fmt/39
+                  - fmt/40
+                  - fmt/346
+                  - fmt/609
+                  - fmt/754
+                  - fmt/755
+                  - fmt/1688
+                  - fmt/1689
+                  - fmt/1690
+                  - fmt/1691
+                  - x-fmt/64
+                  - x-fmt/65
+                  - x-fmt/274
+                  - x-fmt/275
+                  - x-fmt/276
+                same_extension:
+                  mcw:
+                  - fmt/346
+                  - x-fmt/64
+                  - x-fmt/65
+  "/formats/search":
+    get:
+      summary: GET /formats/search
+      responses:
+        '200':
+          description: returns search results
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uid:
+                          type: string
+                        name:
+                          type: string
+                        version:
+                          type: string
+                          nullable: true
+                        source:
+                          type: string
+                        source_version:
+                          type: string
+                        url:
+                          type: string
+                        properties:
+                          type: object
+                          properties: {}
+                        mimetypes:
+                          type: array
+                          items:
+                            type: string
+                        extensions:
+                          type: array
+                          items:
+                            type: string
+                        created_at:
+                          type: string
+                      required:
+                      - uid
+                      - name
+                      - version
+                      - source
+                      - source_version
+                      - url
+                      - properties
+                      - mimetypes
+                      - extensions
+                      - created_at
+                required:
+                - items
+              example:
+                items:
+                - uid: fmt/2
+                  name: Broadcast WAVE
+                  version: 1 Generic
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/2
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/1
+                  name: Broadcast WAVE
+                  version: 0 Generic
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/1
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/527
+                  name: Broadcast WAVE
+                  version: 2 Generic
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/527
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/703
+                  name: Broadcast WAVE
+                  version: 0 PCM Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/703
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/704
+                  name: Broadcast WAVE
+                  version: 1 PCM Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/704
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/705
+                  name: Broadcast WAVE
+                  version: 2 PCM Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/705
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/706
+                  name: Broadcast WAVE
+                  version: 0 MPEG Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/706
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/707
+                  name: Broadcast WAVE
+                  version: 1 MPEG Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/707
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/708
+                  name: Broadcast WAVE
+                  version: 2 MPEG Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/708
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/709
+                  name: Broadcast WAVE
+                  version: 0 WAVEFORMATEXTENSIBLE Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/709
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - rf64
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/710
+                  name: Broadcast WAVE
+                  version: 1 WAVEFORMATEXTENSIBLE Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/710
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - rf64
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/711
+                  name: Broadcast WAVE
+                  version: 2 WAVEFORMATEXTENSIBLE Encoding
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/711
+                  properties: {}
+                  mimetypes:
+                  - audio/x-wav
+                  extensions:
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fmt/713
+                  name: RF64 Multichannel Broadcast Wave format
+                  version:
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/713
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - rf64
+                  - wav
+                  created_at: '2026-06-09'
+                - uid: fdd000003
+                  name: Broadcast WAVE File Format, Version 1, with LPCM Audio
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000003.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000356
+                  name: Broadcast WAVE Audio File Format, Version 1
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000356.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000357
+                  name: Broadcast WAVE Audio File Format, Version 2
+                  version:
+                  source: LOC
+                  source_version: '2024-04-23'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000357.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-23'
+                - uid: fdd000359
+                  name: Broadcast WAVE File Format, Version 2, with LPCM Audio
+                  version:
+                  source: LOC
+                  source_version: '2024-04-21'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000359.shtml
+                  properties: {}
+                  mimetypes: []
+                  extensions:
+                  - wav
+                  created_at: '2024-04-21'
+                - uid: fdd000573
+                  name: Digital Video Broadcasting; Subtitling systems (DVB-SUB)
+                  version:
+                  source: LOC
+                  source_version: '2023-04-17'
+                  url: https://www.loc.gov/preservation/digital/formats/fdd/fdd000573.shtml
+                  properties: {}
+                  mimetypes:
+                  - image/vnd.dvb.subtitle
+                  extensions:
+                  - sub
+                  created_at: '2023-04-17'
+        '400':
+          description: requires q parameter
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '{"error":"Query parameter \"q\" is required"}'
+      parameters:
+      - name: q
+        in: query
+        required: false
+        schema:
+          type: string
+        example: Broadcast
+  "/formats/tags":
+    get:
+      summary: GET /formats/tags
+      parameters:
+      - name: uid
+        in: query
+        required: false
+        schema:
+          type: string
+        example: x-fmt/1
+      responses:
+        '200':
+          description: returns format tags
+          content:
+            application/json:
+              schema:
+                type: array
+                items: {}
+              example: []
+  "/health":
+    get:
+      summary: GET /health
+      responses:
+        '200':
+          description: returns health status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                  timestamp:
+                    type: string
+                required:
+                - status
+                - timestamp
+              example:
+                status: ok
+                timestamp: '2026-06-21T14:10:10+02:00'
+  "/tags":
+    get:
+      summary: GET /tags
+      parameters:
+      - name: namespace
+        in: query
+        required: false
+        schema:
+          type: string
+        example: be.libis.teneo
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: 10
+      - name: profile
+        in: query
+        required: false
+        schema:
+          type: string
+        example: classification
+      responses:
+        '200':
+          description: filters by profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tag:
+                          type: string
+                        name:
+                          type: string
+                        profile:
+                          type: string
+                        namespace:
+                          type: string
+                      required:
+                      - tag
+                      - name
+                      - profile
+                      - namespace
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      per_page:
+                        type: integer
+                      total:
+                        type: integer
+                      total_pages:
+                        type: integer
+                    required:
+                    - page
+                    - per_page
+                    - total
+                    - total_pages
+                required:
+                - items
+                - pagination
+              example:
+                items:
+                - tag: be.libis.teneo:AAC
+                  name: Audio Data Transport Stream
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:AC3
+                  name: Dolby Digital AC-3
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:AIFF
+                  name: Audio Interchange File Format (AIFF)
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:ALAC
+                  name: Apple Lossless Audio Codec (ALAC)
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:AMR
+                  name: Adaptive Multi-Rate Audio (AMR)
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:ANNOTATED_TEXT
+                  name: Annotated text
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:APNG
+                  name: Animate Portable Network Graphics (APNG) images
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:ARCHIVE
+                  name: Archive formats
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:AU
+                  name: NeXT/Sun sound (AU)
+                  profile: classification
+                  namespace: be.libis.teneo
+                - tag: be.libis.teneo:AUDIO
+                  name: Common audio formats
+                  profile: classification
+                  namespace: be.libis.teneo
+                pagination:
+                  page: 1
+                  per_page: 10
+                  total: 82
+                  total_pages: 9
+  "/tags/detail":
+    get:
+      summary: GET /tags/detail
+      parameters:
+      - name: include_ancestors
+        in: query
+        required: false
+        schema:
+          type: string
+        example: 'true'
+      - name: include_descendants
+        in: query
+        required: false
+        schema:
+          type: string
+        example: 'true'
+      - name: include_formats
+        in: query
+        required: false
+        schema:
+          type: string
+        example: 'true'
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+        example: unknown:tag
+      responses:
+        '200':
+          description: includes descendants when requested
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tag:
+                    type: string
+                  name:
+                    type: string
+                  profile:
+                    type: string
+                  namespace:
+                    type: string
+                  formats:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uid:
+                          type: string
+                        name:
+                          type: string
+                        version:
+                          type: string
+                      required:
+                      - uid
+                      - name
+                  ancestors:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tag:
+                          type: string
+                        name:
+                          type: string
+                        profile:
+                          type: string
+                      required:
+                      - tag
+                      - name
+                      - profile
+                  descendants:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tag:
+                          type: string
+                        name:
+                          type: string
+                        profile:
+                          type: string
+                      required:
+                      - tag
+                      - name
+                      - profile
+                required:
+                - tag
+                - name
+                - profile
+                - namespace
+              example:
+                tag: be.libis.teneo:IMAGE
+                name: Common image formats
+                profile: classification
+                namespace: be.libis.teneo
+                formats:
+                - uid: fmt/115
+                  name: Windows Bitmap
+                  version: '2.0'
+                - uid: fmt/118
+                  name: Windows Bitmap
+                  version: '4.0'
+                - uid: fmt/119
+                  name: Windows Bitmap
+                  version: '5.0'
+                - uid: fmt/114
+                  name: Windows Bitmap
+                  version: '1.0'
+                - uid: fmt/116
+                  name: Windows Bitmap
+                  version: '3.0'
+                - uid: fmt/117
+                  name: Windows Bitmap
+                  version: 3.0 NT
+                - uid: x-fmt/270
+                  name: OS/2 Bitmap
+                  version: '2.0'
+                ancestors:
+                - tag: be.libis.teneo:BMP
+                  name: Device Independent Bitmap (DIP/BMP) images
+                  profile: classification
+                - tag: be.libis.teneo:IMAGE
+                  name: Common image formats
+                  profile: classification
+                descendants:
+                - tag: be.libis.teneo:IMAGE
+                  name: Common image formats
+                  profile: classification
+                - tag: be.libis.teneo:TIFF
+                  name: Tagged Image File Format (TIFF) images
+                  profile: classification
+                - tag: be.libis.teneo:JP2
+                  name: Joint Photographic Experts Group 2000 (JPEG 2000) images
+                  profile: classification
+                - tag: be.libis.teneo:JPG
+                  name: Joint Photographic Experts Group (JPEG) images
+                  profile: classification
+                - tag: be.libis.teneo:PNG
+                  name: Portable Network Graphics (PNG) images
+                  profile: classification
+                - tag: be.libis.teneo:APNG
+                  name: Animate Portable Network Graphics (APNG) images
+                  profile: classification
+                - tag: be.libis.teneo:BMP
+                  name: Device Independent Bitmap (DIP/BMP) images
+                  profile: classification
+                - tag: be.libis.teneo:GIF
+                  name: Graphics Interchange Format (GIF) images
+                  profile: classification
+                - tag: be.libis.teneo:PBM
+                  name: Portable Bitmap Format (PBM) images
+                  profile: classification
+                - tag: be.libis.teneo:PGM
+                  name: Portable GrayMap Format (PGM) images
+                  profile: classification
+                - tag: be.libis.teneo:PPM
+                  name: Portable Pixel Map (PPM) images
+                  profile: classification
+                - tag: be.libis.teneo:OO_DRAW
+                  name: OpenDocument Graphics (ODG) images
+                  profile: classification
+        '400':
+          description: returns 400 without tag parameter
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '{"error":"Query parameter \"tag\" is required"}'
+        '404':
+          description: returns 404 for unknown tag
+          content:
+            text/html:
+              schema:
+                type: string
+              example: '{"error":"Tag ''unknown:tag'' not found"}'
+  "/tags/formats":
+    get:
+      summary: GET /tags/formats
+      parameters:
+      - name: per_page
+        in: query
+        required: false
+        schema:
+          type: integer
+        example: 3
+      - name: tag
+        in: query
+        required: false
+        schema:
+          type: string
+        example: be.libis.teneo:BMP
+      responses:
+        '200':
+          description: returns formats with uid and name
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        uid:
+                          type: string
+                        name:
+                          type: string
+                        version:
+                          type: string
+                        source:
+                          type: string
+                        source_version:
+                          type: string
+                        url:
+                          type: string
+                        properties:
+                          type: object
+                          properties: {}
+                        mimetypes:
+                          type: array
+                          items:
+                            type: string
+                        extensions:
+                          type: array
+                          items:
+                            type: string
+                        created_at:
+                          type: string
+                      required:
+                      - uid
+                      - name
+                      - version
+                      - source
+                      - source_version
+                      - url
+                      - properties
+                      - mimetypes
+                      - extensions
+                      - created_at
+                  pagination:
+                    type: object
+                    properties:
+                      page:
+                        type: integer
+                      per_page:
+                        type: integer
+                      total:
+                        type: integer
+                      total_pages:
+                        type: integer
+                    required:
+                    - page
+                    - per_page
+                    - total
+                    - total_pages
+                required:
+                - items
+                - pagination
+              example:
+                items:
+                - uid: fmt/114
+                  name: Windows Bitmap
+                  version: '1.0'
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/114
+                  properties: {}
+                  mimetypes:
+                  - image/bmp
+                  extensions:
+                  - bmp
+                  - ddb
+                  created_at: '2026-06-09'
+                - uid: fmt/115
+                  name: Windows Bitmap
+                  version: '2.0'
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/115
+                  properties: {}
+                  mimetypes:
+                  - image/bmp
+                  extensions:
+                  - bmp
+                  - dib
+                  created_at: '2026-06-09'
+                - uid: fmt/116
+                  name: Windows Bitmap
+                  version: '3.0'
+                  source: PRONOM
+                  source_version: '124'
+                  url: https://www.nationalarchives.gov.uk/PRONOM/fmt/116
+                  properties: {}
+                  mimetypes:
+                  - image/bmp
+                  extensions:
+                  - bmp
+                  - dib
+                  created_at: '2026-06-09'
+                pagination:
+                  page: 1
+                  per_page: 3
+                  total: 7
+                  total_pages: 3
