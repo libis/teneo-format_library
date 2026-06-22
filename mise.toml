@@ -15,3 +15,5 @@ DB_NAME = 'teneo'
 DBADMIN_PUBLIC_PORT = 5433
 DBADMIN_USER = 'admin@example.com'
 DBADMIN_PWD = 'admin123'
+
+RUBY_VERSION = '3.4.9'
