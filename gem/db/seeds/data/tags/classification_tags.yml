@@ -168,7 +168,7 @@
       - tag: be.libis.teneo:RTF
         name: Rich Text Format (RTF)
         profile: classification
-        formats: fmt/45
+        formats: fmt/45 fmt/355
       - tag: be.libis.teneo:XML
         name: Extensible Markup Language (XML)
         profile: classification
