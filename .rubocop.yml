@@ -1,7 +1,23 @@
 # inherit_from: .rubocop_todo.yml
 
+AllCops:
+  TargetRubyVersion: 3.4
+  Enabled: true
+  Exclude:
+    - 'api/grpc/format_library_pb.rb'
+    - 'api/grpc/format_library_services_pb.rb'
+
 Style/Documentation:
   Enabled: false
+
+Style/NumericPredicate:
+  Exclude:
+    - 'spec/**/*'
+    - 'api/spec/**/*'
+
+Style/RaiseArgs:
+  Exclude:
+    - 'api/grpc/*'
 
 Lint/RescueException:
   Enabled: false
