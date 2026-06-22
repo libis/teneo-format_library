@@ -10,10 +10,6 @@ variable "BUNDLER_VERSION" {
   default = "4.0.12"
 }
 
-group "all" {
-  targets = [ "ruby_base", "gem_base" ]
-}
-
 target "ruby_base" {
   description = "Base image for ruby run-time images. With ruby, bundler and postgres client installed."
   dockerfile = "Dockerfile.ruby"

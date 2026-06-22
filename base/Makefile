@@ -4,7 +4,14 @@ include ../help.mk
 
 .SILENT:
 
-build: ## Build the base docker images
-	docker buildx bake all
+.mk.ruby: Dockerfile.ruby docker-bake.hcl
+	docker buildx bake ruby_base
+	touch .mk.ruby
+
+.mk.gem: Dockerfile.gem docker-bake.hcl
+	docker buildx bake gem_base
+	touch .mk.gem
+
+build: .mk.ruby .mk.gem ## Build the base docker images
 
 .PHONY: build
