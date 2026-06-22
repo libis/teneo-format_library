@@ -1,4 +1,4 @@
-include ../help.mk
+sinclude ../help.mk
 
 .DEFAULT_GOAL := helpstack
 STACK := gem
@@ -15,20 +15,25 @@ RUN_TEST := docker compose run --rm -it test
 
 ### Gem actions
 
-.mk.gem-build: install lib/**/*.rb Gemfile $(GEM).gemspec
-	$(RUN_BUILD) gem build $(GEM).gemspec
-	touch .mk.gem-build
+build: .make/.gem-build ## Build the gem in the docker container
 
-build: .mk.gem-build ## Build the gem in the docker container
+.make/.gem-build: install Gemfile $(GEM).gemspec $(wildcard lib/**/*.rb)
+	$(RUN_BUILD) gem build $(GEM).gemspec
+	mkdir -p .make
+	touch .make/.gem-build
 
 test: image-test build ## Run tests in the test container
 	$(RUN_TEST) rspec
 
-.mk.install: image-build Gemfile $(GEM).gemspec
-	$(RUN_BUILD) bundle install
-	touch .mk.install
+console: image-test ## Run an interactive console
+	$(RUN_BUILD) irb -I lib -r teneo/format_library
 
-install: .mk.install ## Install the gem dependencies
+install: .make/.install ## Install the gem dependencies
+
+.make/.install: image-build Gemfile $(GEM).gemspec
+	$(RUN_BUILD) bundle install
+	mkdir -p .make
+	touch .make/.install
 
 update: image-build ## Update the gem dependencies
 	$(RUN_BUILD) bundle update --all
@@ -51,17 +56,19 @@ release: ## Release a new gem version
 
 ### Docker image actions
 
-.mk.image_build: Dockerfile.build docker-bake.hcl
+image-build: .make/.image_build ### Build the docker image for building the gem
+
+.make/.image_build: Dockerfile.build docker-bake.hcl
 	docker buildx bake build
-	touch .mk.image_build
+	mkdir -p .make
+	touch .make/.image_build
 
-image-build: .mk.image_build ### Build the docker image for building the gem
+image-test: build .make/.image_test ### Build the docker image for building the gem
 
-.mk.image_test: Dockerfile.test docker-bake.hcl Gemfile.test Rakefile.test spec/**/*.rb .mk.gem-build
+.make/.image_test: Dockerfile.test docker-bake.hcl Gemfile.test Rakefile.test $(wildcard spec/**/*.rb) .make/.gem-build
 	docker buildx bake test
-	touch .mk.image_test
-
-image-test: build .mk.image_test ### Build the docker image for building the gem
+	mkdir -p .make
+	touch .make/.image_test
 
 ### Database actions
 
