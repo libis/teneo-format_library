@@ -9,7 +9,12 @@ gemspec
 
 group :development do
   gem 'github_changelog_generator', '~> 1.0', '>= 1.18.0'
+  gem 'irb'
+  gem 'puma', '~> 6.4'
+  gem 'rack-unreloader', '~> 2.1'
+  gem 'roda', '~> 3.88'
   gem 'rubocop', '~> 1.0', '>= 1.74.0'
+  gem 'rubocop-rspec'
   gem 'ruby-lsp', '~> 0.0', '>= 0.23.11'
 end
 

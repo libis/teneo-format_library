@@ -1,0 +1,25 @@
+ARG USER_ID=1000
+ARG GROUP_ID=1000
+FROM gem_base
+
+# Copy Entrypoint script
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod 755 /usr/local/bin/start.sh
+
+ARG USER_ID
+ARG GROUP_ID
+RUN groupadd -g ${GROUP_ID:-1000} app \
+    && useradd -rm -d /app -s /bin/bash -g app -u ${USER_ID:-1000} app
+
+USER app
+WORKDIR /app/gem
+
+# Location of the installed gems
+ENV GEMS_PATH=/app/gem/vendor/bundle
+
+# Prepare ruby environment
+ENV LANG=C.UTF-8 \
+    BUNDLE_JOBS=4 \
+    BUNDLE_RETRY=3 \
+    BUNDLE_PATH=${GEMS_PATH}\
+    RUBY_ENV=development

@@ -1,80 +1,26 @@
-name: teneo-format_library
+name: fl_gem
 
 services:
-  db:
-    image: postgres:17-alpine
+  build:
+    container_name: gem_build
+    image: gem_build
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    command:
-      - -c
-      - log_hostname=off
-    init: true
-    shm_size: 128mb
     environment:
-      # TZ: "Europe/Brussels"
-      POSTGRES_DB: ${DB_NAME:-teneo}
-      POSTGRES_USER: ${DB_USER:-teneo}
-      POSTGRES_PASSWORD: ${DB_PASSWORD:-teneo}
-      # PGDATA: /var/lib/postgresql/data/pgdata
-      # POSTGRES_INITDB_ARGS: "--encoding=UTF8 --locale=C"
+      CHANGELOG_GITHUB_TOKEN: ${CHANGELOG_GITHUB_TOKEN}
     networks:
       - db_net
-    ports:
-      - "${DB_PUBLIC_PORT:-5432}:5432"
     volumes:
       - /etc/localtime:/etc/localtime:ro
-      - ./data/db/pgdata:/var/lib/postgresql/data
-    restart: unless-stopped
-    healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
-      interval: 10s
-      timeout: 10s
-      retries: 20
-      start_period: 5s
+      - /etc/timezone:/etc/timezone:ro
+      - ..:/app
+    restart: no
+    profiles:
+      - build
 
-  db_admin:
-    image: dpage/pgadmin4
+  test:
+    container_name: gem_test
+    image: gem_test
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    networks:
-      - db_net
-      - app_net
-    ports:
-      - "${DBADMIN_PUBLIC_PORT:-5433}:5050"
-    environment:
-      TZ: "Europe/Brussels"
-      PGADMIN_DEFAULT_EMAIL: "${DBADMIN_USER:-admin@libis.be}"
-      PGADMIN_DEFAULT_PASSWORD: "${DBADMIN_PWD:-admin}"
-      PGADMIN_CONFIG_SERVER_MODE: "True"
-      PGADMIN_CONFIG_ENHANCED_COOKIE_PROTECTION: "True"
-      PGADMIN_CONFIG_LOG_FILE: "'/var/lib/pgadmin/pgadmin4.log'"
-      PGADMIN_LISTEN_ADDRESS: "0.0.0.0"
-      PGADMIN_LISTEN_PORT: "5050"
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      # - /etc/passwd:/etc/passwd:ro
-      - ./data/admin/data:/var/lib/pgadmin
-      - ./data/admin/logs:/var/log/pgadmin
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-    restart: unless-stopped
-
-  gem_test:
-    build:
-      dockerfile: Dockerfile
-      target: gem_test
-      args:
-        RUBY_VERSION: "${RUBY_VERSION:-3.4.9}"
-        RUBY_OS_VERSION: "${RUBY_OS_VERSION:-slim}"
-        BUILDER_VERION: "${BUILDER_VERSION:-4.0.12}"
-        GEM_VERSION: "${GEM_VERSION:-0.2.0}"
-    pull_policy: build
-    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    command: ["irb"]
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
     environment:
       DB_ADAPTER: postgresql
       DB_HOST: db
@@ -82,53 +28,18 @@ services:
       DB_NAME: "${DB_NAME:-teneo}"
       DB_USER: "${DB_USER:-teneo}"
       DB_PASSWORD: "${DB_PASSWORD:-teneo}"
+      GEM_VERSION: ${GEM_VERSION:-1.0}
     networks:
       - db_net
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
-      - .:/app
+      - ./teneo-format_library-${GEM_VERSION}.gem:/app/teneo-format_library-${GEM_VERSION}.gem
     restart: no
     profiles:
-      - gem
-
-  gem_tools:
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: gem_tools
-      args:
-        RUBY_VERSION: "${RUBY_VERSION:-3.4.9}"
-        RUBY_OS_VERSION: "${RUBY_OS_VERSION:-slim}"
-        BUILDER_VERION: "${BUILDER_VERSION:-4.0.12}"
-    user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
-    command: ["irb", "-I", "lib", "-r", "teneo/format_library"]
-    depends_on:
-      db:
-        condition: service_healthy
-        restart: true
-    environment:
-      DB_ADAPTER: postgresql
-      DB_HOST: db
-      DB_PORT: 5432
-      DB_NAME: "${DB_NAME:-teneo}"
-      DB_USER: "${DB_USER:-teneo}"
-      DB_PASSWORD: "${DB_PASSWORD:-teneo}"
-    networks:
-      - db_net
-    volumes:
-      - /etc/localtime:/etc/localtime:ro
-      - /etc/timezone:/etc/timezone:ro
-      - .:/app
-    restart: no
-    profiles:
-      - gem
+      - test
 
 networks:
-  app_net:
-    driver: bridge
-    attachable: true
 
   db_net:
-    driver: bridge
-    attachable: true
+    external: true

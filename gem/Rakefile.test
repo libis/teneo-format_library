@@ -2,8 +2,12 @@
 
 require 'bundler/setup'
 
+require 'teneo/format_library'
+
 begin
   require 'rspec/core/rake_task'
   RSpec::Core::RakeTask.new(:spec)
 rescue LoadError
 end
+
+require 'teneo/format_library/tasks'

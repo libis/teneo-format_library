@@ -1,74 +1,77 @@
-include .env
--include .env.local
-export
+include ../help.mk
 
-include help.mk
-
-USER_ID ?= $(shell id -u)
-GROUP_ID ?= $(shell id -g)
+.DEFAULT_GOAL := helpstack
+STACK := gem
 
 GEM_VERSION := $(shell ruby -e 'require_relative "lib/teneo/format_library/version"; puts Teneo::FormatLibrary::VERSION')
+export
 
-RUN_TOOL := docker compose --profile gem run --rm gem_tools
-RUN_TEST := docker compose --profile gem run --rm gem_test
+GEM := teneo-format_library
 
 .SILENT:
 
+RUN_BUILD := docker compose run --rm -it build
+RUN_TEST := docker compose run --rm -it test
+
 ### Gem actions
 
-shell_tool:
-	$(RUN_TOOL) bash
+.mk.gem-build: install lib/**/*.rb Gemfile $(GEM).gemspec
+	$(RUN_BUILD) gem build $(GEM).gemspec
+	touch .mk.gem-build
 
-build: install ## Build the gem
-	$(RUN_TOOL) gem build teneo-format_library.gemspec
+build: .mk.gem-build ## Build the gem in the docker container
 
-release: build ## Build and release the gem
-	$(RUN_TOOL) '(git commit -am "Version bump: v$(GEM_VERSION)" || true) && \
-	(git tag --force "v$(GEM_VERSION)") && \
-	(git push --force --tags) && \
-	(bundle exec rake changelog) && \
-	(git commit -a -m "Changelog update" || true) && \
-	(git push --force) && \
-	(bundle exec rake release)
+test: image-test build ## Run tests in the test container
+	$(RUN_TEST) rspec
 
-install: ## Install the gem dependencies
-	$(RUN_TOOL) bundle install
+.mk.install: image-build Gemfile $(GEM).gemspec
+	$(RUN_BUILD) bundle install
+	touch .mk.install
 
-update: ## Update the gem dependencies
-	$(RUN_TOOL) bundle update
+install: .mk.install ## Install the gem dependencies
 
-### Gem actions that need the database
+update: image-build ## Update the gem dependencies
+	$(RUN_BUILD) bundle update --all
 
-test: ## Run the test suite
-	$(RUN_TOOL) rspec
+shell: image-build ## Open a shell in the build container
+	$(RUN_BUILD) bash
 
-console: ## Start a console with the gem loaded
-	$(RUN_TOOL) irb -I lib -r teneo/format_library
+test-shell: image-build ## Open a shell in the build container
+	$(RUN_TEST) bash
 
-### Docker container actions
+release: ## Release a new gem version
+	$(RUN_BUILD) bundle exec rake changelog
+# 	$(RUN_BUILD) '(git commit -am "Version bump: v$(GEM_VERSION)" || true) && \
+# 	(git tag --force "v$(GEM_VERSION)") && \
+# 	(git push --force --tags) && \
+# 	(bundle exec rake changelog) && \
+# 	(git commit -a -m "Changelog update" || true) && \
+# 	(git push --force) && \
+# 	(bundle exec rake release)'
 
-up: ## Start the database and pgadmin containers
-	mkdir -p data/db/pgdata
-	docker compose up -d
+### Docker image actions
 
-down: ## Stop the database and pgadmin containers
-	docker compose down
+.mk.image_build: Dockerfile.build docker-bake.hcl
+	docker buildx bake build
+	touch .mk.image_build
 
-status: ## container status
-	docker compose ps
+image-build: .mk.image_build ### Build the docker image for building the gem
 
-logs: ## Show container logs
-	docker compose logs -f || true
+.mk.image_test: Dockerfile.test docker-bake.hcl Gemfile.test Rakefile.test spec/**/*.rb .mk.gem-build
+	docker buildx bake test
+	touch .mk.image_test
+
+image-test: build .mk.image_test ### Build the docker image for building the gem
 
 ### Database actions
 
-clear: down ## Remove the database storage
-	rm -fr data/db/pgdata
+tasks:image-test build
+	$(RUN_TEST) rake --tasks
 
-migrate: ## Create the database tables - make sure the DB is running
-	$(RUN_TOOL) rake teneo:format_library:migrate
+migrate: image-test build ### Create the database tables
+	$(RUN_TEST) rake teneo:format_library:migrate
 
-seed: ## Populate the database - run migration first
-	$(RUN_TOOL) rake teneo:format_library:seed
+seed: image-test build ### Seed the database with initial data
+	$(RUN_TEST) rake teneo:format_library:seed
 
-reset: down clear up migrate seed ## Reset the database
+.PHONY: build test install update shell test-shell release image-build image-test migrate seed

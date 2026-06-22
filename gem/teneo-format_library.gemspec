@@ -9,14 +9,14 @@ Gem::Specification.new do |spec|
   spec.email = ['kris.dekeyser@kuleuven.be']
 
   spec.summary = 'Format Library classes for Teneo'
-  spec.description = 'This gem provides a library with the Format Library for Teneo'
+  spec.description = 'This gem provides the Format Library for Teneo'
   spec.homepage = 'https://github.com/LIBIS/teneo-format_library'
   spec.license = 'MIT'
   spec.required_ruby_version = '>= 3.4.0'
 
   spec.metadata['allowed_push_host'] = 'https://rubygems.pkg.github.com/libis'
 
-  spec.metadata['source_code_uri'] = 'https://github.com/LIBIS/teneo-format_library'
+  spec.metadata['source_code_uri'] = 'https://github.com/LIBIS/gem/teneo-format_library'
   spec.metadata['changelog_uri'] = 'https://github.com/LIBIS/teneo-format_library/CHANGELOG.md'
 
   # Specify which files should be added to the gem when it is released.
@@ -24,13 +24,12 @@ Gem::Specification.new do |spec|
   spec.files =
     Dir.glob('lib/**/*') +
     Dir.glob('db/migrations/*') +
-    Dir.glob('db/seeds/**/*') +
+    Dir.glob('db/seeds/*') +
     [
       'teneo-format_library.gemspec',
       'Gemfile',
       'Gemfile.lock',
       'README.md',
-      'CHANGELOG.md',
       'LICENSE'
     ]
   spec.bindir = 'exe'

@@ -1,0 +1,19 @@
+ARG GEM_VERSION=0
+FROM gem_build
+
+COPY --chown=app:app Gemfile.test ./Gemfile
+COPY --chown=app:app Rakefile.test ./Rakefile
+COPY --chown=app:app spec ./spec
+COPY --chown=app:app db/seeds ./seeds
+
+ENV FORMAT_LIBRARY_SEEDS_FORMAT_DIR=/app/gem/seeds/data/formats
+ENV FORMAT_LIBRARY_SEEDS_TAG_DIR=/app/gem/seeds/data/tags
+
+ARG GEM_VERSION
+COPY --chown=app:app teneo-format_library-${GEM_VERSION}.gem /app/
+RUN gem unpack /app/teneo-format_library-${GEM_VERSION}.gem --target /app
+
+RUN bundle install --jobs 4
+
+# Run tests
+CMD ["rake", "spec"]
