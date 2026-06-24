@@ -28,5 +28,10 @@ target "production" {
     "GROUP_ID" = GROUP_ID
     "GEM_VERSION" = GEM_VERSION
   }
-  tags = ["registry.docker.libis.be/teneo/format_library/api/rest:${GEM_VERSION}"]
+  tags = [
+    "registry.docker.libis.be/teneo/format_library/api/rest:${GEM_VERSION}",
+    "registry.docker.libis.be/teneo/format_library/api/rest:latest",
+    "ghcr.io/libis/teneo/format_library/api/rest:${GEM_VERSION}",
+    "ghcr.io/libis/teneo/format_library/api/rest:latest"
+    ]
 }

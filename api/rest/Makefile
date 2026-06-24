@@ -54,6 +54,10 @@ SRC_FILES := Gemfile Gemfile.lock app.rb config.ru $(wildcard config/*.rb) $(wil
 	cp ../../gem/teneo-format_library-$(GEM_VERSION).gem ./
 	docker buildx bake production
 	docker image push registry.docker.libis.be/teneo/format_library/api/rest:$(GEM_VERSION)
+	docker image push registry.docker.libis.be/teneo/format_library/api/rest:latest
+	docker image push ghcr.io/libis/teneo/format_library/api/rest:$(GEM_VERSION)
+	docker image push ghcr.io/libis/teneo/format_library/api/rest:latest
+	rm -f teneo-format_library-$(GEM_VERSION).gem
 	mkdir -p .make
 	touch .make/.image-prod
 
