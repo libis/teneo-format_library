@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
+require_relative '../base_app'
+
 module Routes
-  class Health < Roda
+  class Health < BaseApp
     route do |r|
       r.get do
-        response['Content-Type'] = 'application/json'
-        { status: 'ok', timestamp: Time.now.iso8601 }.to_json
+        { status: 'ok', timestamp: Time.now.iso8601 }
       end
     end
   end

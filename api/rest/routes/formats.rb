@@ -1,12 +1,11 @@
 # frozen_string_literal: true
 
+require_relative '../base_app'
 require_relative '../serializers/format_serializer'
 require_relative '../lib/api_helpers'
 
 module Routes
-  class Formats < Roda
-    plugin :halt
-
+  class Formats < BaseApp
     route do |r|
       r.is do
         r.get do
@@ -27,84 +26,77 @@ module Routes
 
           result = ApiHelpers.paginate_dataset(dataset, page, per_page)
           result[:items] = Serializers::FormatSerializer.collection(result[:items])
-          response['Content-Type'] = 'application/json'
-          result.to_json
+          result
         end
       end
 
       r.on 'search' do
         r.get do
           query = r.params['q']
-          r.halt(400, { error: 'Query parameter "q" is required' }.to_json) unless query
+          r.halt(400, { error: 'Query parameter "q" is required' }) unless query
 
           formats = Teneo::FormatLibrary::Format.where(Sequel.ilike(:name, "%#{query}%") | Sequel.ilike(:uid, "%#{query}%")).all
-          response['Content-Type'] = 'application/json'
-          { items: Serializers::FormatSerializer.collection(formats) }.to_json
+          { items: Serializers::FormatSerializer.collection(formats) }
         end
       end
 
       r.on 'detail' do
         r.get do
           uid = r.params['uid']
-          r.halt(400, { error: 'Query parameter "uid" is required' }.to_json) unless uid
+          r.halt(400, { error: 'Query parameter "uid" is required' }) unless uid
 
           format = Teneo::FormatLibrary::Format[uid]
-          r.halt(404, { error: "Format '#{uid}' not found" }.to_json) unless format
+          r.halt(404, { error: "Format '#{uid}' not found" }) unless format
 
-          response['Content-Type'] = 'application/json'
-          Serializers::FormatSerializer.call(format).to_json
+          Serializers::FormatSerializer.call(format)
         end
       end
 
       r.on 'relations' do
         r.get do
           uid = r.params['uid']
-          r.halt(400, { error: 'Query parameter "uid" is required' }.to_json) unless uid
+          r.halt(400, { error: 'Query parameter "uid" is required' }) unless uid
 
           format = Teneo::FormatLibrary::Format[uid]
-          r.halt(404, { error: "Format '#{uid}' not found" }.to_json) unless format
+          r.halt(404, { error: "Format '#{uid}' not found" }) unless format
 
           relation_types = r.params['relation_types']&.split(',')
           sources = r.params['sources']&.split(',')
           formats = r.params['formats']&.split(',')
 
-          response['Content-Type'] = 'application/json'
-          format.relations(relation_types:, sources:, formats:).to_json
+          format.relations(relation_types:, sources:, formats:)
         end
       end
 
       r.on 'related' do
         r.get do
           uid = r.params['uid']
-          r.halt(400, { error: 'Query parameter "uid" is required' }.to_json) unless uid
+          r.halt(400, { error: 'Query parameter "uid" is required' }) unless uid
 
           format = Teneo::FormatLibrary::Format[uid]
-          r.halt(404, { error: "Format '#{uid}' not found" }.to_json) unless format
+          r.halt(404, { error: "Format '#{uid}' not found" }) unless format
 
           relation_types = r.params['relation_types']&.split(',')
           sources = r.params['sources']&.split(',')
           formats = r.params['formats']&.split(',')
 
-          response['Content-Type'] = 'application/json'
-          format.related_formats(relation_types:, sources:, formats:).to_json
+          format.related_formats(relation_types:, sources:, formats:)
         end
       end
 
       r.on 'tags' do
         r.get do
           uid = r.params['uid']
-          r.halt(400, { error: 'Query parameter "uid" is required' }.to_json) unless uid
+          r.halt(400, { error: 'Query parameter "uid" is required' }) unless uid
 
           format = Teneo::FormatLibrary::Format[uid]
-          r.halt(404, { error: "Format '#{uid}' not found" }.to_json) unless format
+          r.halt(404, { error: "Format '#{uid}' not found" }) unless format
 
           namespace = r.params['namespace']
           profile = r.params['profile']
 
-          response['Content-Type'] = 'application/json'
           format.all_tags_hash(namespace:, profile:).values.map do |tag|
             { tag: tag.tag, name: tag.name, profile: tag.profile, namespace: tag.namespace }
-          end.to_json
         end
       end
     end
