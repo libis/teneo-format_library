@@ -1,0 +1,6 @@
+# frozen_string_literal: true
+
+require 'bundler/setup'
+
+require 'teneo/format_library'
+require 'teneo/format_library/tasks'

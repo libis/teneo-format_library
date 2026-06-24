@@ -1,0 +1,10 @@
+.dockerignore
+.gitignore
+/.make/
+/spec/
+/vendor/
+compose.yml
+docker-bake.hcl
+Dockerfile.*
+Makefile
+Rakefile
