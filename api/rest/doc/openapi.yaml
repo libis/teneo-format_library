@@ -1,13 +1,13 @@
 ---
 openapi: 3.0.3
 info:
-  title: api
+  title: rest
   version: 1.0.0
 servers: []
 paths:
-  "/":
+  "/library/api/rest/v1":
     get:
-      summary: GET /
+      summary: GET /library/api/rest/v1
       responses:
         '200':
           description: returns API info
@@ -26,9 +26,16 @@ paths:
               example:
                 message: Teneo Format Library API
                 version: 0.2.0
-  "/formats":
+        '404':
+          description: returns API info
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/formats":
     get:
-      summary: GET /formats
+      summary: GET /library/api/rest/v1/formats
       parameters:
       - name: extension
         in: query
@@ -254,9 +261,16 @@ paths:
                   per_page: 10
                   total: 37
                   total_pages: 4
-  "/formats/detail":
+        '404':
+          description: searches by query
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/formats/detail":
     get:
-      summary: GET /formats/detail
+      summary: GET /library/api/rest/v1/formats/detail
       parameters:
       - name: uid
         in: query
@@ -335,9 +349,9 @@ paths:
               schema:
                 type: string
               example: '{"error":"Format ''unknown/uid'' not found"}'
-  "/formats/related":
+  "/library/api/rest/v1/formats/related":
     get:
-      summary: GET /formats/related
+      summary: GET /library/api/rest/v1/formats/related
       parameters:
       - name: uid
         in: query
@@ -623,9 +637,16 @@ paths:
                 x-fmt/276:
                   same_mimetype:
                   - application/msword
-  "/formats/relations":
+        '404':
+          description: returns related formats
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/formats/relations":
     get:
-      summary: GET /formats/relations
+      summary: GET /library/api/rest/v1/formats/relations
       parameters:
       - name: relation_types
         in: query
@@ -692,9 +713,16 @@ paths:
                   - fmt/346
                   - x-fmt/64
                   - x-fmt/65
-  "/formats/search":
+        '404':
+          description: filters relations by type
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/formats/search":
     get:
-      summary: GET /formats/search
+      summary: GET /library/api/rest/v1/formats/search
       responses:
         '200':
           description: returns search results
@@ -970,6 +998,13 @@ paths:
               schema:
                 type: string
               example: '{"error":"Query parameter \"q\" is required"}'
+        '404':
+          description: returns search results
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
       parameters:
       - name: q
         in: query
@@ -977,9 +1012,9 @@ paths:
         schema:
           type: string
         example: Broadcast
-  "/formats/tags":
+  "/library/api/rest/v1/formats/tags":
     get:
-      summary: GET /formats/tags
+      summary: GET /library/api/rest/v1/formats/tags
       parameters:
       - name: uid
         in: query
@@ -996,9 +1031,16 @@ paths:
                 type: array
                 items: {}
               example: []
-  "/health":
+        '404':
+          description: returns format tags
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/health":
     get:
-      summary: GET /health
+      summary: GET /library/api/rest/v1/health
       responses:
         '200':
           description: returns health status
@@ -1016,10 +1058,17 @@ paths:
                 - timestamp
               example:
                 status: ok
-                timestamp: '2026-06-21T14:10:10+02:00'
-  "/tags":
+                timestamp: '2026-06-23T17:39:46+02:00'
+        '404':
+          description: returns health status
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/tags":
     get:
-      summary: GET /tags
+      summary: GET /library/api/rest/v1/tags
       parameters:
       - name: namespace
         in: query
@@ -1131,9 +1180,16 @@ paths:
                   per_page: 10
                   total: 82
                   total_pages: 9
-  "/tags/detail":
+        '404':
+          description: filters by profile
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
+  "/library/api/rest/v1/tags/detail":
     get:
-      summary: GET /tags/detail
+      summary: GET /library/api/rest/v1/tags/detail
       parameters:
       - name: include_ancestors
         in: query
@@ -1189,6 +1245,7 @@ paths:
                       required:
                       - uid
                       - name
+                      - version
                   ancestors:
                     type: array
                     items:
@@ -1309,9 +1366,9 @@ paths:
               schema:
                 type: string
               example: '{"error":"Tag ''unknown:tag'' not found"}'
-  "/tags/formats":
+  "/library/api/rest/v1/tags/formats":
     get:
-      summary: GET /tags/formats
+      summary: GET /library/api/rest/v1/tags/formats
       parameters:
       - name: per_page
         in: query
@@ -1439,3 +1496,10 @@ paths:
                   per_page: 3
                   total: 7
                   total_pages: 3
+        '404':
+          description: returns formats with uid and name
+          content:
+            text/html:
+              schema:
+                type: string
+              example: ''
