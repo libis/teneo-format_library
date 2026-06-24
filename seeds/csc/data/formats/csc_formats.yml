@@ -1,0 +1,443 @@
+- uid: fi-dpres/dpx-2-1.0
+  name: Digital Picture Exchange
+  version: '1.0'
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - image/x-dpx
+  extensions:
+    - dpx
+  properties:
+    dpres_id: FI_DPRES_DPX_2_1.0
+    grade: fi-dpres-acceptable-file-format
+    content_type: video
+    required_metadata: MIX
+    support_in_dps_ingest: true
+    active: true
+- uid: fi-dpres/ffv1-1-3
+  name: FF Video Codec 1
+  version: '3'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://datatracker.ietf.org/doc/rfc9043/
+  created_at: '2026-06-24'
+  mimetypes:
+    - video/x-ffv
+  extensions:
+    - mkv
+  properties:
+    dpres_id: FI_DPRES_FFV1_1_3
+    grade: fi-dpres-recommended-file-format
+    content_type: video
+    required_metadata: videoMD
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.7.0
+- uid: fi-dpres/flac-1-1.3.0
+  name: Free Lossless Audio Codec
+  version: 1.3.0
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - audio/flac
+  extensions:
+    - flac
+  properties:
+    dpres_id: FI_DPRES_FLAC_1_1.3.0
+    grade: fi-dpres-unacceptable-file-format
+    content_type: audio
+    required_metadata: audioMD
+    support_in_dps_ingest: false
+    active: false
+    added_in_dps_spec: 1.3.0
+- uid: fi-dpres/hevc-1-unap
+  name: High Efficiency Video Coding
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - video/H265
+  extensions:
+    - mp4
+    - h265
+  properties:
+    dpres_id: FI_DPRES_HEVC_1_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: video
+    required_metadata: videoMD
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.12.0
+- uid: fi-dpres/html-1-5.1
+  name: Hypertext Markup Language
+  version: '5.1'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://www.w3.org/TR/html51/
+  created_at: '2026-06-24'
+  mimetypes:
+    - text/html
+  extensions: &id001
+    - html
+    - htm
+  properties:
+    dpres_id: FI_DPRES_HTML_1_5.1
+    grade: fi-dpres-unacceptable-file-format
+    content_type: text
+    charsets:
+      - ISO-8859-15
+      - UTF-8
+      - UTF-16
+      - UTF-32
+    support_in_dps_ingest: false
+    active: false
+    added_in_dps_spec: 1.9.0
+- uid: fi-dpres/html-1-5.2
+  name: Hypertext Markup Language
+  version: '5.2'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://www.w3.org/TR/html52/
+  created_at: '2026-06-24'
+  mimetypes:
+    - text/html
+  extensions: *id001
+  properties:
+    dpres_id: FI_DPRES_HTML_1_5.2
+    grade: fi-dpres-unacceptable-file-format
+    content_type: text
+    charsets:
+      - ISO-8859-15
+      - UTF-8
+      - UTF-16
+      - UTF-32
+    support_in_dps_ingest: false
+    active: false
+    added_in_dps_spec: 1.9.0
+- uid: fi-dpres/lpcm-1-unap
+  name: Linear Pulse-Code Modulation
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://datatracker.ietf.org/doc/rfc3551/
+  created_at: '2026-06-24'
+  mimetypes:
+    - audio/L8
+  extensions:
+    - wav
+    - aiff
+    - pcm
+  properties:
+    dpres_id: FI_DPRES_LPCM_1_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: audio
+    required_metadata: audioMD
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.8.0
+- uid: fi-dpres/odf-1-1.0
+  name: Open Document Format
+  version: '1.0'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://docs.oasis-open.org/office/v1.0/OpenDocument-v1.0-os.pdf
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/vnd.oasis.opendocument.formula
+  extensions: &id002
+    - odf
+  properties:
+    dpres_id: FI_DPRES_ODF_1_1.0
+    grade: fi-dpres-recommended-file-format
+    content_type: text
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.3.0
+- uid: fi-dpres/odf-1-1.2
+  name: Open Document Format
+  version: '1.2'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://docs.oasis-open.org/office/v1.2/OpenDocument-v1.2.pdf
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/vnd.oasis.opendocument.formula
+  extensions: *id002
+  properties:
+    dpres_id: FI_DPRES_ODF_1_1.2
+    grade: fi-dpres-recommended-file-format
+    content_type: text
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.6.0
+- uid: fi-dpres/odf-1-1.3
+  name: Open Document Format
+  version: '1.3'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://www.oasis-open.org/2021/06/16/opendocument-v1-3-oasis-standard-published/
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/vnd.oasis.opendocument.formula
+  extensions: *id002
+  properties:
+    dpres_id: FI_DPRES_ODF_1_1.3
+    grade: fi-dpres-recommended-file-format
+    content_type: text
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.9.0
+- uid: fi-dpres/odf-1-1.4
+  name: Open Document Format
+  version: '1.4'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://groups.oasis-open.org/discussion/opendocument-v14-approved-as-an-oasis-standard-1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/vnd.oasis.opendocument.formula
+  extensions: *id002
+  properties:
+    dpres_id: FI_DPRES_ODF_1_1.4
+    grade: fi-dpres-recommended-file-format
+    content_type: text
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.14.0
+- uid: fi-dpres/siard-1-2.1.1
+  name: Software Independent Archiving of Relational Databases
+  version: 2.1.1
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://github.com/DILCISBoard/SIARD/tree/master/SIARD%202.1.1/format/2019-05-15
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/x-siard
+  extensions:
+    - siard
+  properties:
+    dpres_id: FI_DPRES_SIARD_1_2.1.1
+    grade: fi-dpres-recommended-file-format
+    content_type: databases
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.10.0
+- uid: fi-dpres/xhtml-1-5.1
+  name: Extensible Hypertext Markup Language
+  version: '5.1'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://www.w3.org/TR/html51/
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/xhtml+xml
+  extensions: &id003
+    - xhtml
+    - xht
+    - xml
+    - html
+    - htm
+  properties:
+    dpres_id: FI_DPRES_XHTML_1_5.1
+    grade: fi-dpres-unacceptable-file-format
+    content_type: text
+    charsets:
+      - ISO-8859-15
+      - UTF-8
+      - UTF-16
+      - UTF-32
+    support_in_dps_ingest: false
+    active: false
+    added_in_dps_spec: 1.10.0
+- uid: fi-dpres/xhtml-1-5.2
+  name: Extensible Hypertext Markup Language
+  version: '5.2'
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://www.w3.org/TR/html52/
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/xhtml+xml
+  extensions: *id003
+  properties:
+    dpres_id: FI_DPRES_XHTML_1_5.2
+    grade: fi-dpres-unacceptable-file-format
+    content_type: text
+    charsets:
+      - ISO-8859-15
+      - UTF-8
+      - UTF-16
+      - UTF-32
+    support_in_dps_ingest: false
+    active: false
+    added_in_dps_spec: 1.10.0
+- uid: fi-dpres/mxf-1-unap
+  name: Material Exchange Format
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/mxf
+  extensions:
+    - mxf
+  properties:
+    dpres_id: FI_DPRES_MXF_1_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: videocontainer
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.3.0
+- uid: fi-dpres/dv-2-unap
+  name: Digital Video
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - video/dv
+  extensions:
+    - dv
+  properties:
+    dpres_id: FI_DPRES_DV_2_UNAP
+    grade: fi-dpres-acceptable-file-format
+    content_type: videocontainer
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.3.0
+- uid: fi-dpres/seg-y-1-1.0
+  name: SEG-Y Seismic Data Exchange Format
+  version: '1.0'
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/x.fi-dpres.segy
+  extensions: &id004
+    - sgy
+    - segy
+  properties:
+    dpres_id: FI_DPRES_SEG-Y_1_1.0
+    grade: fi-dpres-bit-level-file-format
+    content_type: research data
+    support_in_dps_ingest: true
+    active: true
+- uid: fi-dpres/seg-y-1-2.0
+  name: SEG-Y Seismic Data Exchange Format
+  version: '2.0'
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/x.fi-dpres.segy
+  extensions: *id004
+  properties:
+    dpres_id: FI_DPRES_SEG-Y_1_2.0
+    grade: fi-dpres-bit-level-file-format
+    content_type: research data
+    support_in_dps_ingest: true
+    active: true
+- uid: fi-dpres/seg-y-1-unkn
+  name: SEG-Y Seismic Data Exchange Format
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/x.fi-dpres.segy
+  extensions: *id004
+  properties:
+    dpres_id: FI_DPRES_SEG-Y_1_UNKN
+    grade: fi-dpres-bit-level-file-format
+    content_type: research data
+    support_in_dps_ingest: true
+    active: true
+- uid: fi-dpres/prores-1-unap
+  name: Apple ProRes
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - video/x.fi-dpres.prores
+  extensions:
+    - mov
+  properties:
+    dpres_id: FI_DPRES_PRORES_1_UNAP
+    grade: fi-dpres-bit-level-file-format-with-recommended
+    content_type: video
+    support_in_dps_ingest: true
+    active: true
+- uid: fi-dpres/lpcm-2-unap
+  name: Linear Pulse-Code Modulation
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://datatracker.ietf.org/doc/rfc3551/
+  created_at: '2026-06-24'
+  mimetypes:
+    - audio/L16
+  extensions:
+    - wav
+    - aiff
+    - pcm
+    - l16
+  properties:
+    dpres_id: FI_DPRES_LPCM_2_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: audio
+    required_metadata: audioMD
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.8.0
+- uid: fi-dpres/lpcm-3-unap
+  name: Linear Pulse-Code Modulation
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://datatracker.ietf.org/doc/rfc3551/
+  created_at: '2026-06-24'
+  mimetypes:
+    - audio/L20
+  extensions:
+    - wav
+    - aiff
+    - pcm
+  properties:
+    dpres_id: FI_DPRES_LPCM_3_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: audio
+    required_metadata: audioMD
+    support_in_dps_ingest: false
+    active: true
+    added_in_dps_spec: 1.8.0
+- uid: fi-dpres/lpcm-4-unap
+  name: Linear Pulse-Code Modulation
+  source: FI-DPRES
+  source_version: 1.4.1
+  url: https://datatracker.ietf.org/doc/rfc3551/
+  created_at: '2026-06-24'
+  mimetypes:
+    - audio/L24
+  extensions:
+    - wav
+    - aiff
+    - pcm
+  properties:
+    dpres_id: FI_DPRES_LPCM_4_UNAP
+    grade: fi-dpres-recommended-file-format
+    content_type: audio
+    required_metadata: audioMD
+    support_in_dps_ingest: true
+    active: true
+    added_in_dps_spec: 1.8.0
+- uid: fi-dpres/atlproj-1-unap
+  name: ATLAS.TI project bundle file
+  source: FI-DPRES
+  source_version: 1.4.1
+  created_at: '2026-06-24'
+  mimetypes:
+    - application/x.fi-dpres.atlproj
+  extensions:
+    - atlproj
+  properties:
+    dpres_id: FI_DPRES_ATLPROJ_1_UNAP
+    grade: fi-dpres-bit-level-file-format-with-recommended
+    content_type: text
+    support_in_dps_ingest: true
+    active: true
