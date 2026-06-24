@@ -13,7 +13,7 @@ Style/Documentation:
 Style/NumericPredicate:
   Exclude:
     - 'spec/**/*'
-    - 'api/spec/**/*'
+    - '**/spec/**/*'
 
 Style/RaiseArgs:
   Exclude:
