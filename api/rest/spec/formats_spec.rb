@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'spec_helper'
+require 'securerandom'
+require 'tempfile'
 
 RSpec.describe 'Formats API', type: :request do
   describe 'GET /library/api/rest/v1/formats' do
@@ -50,6 +52,25 @@ RSpec.describe 'Formats API', type: :request do
     end
   end
 
+  it 'creates a new format' do
+    uid = "test-fmt-#{SecureRandom.hex(6)}"
+    payload = { uid:, name: 'Test Format', source: 'TEST' }
+    post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+    expect(last_response).to be_ok
+    json = JSON.parse(last_response.body)
+    expect(json['uid']).to eq(uid)
+    expect(json['name']).to eq('Test Format')
+    expect(json['source']).to eq('TEST')
+  end
+
+  it 'returns 400 if payload is invalid' do
+    payload = { name: 'Test Format', source: 'TEST' }
+    post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+    expect(last_response.status).to eq(400)
+    json = JSON.parse(last_response.body)
+    expect(json['error']).to include('required')
+  end
+
   describe 'GET /library/api/rest/v1/formats/search' do
     it 'requires q parameter' do
       get '/library/api/rest/v1/formats/search'
@@ -69,11 +90,22 @@ RSpec.describe 'Formats API', type: :request do
 
   describe 'GET /library/api/rest/v1/formats/detail' do
     it 'returns format details' do
-      get '/library/api/rest/v1/formats/detail?uid=x-fmt/1'
+      uid = "test-fmt-detail-#{SecureRandom.hex(6)}"
+      payload = {
+        uid:,
+        name: 'Detail Format',
+        source: 'TEST',
+        mimetypes: ['application/x-detail'],
+        extensions: ['detail']
+      }
+      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response).to be_ok
+
+      get "/library/api/rest/v1/formats/detail?uid=#{uid}"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
-      expect(json['uid']).to eq('x-fmt/1')
-      expect(json['name']).to eq('Microsoft Word for Macintosh Document')
+      expect(json['uid']).to eq(uid)
+      expect(json['name']).to eq('Detail Format')
       expect(json['mimetypes']).to be_an(Array)
       expect(json['extensions']).to be_an(Array)
     end
@@ -124,6 +156,133 @@ RSpec.describe 'Formats API', type: :request do
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json).to be_an(Array)
+    end
+  end
+
+  describe 'PUT /library/api/rest/v1/formats/detail' do
+    it 'updates an existing format' do
+      uid = "test-fmt-#{SecureRandom.hex(6)}"
+      payload = { uid:, name: 'Old Name', source: 'TEST' }
+      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response).to be_ok
+
+      update_payload = { uid:, name: 'Updated Name' }
+      put "/library/api/rest/v1/formats/detail?uid=#{uid}", update_payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json['uid']).to eq(uid)
+      expect(json['name']).to eq('Updated Name')
+    end
+  end
+
+  describe 'DELETE /library/api/rest/v1/formats/detail' do
+    it 'deletes an existing format' do
+      uid = "test-fmt-#{SecureRandom.hex(6)}"
+      payload = { uid:, name: 'ToDelete', source: 'TEST' }
+      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response).to be_ok
+
+      delete "/library/api/rest/v1/formats/detail?uid=#{uid}"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json['deleted']).to eq(uid)
+
+      get "/library/api/rest/v1/formats/detail?uid=#{uid}"
+      expect(last_response.status).to eq(404)
+    end
+  end
+
+  describe 'POST /library/api/rest/v1/formats/upload' do
+    it 'uploads formats from YAML file' do
+      uid = "test-fmt-upload-yaml-#{SecureRandom.hex(6)}"
+      yaml = <<~YAML
+        - uid: #{uid}
+          name: Uploaded YAML Format
+          source: TEST
+          mimetypes:
+            - application/x-upload-yaml
+      YAML
+
+      Tempfile.create(['formats', '.yml']) do |file|
+        file.write(yaml)
+        file.rewind
+
+        post '/library/api/rest/v1/formats/upload',
+             { file: Rack::Test::UploadedFile.new(file.path, 'application/x-yaml') }
+      end
+
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json['count']).to eq(1)
+      expect(json['items'].first['uid']).to eq(uid)
+      expect(json['items'].first['name']).to eq('Uploaded YAML Format')
+    end
+
+    it 'uploads formats from JSON file' do
+      uid = "test-fmt-upload-json-#{SecureRandom.hex(6)}"
+      payload = [{ uid:, name: 'Uploaded JSON Format', source: 'TEST', extensions: ['upjson'] }]
+
+      Tempfile.create(['formats', '.json']) do |file|
+        file.write(payload.to_json)
+        file.rewind
+
+        post '/library/api/rest/v1/formats/upload',
+             { file: Rack::Test::UploadedFile.new(file.path, 'application/json') }
+      end
+
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json['count']).to eq(1)
+      expect(json['items'].first['uid']).to eq(uid)
+      expect(json['items'].first['name']).to eq('Uploaded JSON Format')
+    end
+
+    it 'returns 400 for invalid YAML payload' do
+      invalid_yaml = "uid: test-fmt-broken\n  - invalid"
+
+      post '/library/api/rest/v1/formats/upload?format=yaml',
+           invalid_yaml,
+           { 'CONTENT_TYPE' => 'application/x-yaml' }
+
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).not_to be_nil
+    end
+
+    it 'returns 400 for invalid JSON payload' do
+      Tempfile.create(['formats-invalid', '.json']) do |file|
+        file.write('{"uid": "test-fmt-broken"')
+        file.rewind
+
+        post '/library/api/rest/v1/formats/upload',
+             { file: Rack::Test::UploadedFile.new(file.path, 'application/json') }
+      end
+
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).not_to be_nil
+    end
+
+    it 'returns 400 for empty payload' do
+      post '/library/api/rest/v1/formats/upload', '', { 'CONTENT_TYPE' => 'application/x-yaml' }
+
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 400 for unsupported file extension' do
+      Tempfile.create(['formats', '.txt']) do |file|
+        file.write("uid: test-fmt-txt\nname: Unsupported\nsource: TEST\n")
+        file.rewind
+
+        post '/library/api/rest/v1/formats/upload',
+             { file: Rack::Test::UploadedFile.new(file.path, 'text/plain') }
+      end
+
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('Unsupported upload format')
     end
   end
 end
