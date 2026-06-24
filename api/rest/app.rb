@@ -16,32 +16,40 @@ class App < Roda
   plugin :halt
 
   route do |r|
-    r.root do
-      response['Content-Type'] = 'application/json'
-      { message: 'Teneo Format Library API', version: Teneo::FormatLibrary::VERSION }.to_json
-    end
+    r.on 'library' do
+      r.on 'api' do
+        r.on 'rest' do
+          r.on 'v1' do
+            r.is do
+              response['Content-Type'] = 'application/json'
+              { message: 'Teneo Format Library API', version: Teneo::FormatLibrary::VERSION }.to_json
+            end
 
-    r.on 'health' do
-      r.run Routes::Health
-    end
+            r.on 'health' do
+              r.run Routes::Health
+            end
 
-    r.on 'formats' do
-      r.run Routes::Formats
-    end
+            r.on 'formats' do
+              r.run Routes::Formats
+            end
 
-    r.on 'tags' do
-      r.run Routes::Tags
-    end
+            r.on 'tags' do
+              r.run Routes::Tags
+            end
 
-    r.on 'openapi' do
-      r.get 'json' do
-        response['Content-Type'] = 'application/json'
-        File.read(File.join(__dir__, 'doc', 'openapi.json'))
-      end
+            r.on 'openapi' do
+              r.get 'json' do
+                response['Content-Type'] = 'application/json'
+                File.read(File.join(__dir__, 'doc', 'openapi.json'))
+              end
 
-      r.get 'yaml' do
-        response['Content-Type'] = 'application/yaml'
-        File.read(File.join(__dir__, 'doc', 'openapi.yaml'))
+              r.get 'yaml' do
+                response['Content-Type'] = 'application/yaml'
+                File.read(File.join(__dir__, 'doc', 'openapi.yaml'))
+              end
+            end
+          end
+        end
       end
     end
   end

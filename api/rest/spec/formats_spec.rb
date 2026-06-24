@@ -3,9 +3,9 @@
 require_relative 'spec_helper'
 
 RSpec.describe 'Formats API', type: :request do
-  describe 'GET /formats' do
+  describe 'GET /library/api/rest/v1/formats' do
     it 'returns paginated list of formats' do
-      get '/formats?per_page=5'
+      get '/library/api/rest/v1/formats?per_page=5'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['items']).to be_an(Array)
@@ -14,7 +14,7 @@ RSpec.describe 'Formats API', type: :request do
     end
 
     it 'filters by source' do
-      get '/formats?source=PRONOM&per_page=10'
+      get '/library/api/rest/v1/formats?source=PRONOM&per_page=10'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
@@ -23,7 +23,7 @@ RSpec.describe 'Formats API', type: :request do
     end
 
     it 'filters by mimetype' do
-      get '/formats?mimetype=image/jpeg&per_page=10'
+      get '/library/api/rest/v1/formats?mimetype=image/jpeg&per_page=10'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
@@ -32,7 +32,7 @@ RSpec.describe 'Formats API', type: :request do
     end
 
     it 'filters by extension' do
-      get '/formats?extension=pdf&per_page=10'
+      get '/library/api/rest/v1/formats?extension=pdf&per_page=10'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
@@ -41,7 +41,7 @@ RSpec.describe 'Formats API', type: :request do
     end
 
     it 'searches by query' do
-      get '/formats?q=WAVE&per_page=10'
+      get '/library/api/rest/v1/formats?q=WAVE&per_page=10'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
@@ -50,16 +50,16 @@ RSpec.describe 'Formats API', type: :request do
     end
   end
 
-  describe 'GET /formats/search' do
+  describe 'GET /library/api/rest/v1/formats/search' do
     it 'requires q parameter' do
-      get '/formats/search'
+      get '/library/api/rest/v1/formats/search'
       expect(last_response.status).to eq(400)
       json = JSON.parse(last_response.body)
       expect(json['error']).to include('required')
     end
 
     it 'returns search results' do
-      get '/formats/search?q=Broadcast'
+      get '/library/api/rest/v1/formats/search?q=Broadcast'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['items']).to be_an(Array)
@@ -67,9 +67,9 @@ RSpec.describe 'Formats API', type: :request do
     end
   end
 
-  describe 'GET /formats/detail' do
+  describe 'GET /library/api/rest/v1/formats/detail' do
     it 'returns format details' do
-      get '/formats/detail?uid=x-fmt/1'
+      get '/library/api/rest/v1/formats/detail?uid=x-fmt/1'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['uid']).to eq('x-fmt/1')
@@ -79,48 +79,48 @@ RSpec.describe 'Formats API', type: :request do
     end
 
     it 'returns 400 without uid parameter' do
-      get '/formats/detail'
+      get '/library/api/rest/v1/formats/detail'
       expect(last_response.status).to eq(400)
       json = JSON.parse(last_response.body)
       expect(json['error']).to include('required')
     end
 
     it 'returns 404 for unknown format' do
-      get '/formats/detail?uid=unknown/uid'
+      get '/library/api/rest/v1/formats/detail?uid=unknown/uid'
       expect(last_response.status).to eq(404)
       json = JSON.parse(last_response.body)
       expect(json['error']).to include('not found')
     end
   end
 
-  describe 'GET /formats/relations' do
+  describe 'GET /library/api/rest/v1/formats/relations' do
     it 'returns format relations' do
-      get '/formats/relations?uid=x-fmt/1'
+      get '/library/api/rest/v1/formats/relations?uid=x-fmt/1'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json).to be_a(Hash)
     end
 
     it 'filters relations by type' do
-      get '/formats/relations?uid=x-fmt/1&relation_types=has_format'
+      get '/library/api/rest/v1/formats/relations?uid=x-fmt/1&relation_types=has_format'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json).to be_a(Hash)
     end
   end
 
-  describe 'GET /formats/related' do
+  describe 'GET /library/api/rest/v1/formats/related' do
     it 'returns related formats' do
-      get '/formats/related?uid=x-fmt/1'
+      get '/library/api/rest/v1/formats/related?uid=x-fmt/1'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json).to be_a(Hash)
     end
   end
 
-  describe 'GET /formats/tags' do
+  describe 'GET /library/api/rest/v1/formats/tags' do
     it 'returns format tags' do
-      get '/formats/tags?uid=x-fmt/1'
+      get '/library/api/rest/v1/formats/tags?uid=x-fmt/1'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json).to be_an(Array)
