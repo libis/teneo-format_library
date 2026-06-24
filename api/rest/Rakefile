@@ -1,28 +1,9 @@
 # frozen_string_literal: true
 
-namespace :grpc do
-  desc 'Generate gRPC Ruby code from protobuf definitions'
-  task :generate do
-    proto_dir = File.join(__dir__, 'proto')
-    output_dir = File.join(__dir__, 'grpc')
+require 'bundler/setup'
 
-    system(
-      'grpc_tools_ruby_protoc',
-      '-I', proto_dir,
-      '--ruby_out', output_dir,
-      '--grpc_out', output_dir,
-      File.join(proto_dir, 'format_library.proto')
-    ) or raise 'Failed to generate gRPC code'
-
-    puts "Generated gRPC code in #{output_dir}"
-  end
-
-  desc 'Clean generated gRPC code'
-  task :clean do
-    output_dir = File.join(__dir__, 'grpc')
-    FileUtils.rm_rf(output_dir) if Dir.exist?(output_dir)
-    puts 'Cleaned gRPC generated code'
-  end
+begin
+  require 'rspec/core/rake_task'
+  RSpec::Core::RakeTask.new(:spec)
+rescue LoadError
 end
-
-task default: 'grpc:generate'
