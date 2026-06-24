@@ -2,12 +2,12 @@ name: fl_api_rest
 
 services:
   dev:
-    container_name: api_rest_dev
+    container_name: fl_api_rest
     image: api/rest
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     environment:
       DB_ADAPTER: postgresql
-      DB_HOST: db
+      DB_HOST: fl_db
       DB_PORT: 5432
       DB_NAME: "${DB_NAME:-teneo}"
       DB_USER: "${DB_USER:-teneo}"
@@ -15,7 +15,7 @@ services:
       OPENAPI: 1
     ports:
       - "${API_REST_PORT}:3000"
-      - "${API_REST_CTRL_PORT}:3001"
+      - "${API_REST_CTRL_PORT}:9292"
     networks:
       - app_net
       - db_net

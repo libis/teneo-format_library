@@ -2,7 +2,7 @@ name: fl_db
 
 services:
   db:
-    container_name: db
+    container_name: fl_db
     image: postgres:17-alpine
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     command:
@@ -33,7 +33,7 @@ services:
       start_period: 5s
 
   db_admin:
-    container_name: db_admin
+    container_name: fl_db_admin
     image: dpage/pgadmin4
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     networks:

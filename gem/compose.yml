@@ -23,7 +23,7 @@ services:
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     environment:
       DB_ADAPTER: postgresql
-      DB_HOST: db
+      DB_HOST: fl_db
       DB_PORT: 5432
       DB_NAME: "${DB_NAME:-teneo}"
       DB_USER: "${DB_USER:-teneo}"
