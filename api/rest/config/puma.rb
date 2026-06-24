@@ -2,4 +2,4 @@
 
 workers 0
 port 3000
-activate_control_app 'tcp://0.0.0.0:3001', { no_token: true }
+activate_control_app 'tcp://0.0.0.0:9292', { no_token: true }
