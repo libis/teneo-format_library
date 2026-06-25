@@ -15,6 +15,9 @@ install: .make/.install ## install the dependencies
 	mkdir -p .make
 	touch .make/.install
 
+update: ### update the dependencies
+	$(RUN_DEV) bundle update --all
+
 console: install ## start an interactive console
 	$(RUN_DEV) irb
 
@@ -36,8 +39,7 @@ test: image-dev ## run the REST API tests
 	docker compose exec dev bundle exec rspec
 
 openapi: image-dev ## generate OpenAPI spec by running the the REST API tests
-	docker compose exec -e OPENAPI_FORMAT=yaml dev bundle exec rspec
-	docker compose exec -e OPENAPI_FORMAT=json dev bundle exec rspec
+	docker compose exec -e OPENAPI_FORMAT=both dev bundle exec rspec
 
 image-dev: .make/.image-dev ### Build docker image for development
 
