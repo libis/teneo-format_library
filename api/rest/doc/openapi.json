@@ -350,6 +350,131 @@
             }
           }
         }
+      },
+      "post": {
+        "summary": "POST /library/api/rest/v1/formats",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uid": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uid",
+                  "name",
+                  "source"
+                ]
+              },
+              "example": {
+                "uid": "test-fmt-57033f40bbc5",
+                "name": "Test Format",
+                "source": "TEST"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "creates a new format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "nullable": true
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "source_version": {
+                      "nullable": true
+                    },
+                    "url": {
+                      "nullable": true
+                    },
+                    "properties": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "mimetypes": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "extensions": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "created_at": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "uid",
+                    "name",
+                    "version",
+                    "source",
+                    "source_version",
+                    "url",
+                    "properties",
+                    "mimetypes",
+                    "extensions",
+                    "created_at"
+                  ]
+                },
+                "example": {
+                  "uid": "test-fmt-57033f40bbc5",
+                  "name": "Test Format",
+                  "version": null,
+                  "source": "TEST",
+                  "source_version": null,
+                  "url": null,
+                  "properties": {},
+                  "mimetypes": [],
+                  "extensions": [],
+                  "created_at": "2026-06-25"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "returns 400 if payload is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Missing required fields: uid"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/library/api/rest/v1/formats/detail": {
@@ -363,7 +488,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "unknown/uid"
+            "example": "test-fmt-3dbafa9c95df"
           }
         ],
         "responses": {
@@ -381,16 +506,16 @@
                       "type": "string"
                     },
                     "version": {
-                      "type": "string"
+                      "nullable": true
                     },
                     "source": {
                       "type": "string"
                     },
                     "source_version": {
-                      "type": "string"
+                      "nullable": true
                     },
                     "url": {
-                      "type": "string"
+                      "nullable": true
                     },
                     "properties": {
                       "type": "object",
@@ -426,20 +551,20 @@
                   ]
                 },
                 "example": {
-                  "uid": "x-fmt/1",
-                  "name": "Microsoft Word for Macintosh Document",
-                  "version": "3.0",
-                  "source": "PRONOM",
-                  "source_version": "124",
-                  "url": "https://www.nationalarchives.gov.uk/PRONOM/x-fmt/1",
+                  "uid": "test-fmt-detail-27f8fbc0bfd4",
+                  "name": "Detail Format",
+                  "version": null,
+                  "source": "TEST",
+                  "source_version": null,
+                  "url": null,
                   "properties": {},
                   "mimetypes": [
-                    "application/msword"
+                    "application/x-detail"
                   ],
                   "extensions": [
-                    "mcw"
+                    "detail"
                   ],
-                  "created_at": "2026-06-09"
+                  "created_at": "2026-06-25"
                 }
               }
             }
@@ -447,22 +572,152 @@
           "400": {
             "description": "returns 400 without uid parameter",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 },
-                "example": "{\"error\":\"Query parameter \\\"uid\\\" is required\"}"
+                "example": {
+                  "error": "Query parameter \"uid\" is required"
+                }
               }
             }
           },
           "404": {
-            "description": "returns 404 for unknown format",
+            "description": "deletes an existing format",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 },
-                "example": "{\"error\":\"Format 'unknown/uid' not found\"}"
+                "example": {
+                  "error": "Format 'test-fmt-3dbafa9c95df' not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "PUT /library/api/rest/v1/formats/detail",
+        "parameters": [
+          {
+            "name": "uid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "test-fmt-7ade3a4efec0"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "uid": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "uid",
+                  "name"
+                ]
+              },
+              "example": {
+                "uid": "test-fmt-7ade3a4efec0",
+                "name": "Updated Name"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "updates an existing format",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "uid": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "version": {
+                      "nullable": true
+                    },
+                    "source": {
+                      "type": "string"
+                    },
+                    "source_version": {
+                      "nullable": true
+                    },
+                    "url": {
+                      "nullable": true
+                    },
+                    "properties": {
+                      "type": "object",
+                      "properties": {}
+                    },
+                    "mimetypes": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "extensions": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "created_at": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "uid",
+                    "name",
+                    "version",
+                    "source",
+                    "source_version",
+                    "url",
+                    "properties",
+                    "mimetypes",
+                    "extensions",
+                    "created_at"
+                  ]
+                },
+                "example": {
+                  "uid": "test-fmt-7ade3a4efec0",
+                  "name": "Updated Name",
+                  "version": null,
+                  "source": "TEST",
+                  "source_version": null,
+                  "url": null,
+                  "properties": {},
+                  "mimetypes": [],
+                  "extensions": [],
+                  "created_at": "2026-06-25"
+                }
               }
             }
           }
@@ -1377,11 +1632,21 @@
           "400": {
             "description": "requires q parameter",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 },
-                "example": "{\"error\":\"Query parameter \\\"q\\\" is required\"}"
+                "example": {
+                  "error": "Query parameter \"q\" is required"
+                }
               }
             }
           }
@@ -1429,6 +1694,161 @@
         }
       }
     },
+    "/library/api/rest/v1/formats/upload": {
+      "post": {
+        "summary": "POST /library/api/rest/v1/formats/upload",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              },
+              "example": {
+                "file": "formats20260625-34-e9t6si.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "uploads formats from JSON file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "uid": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "version": {
+                            "nullable": true
+                          },
+                          "source": {
+                            "type": "string"
+                          },
+                          "source_version": {
+                            "nullable": true
+                          },
+                          "url": {
+                            "nullable": true
+                          },
+                          "properties": {
+                            "type": "object",
+                            "properties": {}
+                          },
+                          "mimetypes": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "extensions": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          },
+                          "created_at": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "uid",
+                          "name",
+                          "version",
+                          "source",
+                          "source_version",
+                          "url",
+                          "properties",
+                          "mimetypes",
+                          "extensions",
+                          "created_at"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "items"
+                  ]
+                },
+                "example": {
+                  "count": 1,
+                  "items": [
+                    {
+                      "uid": "test-fmt-upload-json-bdb9772bdb28",
+                      "name": "Uploaded JSON Format",
+                      "version": null,
+                      "source": "TEST",
+                      "source_version": null,
+                      "url": null,
+                      "properties": {},
+                      "mimetypes": [],
+                      "extensions": [
+                        "upjson"
+                      ],
+                      "created_at": "2026-06-25"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "returns 400 for unsupported file extension",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Unsupported upload format. Use yaml, yml, or json."
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "yaml"
+          }
+        ]
+      }
+    },
     "/library/api/rest/v1/health": {
       "get": {
         "summary": "GET /library/api/rest/v1/health",
@@ -1454,7 +1874,7 @@
                 },
                 "example": {
                   "status": "ok",
-                  "timestamp": "2026-06-23T17:39:46+02:00"
+                  "timestamp": "2026-06-25T17:14:12+02:00"
                 }
               }
             }
@@ -1631,6 +2051,77 @@
             }
           }
         }
+      },
+      "post": {
+        "summary": "POST /library/api/rest/v1/tags",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "profile": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tag",
+                  "name",
+                  "profile"
+                ]
+              },
+              "example": {
+                "tag": "test.ns:0aace2e67e9b",
+                "name": "New Tag",
+                "profile": "test"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "creates a new tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tag": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "profile": {
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tag",
+                    "name",
+                    "profile",
+                    "namespace"
+                  ]
+                },
+                "example": {
+                  "tag": "test.ns:0aace2e67e9b",
+                  "name": "New Tag",
+                  "profile": "test",
+                  "namespace": "test.ns"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/library/api/rest/v1/tags/detail": {
@@ -1671,7 +2162,7 @@
             "schema": {
               "type": "string"
             },
-            "example": "unknown:tag"
+            "example": "test.ns:b5a54b52d74e"
           }
         ],
         "responses": {
@@ -1891,22 +2382,119 @@
           "400": {
             "description": "returns 400 without tag parameter",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 },
-                "example": "{\"error\":\"Query parameter \\\"tag\\\" is required\"}"
+                "example": {
+                  "error": "Query parameter \"tag\" is required"
+                }
               }
             }
           },
           "404": {
-            "description": "returns 404 for unknown tag",
+            "description": "deletes an existing tag",
             "content": {
-              "text/html": {
+              "application/json": {
                 "schema": {
-                  "type": "string"
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
                 },
-                "example": "{\"error\":\"Tag 'unknown:tag' not found\"}"
+                "example": {
+                  "error": "Tag 'test.ns:b5a54b52d74e' not found"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "PUT /library/api/rest/v1/tags/detail",
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "test.ns:7540c00bcef6"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "tag": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "tag",
+                  "name"
+                ]
+              },
+              "example": {
+                "tag": "test.ns:7540c00bcef6",
+                "name": "Updated Name"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "updates an existing tag",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "tag": {
+                      "type": "string"
+                    },
+                    "name": {
+                      "type": "string"
+                    },
+                    "profile": {
+                      "type": "string"
+                    },
+                    "namespace": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "tag",
+                    "name",
+                    "profile",
+                    "namespace"
+                  ]
+                },
+                "example": {
+                  "tag": "test.ns:7540c00bcef6",
+                  "name": "Updated Name",
+                  "profile": "test",
+                  "namespace": "test.ns"
+                }
               }
             }
           }
@@ -2093,8 +2681,139 @@
                 }
               }
             }
+          },
+          "404": {
+            "description": "returns formats with uid and name",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {},
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {}
+              }
+            }
           }
         }
+      }
+    },
+    "/library/api/rest/v1/tags/upload": {
+      "post": {
+        "summary": "POST /library/api/rest/v1/tags/upload",
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": [
+                  "file"
+                ]
+              },
+              "example": {
+                "file": "tags20260625-34-1wvfm2.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "uploads tags from JSON file",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "count": {
+                      "type": "integer"
+                    },
+                    "items": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "tag": {
+                            "type": "string"
+                          },
+                          "name": {
+                            "type": "string"
+                          },
+                          "profile": {
+                            "type": "string"
+                          },
+                          "namespace": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "tag",
+                          "name",
+                          "profile",
+                          "namespace"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "count",
+                    "items"
+                  ]
+                },
+                "example": {
+                  "count": 1,
+                  "items": [
+                    {
+                      "tag": "test.ns:JSON_UPLOAD_2621eafe5e69",
+                      "name": "Uploaded JSON Tag",
+                      "profile": "test",
+                      "namespace": "test.ns"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "returns 400 for unsupported file extension",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "error"
+                  ]
+                },
+                "example": {
+                  "error": "Unsupported upload format. Use yaml, yml, or json."
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "example": "yaml"
+          }
+        ]
       }
     }
   }

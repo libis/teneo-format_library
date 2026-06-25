@@ -20,7 +20,13 @@ Teneo::FormatLibrary::Database.reconnect
 
 require 'rspec/openapi'
 
-RSpec::OpenAPI.path = "doc/openapi.#{ENV['OPENAPI_FORMAT'] || 'yaml'}"
+RSpec::OpenAPI.path =
+  if ENV.fetch('OPENAPI_FORMAT', nil) == 'both'
+    # Emit both YAML and JSON from a single run by passing an array of paths.
+    %w[yaml json].map { |ext| "doc/openapi.#{ext}" }
+  else
+    "doc/openapi.#{ENV['OPENAPI_FORMAT'] || 'yaml'}"
+  end
 
 require_relative '../app'
 require 'rack/test'
