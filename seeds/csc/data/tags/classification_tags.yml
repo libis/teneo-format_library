@@ -1,0 +1,384 @@
+- tag: fi.csc.dpres:IMAGE
+  name: Still image formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:DNG_1
+      name: Digital Negative (DNG)
+      profile: classification
+      formats: fmt/152 fmt/437 fmt/438 fmt/730 fmt/1841
+    - tag: fi.csc.dpres:DNG_2
+      name: Digital Negative (DNG)
+      profile: classification
+      formats: fmt/152 fmt/437 fmt/438 fmt/730 fmt/1841
+    - tag: fi.csc.dpres:EPS
+      name: Encapsulated postscript (EPS)
+      profile: classification
+      formats: fmt/124
+    - tag: fi.csc.dpres:GIF
+      name: Graphics Interchange Format (GIF)
+      profile: classification
+      formats: fmt/3 fmt/4
+    - tag: fi.csc.dpres:JP2
+      name: Joint Photographic Experts Group JPEG 2000 (JP2)
+      profile: classification
+      formats: x-fmt/392
+    - tag: fi.csc.dpres:JPEG
+      name: Joint Photographic Experts Group (JPEG)
+      profile: classification
+      formats: fmt/42 fmt/43 fmt/44 x-fmt/398 x-fmt/390 x-fmt/391 fmt/645 fmt/1507
+    - tag: fi.csc.dpres:PNG
+      name: Portable network graphics (PNG)
+      profile: classification
+      formats: fmt/13
+    - tag: fi.csc.dpres:SVG
+      name: Scalable Vector Graphics (SVG)
+      profile: classification
+      formats: fmt/92
+    - tag: fi.csc.dpres:TIFF
+      name: Tagged Image File Format (TIFF)
+      profile: classification
+      formats: fmt/353
+    - tag: fi.csc.dpres:WEBP
+      name: WebP Image Format (WEBP)
+      profile: classification
+      formats: fmt/566
+- tag: fi.csc.dpres:AUDIO
+  name: Audio formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:AAC_1
+      name: Advanced Audio Coding (AAC)
+      profile: classification
+      formats: fmt/199
+    - tag: fi.csc.dpres:AAC_2
+      name: Advanced Audio Coding (AAC)
+      profile: classification
+      formats: fmt/199
+    - tag: fi.csc.dpres:AIFF
+      name: Audio Interchange File Format (AIFF)
+      profile: classification
+      formats: x-fmt/135
+    - tag: fi.csc.dpres:AIFF_C
+      name: Audio Interchange File Format (AIFF_C)
+      profile: classification
+      formats: x-fmt/136
+    - tag: fi.csc.dpres:BWF
+      name: Broadcast Wave Format (BWF)
+      profile: classification
+      formats: fmt/527
+    - tag: fi.csc.dpres:FLAC
+      name: Free Lossless Audio Codec (FLAC)
+      profile: classification
+      formats: fmt/279 fi-dpres/flac-1-1.3.0
+    - tag: fi.csc.dpres:LPCM_1
+      name: Linear Pulse-Code Modulation (LPCM)
+      profile: classification
+      formats: fi-dpres/lpcm-1-unap
+    - tag: fi.csc.dpres:MP3_1
+      name: Moving Pictures Expert Group MPEG-1 layer-3 (MP3)
+      profile: classification
+      formats: fmt/134
+    - tag: fi.csc.dpres:MP3_2
+      name: Moving Pictures Expert Group MPEG-2 layer-3 (MP3)
+      profile: classification
+      formats: fmt/134
+    - tag: fi.csc.dpres:WAV
+      name: Waveform Audio Format (WAV)
+      profile: classification
+      formats: fmt/141
+    - tag: fi.csc.dpres:WMA
+      name: Windows Media Audio (WMA)
+      profile: classification
+      formats: fmt/132
+    - tag: fi.csc.dpres:LPCM_2
+      name: Linear Pulse-Code Modulation (LPCM)
+      profile: classification
+      formats: fi-dpres/lpcm-2-unap
+    - tag: fi.csc.dpres:LPCM_3
+      name: Linear Pulse-Code Modulation (LPCM)
+      profile: classification
+      formats: fi-dpres/lpcm-3-unap
+    - tag: fi.csc.dpres:LPCM_4
+      name: Linear Pulse-Code Modulation (LPCM)
+      profile: classification
+      formats: fi-dpres/lpcm-4-unap
+    - tag: fi.csc.dpres:AC3
+      name: Dolby Digital AC-3 (AC3)
+      profile: classification
+      formats: fmt/735
+- tag: fi.csc.dpres:AUDIO_CONTAINER
+  name: Audio container formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:MPEG_4_2
+      name: MPEG-4 file format version 2 (MPEG-4)
+      profile: classification
+      formats: fmt/199
+- tag: fi.csc.dpres:VIDEO
+  name: Video formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:AVC_1
+      name: Advanced Video Coding (AVC)
+      profile: classification
+      formats: fmt/199
+    - tag: fi.csc.dpres:AVC_2
+      name: Advanced Video Coding (AVC)
+      profile: classification
+      formats: fmt/199
+    - tag: fi.csc.dpres:DPX_1
+      name: Digital Picture Exchange (DPX)
+      profile: classification
+      formats: fmt/541
+    - tag: fi.csc.dpres:DPX_2
+      name: Digital Picture Exchange (DPX)
+      profile: classification
+      formats: fmt/541 fi-dpres/dpx-2-1.0
+    - tag: fi.csc.dpres:DV_1
+      name: Digital Video (DV)
+      profile: classification
+      formats: x-fmt/152
+    - tag: fi.csc.dpres:FFV1
+      name: FF Video Codec 1 (FFV1)
+      profile: classification
+      formats: fi-dpres/ffv1-1-3
+    - tag: fi.csc.dpres:HEVC
+      name: High Efficiency Video Coding (HEVC)
+      profile: classification
+      formats: fi-dpres/hevc-1-unap
+    - tag: fi.csc.dpres:JPEG2000
+      name: JPEG 2000 (JPEG2000)
+      profile: classification
+      formats: x-fmt/392
+    - tag: fi.csc.dpres:MJPEG2000_1
+      name: JPEG 2000 (MJPEG2000)
+      profile: classification
+      formats: fmt/337
+    - tag: fi.csc.dpres:MPEG
+      name: Moving Pictures Expert Group (MPEG)
+      profile: classification
+      formats: fmt/649 fmt/640 fmt/199
+    - tag: fi.csc.dpres:WMV
+      name: Windows Media Video (WMV)
+      profile: classification
+      formats: fmt/133
+    - tag: fi.csc.dpres:PRORES
+      name: Apple ProRes (PRORES)
+      profile: classification
+      formats: fi-dpres/prores-1-unap
+- tag: fi.csc.dpres:VIDEO_CONTAINER
+  name: Video container formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:MATROSKA
+      name: Matroska Multimedia Container (MATROSKA)
+      profile: classification
+      formats: fmt/569
+    - tag: fi.csc.dpres:MPEG_2_TS
+      name: MPEG transport stream (MPEG-2 (TS))
+      profile: classification
+      formats: fmt/585
+    - tag: fi.csc.dpres:MPEG_4_1
+      name: MPEG-4 file format version 2 (MPEG-4)
+      profile: classification
+      formats: fmt/199
+    - tag: fi.csc.dpres:MXF
+      name: Material Exchange Format (MXF)
+      profile: classification
+      formats: fi-dpres/mxf-1-unap
+    - tag: fi.csc.dpres:MJPEG2000_2
+      name: Motion JPEG 2000 (MJPEG2000)
+      profile: classification
+      formats: fmt/337
+    - tag: fi.csc.dpres:MOV
+      name: QuickTime (MOV)
+      profile: classification
+      formats: x-fmt/384
+    - tag: fi.csc.dpres:ASF
+      name: Advanced Systems Format (ASF)
+      profile: classification
+      formats: fmt/131
+    - tag: fi.csc.dpres:AVI
+      name: Audio Video Interleave (AVI)
+      profile: classification
+      formats: fmt/5
+    - tag: fi.csc.dpres:DV_2
+      name: Digital Video (DV)
+      profile: classification
+      formats: fi-dpres/dv-2-unap
+    - tag: fi.csc.dpres:MPEG_1_PS
+      name: MPEG program stream (MPEG-1 (PS))
+      profile: classification
+      formats: x-fmt/385
+    - tag: fi.csc.dpres:MPEG_2_PS
+      name: MPEG program stream (MPEG-2 (PS))
+      profile: classification
+      formats: x-fmt/386
+- tag: fi.csc.dpres:TEXT
+  name: Text formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:CSV
+      name: Comma Separated Values (CSV)
+      profile: classification
+      formats: x-fmt/18
+    - tag: fi.csc.dpres:EPUB
+      name: Electronic Publications (EPUB)
+      profile: classification
+      formats: fmt/483
+    - tag: fi.csc.dpres:HTML
+      name: Hypertext Markup Language (HTML)
+      profile: classification
+      formats: fmt/100 fmt/471 fi-dpres/html-1-5.1 fi-dpres/html-1-5.2
+    - tag: fi.csc.dpres:IFC
+      name: Industry Foundation Classes (IFC)
+      profile: classification
+      formats: fmt/700
+    - tag: fi.csc.dpres:MS_EXCEL_1
+      name: Microsoft Office Suite (MS_EXCEL)
+      profile: classification
+      formats: fmt/61 fmt/62
+    - tag: fi.csc.dpres:MS_EXCEL_2
+      name: Microsoft Office Suite (MS_EXCEL)
+      profile: classification
+      formats: fmt/214
+    - tag: fi.csc.dpres:MS_POWERPOINT_1
+      name: Microsoft Office Suite (MS_POWERPOINT)
+      profile: classification
+      formats: fmt/126
+    - tag: fi.csc.dpres:MS_POWERPOINT_2
+      name: Microsoft Office Suite (MS_POWERPOINT)
+      profile: classification
+      formats: fmt/215
+    - tag: fi.csc.dpres:MS_WORD_1
+      name: Microsoft Office Suite (MS_WORD)
+      profile: classification
+      formats: fmt/40
+    - tag: fi.csc.dpres:MS_WORD_2
+      name: Microsoft Office Suite (MS_WORD)
+      profile: classification
+      formats: fmt/412
+    - tag: fi.csc.dpres:ODF
+      name: Open Document Format (ODF)
+      profile: classification
+      formats: fi-dpres/odf-1-1.0 fi-dpres/odf-1-1.2 fi-dpres/odf-1-1.3 fi-dpres/odf-1-1.4
+    - tag: fi.csc.dpres:ODG
+      name: Open Document Format (ODG)
+      profile: classification
+      formats: fmt/139 fmt/296 fmt/297 fmt/1753 fmt/2048
+    - tag: fi.csc.dpres:ODP
+      name: Open Document Format (ODP)
+      profile: classification
+      formats: fmt/138 fmt/292 fmt/293 fmt/1754 fmt/2046
+    - tag: fi.csc.dpres:ODS
+      name: Open Document Format (ODS)
+      profile: classification
+      formats: fmt/137 fmt/294 fmt/295 fmt/1755 fmt/2045
+    - tag: fi.csc.dpres:ODT
+      name: Open Document Format (ODT)
+      profile: classification
+      formats: fmt/136 fmt/290 fmt/291 fmt/1756 fmt/2044
+    - tag: fi.csc.dpres:PDF
+      name: 'PDF for long-term preservation: PDF-Archive (PDF)'
+      profile: classification
+      formats: fmt/16 fmt/17 fmt/18 fmt/19 fmt/20 fmt/276
+    - tag: fi.csc.dpres:PDF_A
+      name: Portable Document Format (PDF/A)
+      profile: classification
+      formats: fmt/95 fmt/354 fmt/476 fmt/477 fmt/478 fmt/479 fmt/480 fmt/481
+    - tag: fi.csc.dpres:TEXT_PLAIN
+      name: Tekstitiedosto (TEXT_PLAIN)
+      profile: classification
+      formats: x-fmt/111
+    - tag: fi.csc.dpres:XHTML
+      name: Extensible Hypertext Markup Language (XHTML)
+      profile: classification
+      formats: fmt/102 fmt/103 fmt/471 fi-dpres/xhtml-1-5.1 fi-dpres/xhtml-1-5.2
+    - tag: fi.csc.dpres:XML
+      name: Extensible Markup Language (XML)
+      profile: classification
+      formats: fmt/101 fmt/1776
+    - tag: fi.csc.dpres:ATLPROJ
+      name: ATLAS.TI project bundle file (ATLPROJ)
+      profile: classification
+      formats: fi-dpres/atlproj-1-unap
+    - tag: fi.csc.dpres:JSON
+      name: JavaScript Object Notation (JSON)
+      profile: classification
+      formats: fmt/817
+- tag: fi.csc.dpres:EMAIL
+  name: Email formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:EML
+      name: Electronic Mail Format (EML)
+      profile: classification
+      formats: fmt/278
+    - tag: fi.csc.dpres:MBOX
+      name: Mbox (MBOX)
+      profile: classification
+      formats: fmt/720
+- tag: fi.csc.dpres:WEB_ARCHIVE
+  name: Web archive formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:ARC
+      name: Internet Archive  (ARC)
+      profile: classification
+      formats: x-fmt/219 fmt/410
+    - tag: fi.csc.dpres:WARC
+      name: Web ARChive Format (WARC)
+      profile: classification
+      formats: fmt/289 fmt/1355 fmt/1281
+- tag: fi.csc.dpres:DATABASE
+  name: Database formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:SIARD
+      name: Software Independent Archiving of Relational Databases (SIARD)
+      profile: classification
+      formats: fmt/995 fmt/1196 fi-dpres/siard-1-2.1.1 fmt/1777
+- tag: fi.csc.dpres:GEOSPATIAL
+  name: Geospatial data formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:GEOPACKAGE
+      name: Geopackage (GEOPACKAGE)
+      profile: classification
+      formats: fmt/1700
+    - tag: fi.csc.dpres:GEOTIFF
+      name: Geographic Tagged Image File Format (GEOTIFF)
+      profile: classification
+      formats: fmt/155
+    - tag: fi.csc.dpres:GML
+      name: Geography Markup Language (GML)
+      profile: classification
+      formats: x-fmt/227 fmt/1047
+    - tag: fi.csc.dpres:KML
+      name: Keyhole Markup Language (KML)
+      profile: classification
+      formats: fmt/244
+- tag: fi.csc.dpres:RESEARCH_DATA
+  name: Research data formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:POR
+      name: SPSS Portable (POR)
+      profile: classification
+      formats: fmt/997
+    - tag: fi.csc.dpres:SEG_Y
+      name: SEG-Y Seismic Data Exchange Format (SEG-Y)
+      profile: classification
+      formats: fi-dpres/seg-y-1-1.0 fi-dpres/seg-y-1-2.0 fi-dpres/seg-y-1-unkn
+- tag: fi.csc.dpres:SCIENTIFIC_SOFTWARE
+  name: Scientific software formats
+  profile: classification
+  children:
+    - tag: fi.csc.dpres:HDF5
+      name: Hierarchical Data Format (HDF5)
+      profile: classification
+      formats: fmt/807 fmt/286 fmt/287
+    - tag: fi.csc.dpres:MATLAB
+      name: Matlab (MATLAB)
+      profile: classification
+      formats: fmt/806 fmt/828
