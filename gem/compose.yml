@@ -34,6 +34,7 @@ services:
     volumes:
       - /etc/localtime:/etc/localtime:ro
       - /etc/timezone:/etc/timezone:ro
+      - ../seeds:/seeds
       - ./teneo-format_library-${GEM_VERSION}.gem:/app/teneo-format_library-${GEM_VERSION}.gem
     restart: no
     profiles:
