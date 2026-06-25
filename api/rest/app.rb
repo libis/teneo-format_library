@@ -7,6 +7,7 @@ require_relative 'base_app'
 require_relative 'routes/health'
 require_relative 'routes/formats'
 require_relative 'routes/tags'
+require_relative 'routes/doc'
 
 class App < BaseApp
   route do |r|
@@ -28,6 +29,10 @@ class App < BaseApp
 
             r.on 'tags' do
               r.run Routes::Tags
+            end
+
+            r.on 'doc' do
+              r.run Routes::Doc
             end
 
             r.on 'openapi' do

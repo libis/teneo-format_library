@@ -22,4 +22,22 @@ RSpec.describe 'API', type: :request do
       expect(json['timestamp']).not_to be_nil
     end
   end
+
+  describe 'GET /library/api/rest/v1/doc', type: :request do
+    it 'serves the documentation index page' do
+      get '/library/api/rest/v1/doc'
+      expect(last_response).to be_ok
+      expect(last_response.headers['Content-Type']).to include('text/html')
+      expect(last_response.body).to include('<!DOCTYPE html>')
+    end
+  end
+
+  describe 'GET /library/api/rest/v1/doc/bundle.css', type: :request do
+    it 'serves static documentation assets' do
+      get '/library/api/rest/v1/doc/bundle.css'
+      expect(last_response).to be_ok
+      expect(last_response.headers['Content-Type']).to include('text/css')
+      expect(last_response.body).not_to be_empty
+    end
+  end
 end
