@@ -2,7 +2,7 @@
 
 require_relative 'spec_helper'
 
-RSpec.describe 'API', openapi: { tags: ['API'] }, type: :request do
+RSpec.describe 'API', openapi: { tags: ['API'], example_mode: :none }, type: :request do
   describe 'GET /library/api/rest/v1', openapi: { summary: 'Get API info' } do
     it 'returns API info' do
       get '/library/api/rest/v1'

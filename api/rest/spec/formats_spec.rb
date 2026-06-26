@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 require 'securerandom'
 require 'tempfile'
 
-RSpec.describe 'Formats API', openapi: { tags: ['Formats'] }, type: :request do
+RSpec.describe 'Formats API', openapi: { tags: ['Formats'], example_mode: :none }, type: :request do
   def build_payload
     {
       uid: 'test-fmt-test',
@@ -290,7 +290,6 @@ RSpec.describe 'Formats API', openapi: { tags: ['Formats'] }, type: :request do
 
   describe 'POST /library/api/rest/v1/formats/upload', openapi: {
     summary: 'Upload formats from a file',
-    example_mode: :none,
     enum: {
       format: %w[yaml json]
     }

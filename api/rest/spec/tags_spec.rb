@@ -4,7 +4,7 @@ require_relative 'spec_helper'
 require 'securerandom'
 require 'tempfile'
 
-RSpec.describe 'Tags API', openapi: { tags: ['Tags'] }, type: :request do
+RSpec.describe 'Tags API', openapi: { tags: ['Tags'], example_mode: :none }, type: :request do
   def build_payload(flag = 'test')
     {
       tag: "test:test-tag-#{flag || 'test' }",
@@ -79,7 +79,7 @@ RSpec.describe 'Tags API', openapi: { tags: ['Tags'] }, type: :request do
     end
   end
 
-  describe 'GET /library/api/rest/v1/tags/detail', openapi: { summary: 'Get tag details', example_mode: { request: :multiple, response: :single} } do
+  describe 'GET /library/api/rest/v1/tags/detail', openapi: { summary: 'Get tag details' } do
     it 'returns tag details', with_tag: true do
       get "/library/api/rest/v1/tags/detail?tag=#{@tag.tag}"
       expect(last_response).to be_ok
@@ -277,7 +277,6 @@ RSpec.describe 'Tags API', openapi: { tags: ['Tags'] }, type: :request do
 
   describe 'POST /library/api/rest/v1/tags/upload', openapi: {
     summary: 'Upload tags from a file',
-    example_mode: :none,
     enum: {
       format: %w[yaml json]
     }

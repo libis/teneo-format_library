@@ -34,9 +34,7 @@ paths:
                 required:
                 - message
                 - version
-              example:
-                message: Teneo Format Library API
-                version: 0.2.0
+              example: {}
   "/library/api/rest/v1/formats":
     get:
       summary: Get a list of formats
@@ -149,25 +147,7 @@ paths:
                 required:
                 - items
                 - pagination
-              example:
-                items:
-                - uid: test-fmt-test
-                  name: Test Format
-                  version:
-                  source: TEST
-                  source_version:
-                  url:
-                  properties: {}
-                  mimetypes:
-                  - application/test
-                  extensions:
-                  - test
-                  created_at: '2026-06-26'
-                pagination:
-                  page: 1
-                  per_page: 2
-                  total: 1
-                  total_pages: 1
+              example: {}
     post:
       summary: Create a new format
       tags:
@@ -198,14 +178,7 @@ paths:
               - source
               - mimetypes
               - extensions
-            example:
-              uid: test-fmt-test
-              name: Test Format
-              source: TEST
-              mimetypes:
-              - application/test
-              extensions:
-              - test
+            example: {}
       responses:
         '200':
           description: creates a new format
@@ -251,18 +224,9 @@ paths:
                 - extensions
                 - created_at
               example:
-                uid: test-fmt-test
-                name: Test Format
                 version:
-                source: TEST
                 source_version:
                 url:
-                properties: {}
-                mimetypes:
-                - application/test
-                extensions:
-                - test
-                created_at: '2026-06-26'
         '400':
           description: returns 400 if format already exists
           content:
@@ -274,8 +238,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: 'Missing required fields: uid'
+              example: {}
   "/library/api/rest/v1/formats/detail":
     delete:
       summary: Delete an existing format
@@ -300,8 +263,7 @@ paths:
                     type: string
                 required:
                 - deleted
-              example:
-                deleted: test-fmt-test
+              example: {}
         '400':
           description: returns 400 without uid parameter
           content:
@@ -313,8 +275,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -326,8 +287,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
     get:
       summary: Get format details
       tags:
@@ -384,18 +344,9 @@ paths:
                 - extensions
                 - created_at
               example:
-                uid: test-fmt-test
-                name: Test Format
                 version:
-                source: TEST
                 source_version:
                 url:
-                properties: {}
-                mimetypes:
-                - application/test
-                extensions:
-                - test
-                created_at: '2026-06-26'
         '400':
           description: returns 400 without uid parameter
           content:
@@ -407,8 +358,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -420,8 +370,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
     put:
       summary: Update an existing format
       tags:
@@ -446,9 +395,7 @@ paths:
               required:
               - uid
               - name
-            example:
-              uid: test-fmt-test
-              name: Updated Name
+            example: {}
       responses:
         '200':
           description: updates an existing format
@@ -494,18 +441,9 @@ paths:
                 - extensions
                 - created_at
               example:
-                uid: test-fmt-test
-                name: Updated Name
                 version:
-                source: TEST
                 source_version:
                 url:
-                properties: {}
-                mimetypes:
-                - application/test
-                extensions:
-                - test
-                created_at: '2026-06-26'
         '400':
           description: returns 400 without uid parameter
           content:
@@ -517,8 +455,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -530,8 +467,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
   "/library/api/rest/v1/formats/related":
     get:
       summary: Get related formats
@@ -564,8 +500,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -577,8 +512,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
   "/library/api/rest/v1/formats/relations":
     get:
       summary: Get format relations
@@ -617,8 +551,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -630,8 +563,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
   "/library/api/rest/v1/formats/search":
     get:
       summary: Search formats
@@ -688,20 +620,7 @@ paths:
                       - created_at
                 required:
                 - items
-              example:
-                items:
-                - uid: test-fmt-test
-                  name: Test Format
-                  version:
-                  source: TEST
-                  source_version:
-                  url:
-                  properties: {}
-                  mimetypes:
-                  - application/test
-                  extensions:
-                  - test
-                  created_at: '2026-06-26'
+              example: {}
         '400':
           description: requires q parameter
           content:
@@ -713,8 +632,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "q" is required
+              example: {}
       parameters:
       - name: q
         in: query
@@ -754,8 +672,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "uid" is required
+              example: {}
         '404':
           description: returns 404 for unknown format
           content:
@@ -767,8 +684,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Format 'unknown/uid' not found
+              example: {}
   "/library/api/rest/v1/formats/upload":
     post:
       summary: Upload formats from a file
@@ -880,9 +796,7 @@ paths:
                 required:
                 - status
                 - timestamp
-              example:
-                status: ok
-                timestamp: '2026-06-26T17:36:44+02:00'
+              example: {}
   "/library/api/rest/v1/tags":
     get:
       summary: Get a list of tags
@@ -957,23 +871,7 @@ paths:
                 required:
                 - items
                 - pagination
-              example:
-                items:
-                - tag: test:test-tag-child
-                  name: Test Tag
-                  profile: TEST
-                  properties: {}
-                  info: {}
-                - tag: test:test-tag-parent
-                  name: Test Tag
-                  profile: TEST
-                  properties: {}
-                  info: {}
-                pagination:
-                  page: 1
-                  per_page: 2
-                  total: 3
-                  total_pages: 2
+              example: {}
     post:
       summary: Create a new tag
       tags:
@@ -1002,12 +900,7 @@ paths:
               - profile
               - properties
               - info
-            example:
-              tag: test:test-tag-test
-              name: Test Tag
-              profile: TEST
-              properties: {}
-              info: {}
+            example: {}
       responses:
         '200':
           description: creates a new tag
@@ -1034,12 +927,7 @@ paths:
                 - profile
                 - properties
                 - info
-              example:
-                tag: test:test-tag-test
-                name: Test Tag
-                profile: TEST
-                properties: {}
-                info: {}
+              example: {}
         '400':
           description: returns 400 if tag exists
           content:
@@ -1051,10 +939,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: |
-                  PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint "tags_pkey"
-                  DETAIL:  Key (tag)=(test:test-tag-test) already exists.
+              example: {}
   "/library/api/rest/v1/tags/detail":
     delete:
       summary: Delete an existing tag
@@ -1079,8 +964,7 @@ paths:
                     type: string
                 required:
                 - deleted
-              example:
-                deleted: test:test-tag-test
+              example: {}
         '400':
           description: returns 400 without tag parameter
           content:
@@ -1092,8 +976,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "tag" is required
+              example: {}
         '404':
           description: returns 404 for unknown tag
           content:
@@ -1105,8 +988,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Tag 'unknown:tag' not found
+              example: {}
     get:
       summary: Get tag details
       tags:
@@ -1227,43 +1109,7 @@ paths:
                 - profile
                 - properties
                 - info
-              example:
-                tag: test:test-tag-test
-                name: Test Tag
-                profile: TEST
-                properties: {}
-                info: {}
-                formats:
-                - uid: test-format-test
-                  name: Test Format
-                ancestors:
-                - tag: test:test-tag-test
-                  path: "{(test:test-tag-test)}"
-                  name: Test Tag
-                  profile: TEST
-                - tag: test:test-tag-parent
-                  path: "{(test:test-tag-test),(test:test-tag-parent)}"
-                  name: Test Tag
-                  profile: TEST
-                descendants:
-                - tag: test:test-tag-test
-                  namespace: test
-                  label: test-tag-test
-                  name: Test Tag
-                  profile: TEST
-                  properties: {}
-                  info: {}
-                  is_cycle: false
-                  path: "{(test:test-tag-test)}"
-                - tag: test:test-tag-child
-                  namespace: test
-                  label: test-tag-child
-                  name: Test Tag
-                  profile: TEST
-                  properties: {}
-                  info: {}
-                  is_cycle: false
-                  path: "{(test:test-tag-test),(test:test-tag-child)}"
+              example: {}
         '400':
           description: returns 400 without tag parameter
           content:
@@ -1275,8 +1121,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "tag" is required
+              example: {}
         '404':
           description: returns 404 for unknown tag
           content:
@@ -1288,8 +1133,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Tag 'unknown:tag' not found
+              example: {}
     put:
       summary: Update an existing tag
       tags:
@@ -1314,9 +1158,7 @@ paths:
               required:
               - tag
               - name
-            example:
-              tag: test:test-tag-test
-              name: Updated Name
+            example: {}
       responses:
         '200':
           description: updates an existing tag
@@ -1343,12 +1185,7 @@ paths:
                 - profile
                 - properties
                 - info
-              example:
-                tag: test:test-tag-test
-                name: Updated Name
-                profile: TEST
-                properties: {}
-                info: {}
+              example: {}
         '400':
           description: returns 400 without tag parameter
           content:
@@ -1360,8 +1197,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "tag" is required
+              example: {}
         '404':
           description: returns 404 for unknown tag
           content:
@@ -1373,8 +1209,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Tag 'unknown:tag' not found
+              example: {}
   "/library/api/rest/v1/tags/formats":
     get:
       summary: Get formats for a tag
@@ -1461,25 +1296,7 @@ paths:
                 required:
                 - items
                 - pagination
-              example:
-                items:
-                - uid: test-format-test
-                  name: Test Format
-                  version:
-                  source: TEST
-                  source_version:
-                  url:
-                  properties: {}
-                  mimetypes:
-                  - application/test
-                  extensions:
-                  - ".test"
-                  created_at: '2026-06-26'
-                pagination:
-                  page: 1
-                  per_page: 3
-                  total: 1
-                  total_pages: 1
+              example: {}
         '400':
           description: returns 400 without tag parameter
           content:
@@ -1491,8 +1308,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "tag" is required
+              example: {}
         '404':
           description: returns 404 for unknown tag
           content:
@@ -1504,8 +1320,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Tag 'unknown:tag' not found
+              example: {}
   "/library/api/rest/v1/tags/tree":
     get:
       summary: Get tag tree structure
@@ -1535,9 +1350,7 @@ paths:
                     - test:test-tag-child
                 required:
                 - test:test-tag-test
-              example:
-                test:test-tag-test:
-                  test:test-tag-child:
+              example: {}
         '400':
           description: returns 400 without tag parameter
           content:
@@ -1549,8 +1362,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Query parameter "tag" is required
+              example: {}
         '404':
           description: returns 404 for unknown tag
           content:
@@ -1562,8 +1374,7 @@ paths:
                     type: string
                 required:
                 - error
-              example:
-                error: Tag 'unknown:tag' not found
+              example: {}
   "/library/api/rest/v1/tags/upload":
     post:
       summary: Upload tags from a file

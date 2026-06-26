@@ -39,10 +39,7 @@
                     "version"
                   ]
                 },
-                "example": {
-                  "message": "Teneo Format Library API",
-                  "version": "0.2.0"
-                }
+                "example": {}
               }
             }
           }
@@ -207,32 +204,7 @@
                     "pagination"
                   ]
                 },
-                "example": {
-                  "items": [
-                    {
-                      "uid": "test-fmt-test",
-                      "name": "Test Format",
-                      "version": null,
-                      "source": "TEST",
-                      "source_version": null,
-                      "url": null,
-                      "properties": {},
-                      "mimetypes": [
-                        "application/test"
-                      ],
-                      "extensions": [
-                        "test"
-                      ],
-                      "created_at": "2026-06-26"
-                    }
-                  ],
-                  "pagination": {
-                    "page": 1,
-                    "per_page": 2,
-                    "total": 1,
-                    "total_pages": 1
-                  }
-                }
+                "example": {}
               }
             }
           }
@@ -279,17 +251,7 @@
                   "extensions"
                 ]
               },
-              "example": {
-                "uid": "test-fmt-test",
-                "name": "Test Format",
-                "source": "TEST",
-                "mimetypes": [
-                  "application/test"
-                ],
-                "extensions": [
-                  "test"
-                ]
-              }
+              "example": {}
             }
           }
         },
@@ -353,20 +315,9 @@
                   ]
                 },
                 "example": {
-                  "uid": "test-fmt-test",
-                  "name": "Test Format",
                   "version": null,
-                  "source": "TEST",
                   "source_version": null,
-                  "url": null,
-                  "properties": {},
-                  "mimetypes": [
-                    "application/test"
-                  ],
-                  "extensions": [
-                    "test"
-                  ],
-                  "created_at": "2026-06-26"
+                  "url": null
                 }
               }
             }
@@ -386,9 +337,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Missing required fields: uid"
-                }
+                "example": {}
               }
             }
           }
@@ -428,9 +377,7 @@
                     "deleted"
                   ]
                 },
-                "example": {
-                  "deleted": "test-fmt-test"
-                }
+                "example": {}
               }
             }
           },
@@ -449,9 +396,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -470,9 +415,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -554,20 +497,9 @@
                   ]
                 },
                 "example": {
-                  "uid": "test-fmt-test",
-                  "name": "Test Format",
                   "version": null,
-                  "source": "TEST",
                   "source_version": null,
-                  "url": null,
-                  "properties": {},
-                  "mimetypes": [
-                    "application/test"
-                  ],
-                  "extensions": [
-                    "test"
-                  ],
-                  "created_at": "2026-06-26"
+                  "url": null
                 }
               }
             }
@@ -587,9 +519,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -608,9 +538,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -650,10 +578,7 @@
                   "name"
                 ]
               },
-              "example": {
-                "uid": "test-fmt-test",
-                "name": "Updated Name"
-              }
+              "example": {}
             }
           }
         },
@@ -717,20 +642,9 @@
                   ]
                 },
                 "example": {
-                  "uid": "test-fmt-test",
-                  "name": "Updated Name",
                   "version": null,
-                  "source": "TEST",
                   "source_version": null,
-                  "url": null,
-                  "properties": {},
-                  "mimetypes": [
-                    "application/test"
-                  ],
-                  "extensions": [
-                    "test"
-                  ],
-                  "created_at": "2026-06-26"
+                  "url": null
                 }
               }
             }
@@ -750,9 +664,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -771,9 +683,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -825,9 +735,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -846,9 +754,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -909,9 +815,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -930,9 +834,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -1015,26 +917,7 @@
                     "items"
                   ]
                 },
-                "example": {
-                  "items": [
-                    {
-                      "uid": "test-fmt-test",
-                      "name": "Test Format",
-                      "version": null,
-                      "source": "TEST",
-                      "source_version": null,
-                      "url": null,
-                      "properties": {},
-                      "mimetypes": [
-                        "application/test"
-                      ],
-                      "extensions": [
-                        "test"
-                      ],
-                      "created_at": "2026-06-26"
-                    }
-                  ]
-                }
+                "example": {}
               }
             }
           },
@@ -1053,9 +936,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"q\" is required"
-                }
+                "example": {}
               }
             }
           }
@@ -1118,9 +999,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"uid\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -1139,9 +1018,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Format 'unknown/uid' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -1311,10 +1188,7 @@
                     "timestamp"
                   ]
                 },
-                "example": {
-                  "status": "ok",
-                  "timestamp": "2026-06-26T17:36:44+02:00"
-                }
+                "example": {}
               }
             }
           }
@@ -1425,30 +1299,7 @@
                     "pagination"
                   ]
                 },
-                "example": {
-                  "items": [
-                    {
-                      "tag": "test:test-tag-child",
-                      "name": "Test Tag",
-                      "profile": "TEST",
-                      "properties": {},
-                      "info": {}
-                    },
-                    {
-                      "tag": "test:test-tag-parent",
-                      "name": "Test Tag",
-                      "profile": "TEST",
-                      "properties": {},
-                      "info": {}
-                    }
-                  ],
-                  "pagination": {
-                    "page": 1,
-                    "per_page": 2,
-                    "total": 3,
-                    "total_pages": 2
-                  }
-                }
+                "example": {}
               }
             }
           }
@@ -1491,13 +1342,7 @@
                   "info"
                 ]
               },
-              "example": {
-                "tag": "test:test-tag-test",
-                "name": "Test Tag",
-                "profile": "TEST",
-                "properties": {},
-                "info": {}
-              }
+              "example": {}
             }
           }
         },
@@ -1535,13 +1380,7 @@
                     "info"
                   ]
                 },
-                "example": {
-                  "tag": "test:test-tag-test",
-                  "name": "Test Tag",
-                  "profile": "TEST",
-                  "properties": {},
-                  "info": {}
-                }
+                "example": {}
               }
             }
           },
@@ -1560,9 +1399,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "PG::UniqueViolation: ERROR:  duplicate key value violates unique constraint \"tags_pkey\"\nDETAIL:  Key (tag)=(test:test-tag-test) already exists.\n"
-                }
+                "example": {}
               }
             }
           }
@@ -1602,9 +1439,7 @@
                     "deleted"
                   ]
                 },
-                "example": {
-                  "deleted": "test:test-tag-test"
-                }
+                "example": {}
               }
             }
           },
@@ -1623,9 +1458,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"tag\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -1644,9 +1477,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Tag 'unknown:tag' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -1821,57 +1652,7 @@
                     "info"
                   ]
                 },
-                "example": {
-                  "tag": "test:test-tag-test",
-                  "name": "Test Tag",
-                  "profile": "TEST",
-                  "properties": {},
-                  "info": {},
-                  "formats": [
-                    {
-                      "uid": "test-format-test",
-                      "name": "Test Format"
-                    }
-                  ],
-                  "ancestors": [
-                    {
-                      "tag": "test:test-tag-test",
-                      "path": "{(test:test-tag-test)}",
-                      "name": "Test Tag",
-                      "profile": "TEST"
-                    },
-                    {
-                      "tag": "test:test-tag-parent",
-                      "path": "{(test:test-tag-test),(test:test-tag-parent)}",
-                      "name": "Test Tag",
-                      "profile": "TEST"
-                    }
-                  ],
-                  "descendants": [
-                    {
-                      "tag": "test:test-tag-test",
-                      "namespace": "test",
-                      "label": "test-tag-test",
-                      "name": "Test Tag",
-                      "profile": "TEST",
-                      "properties": {},
-                      "info": {},
-                      "is_cycle": false,
-                      "path": "{(test:test-tag-test)}"
-                    },
-                    {
-                      "tag": "test:test-tag-child",
-                      "namespace": "test",
-                      "label": "test-tag-child",
-                      "name": "Test Tag",
-                      "profile": "TEST",
-                      "properties": {},
-                      "info": {},
-                      "is_cycle": false,
-                      "path": "{(test:test-tag-test),(test:test-tag-child)}"
-                    }
-                  ]
-                }
+                "example": {}
               }
             }
           },
@@ -1890,9 +1671,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"tag\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -1911,9 +1690,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Tag 'unknown:tag' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -1953,10 +1730,7 @@
                   "name"
                 ]
               },
-              "example": {
-                "tag": "test:test-tag-test",
-                "name": "Updated Name"
-              }
+              "example": {}
             }
           }
         },
@@ -1994,13 +1768,7 @@
                     "info"
                   ]
                 },
-                "example": {
-                  "tag": "test:test-tag-test",
-                  "name": "Updated Name",
-                  "profile": "TEST",
-                  "properties": {},
-                  "info": {}
-                }
+                "example": {}
               }
             }
           },
@@ -2019,9 +1787,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"tag\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -2040,9 +1806,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Tag 'unknown:tag' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -2169,32 +1933,7 @@
                     "pagination"
                   ]
                 },
-                "example": {
-                  "items": [
-                    {
-                      "uid": "test-format-test",
-                      "name": "Test Format",
-                      "version": null,
-                      "source": "TEST",
-                      "source_version": null,
-                      "url": null,
-                      "properties": {},
-                      "mimetypes": [
-                        "application/test"
-                      ],
-                      "extensions": [
-                        ".test"
-                      ],
-                      "created_at": "2026-06-26"
-                    }
-                  ],
-                  "pagination": {
-                    "page": 1,
-                    "per_page": 3,
-                    "total": 1,
-                    "total_pages": 1
-                  }
-                }
+                "example": {}
               }
             }
           },
@@ -2213,9 +1952,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"tag\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -2234,9 +1971,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Tag 'unknown:tag' not found"
-                }
+                "example": {}
               }
             }
           }
@@ -2284,11 +2019,7 @@
                     "test:test-tag-test"
                   ]
                 },
-                "example": {
-                  "test:test-tag-test": {
-                    "test:test-tag-child": null
-                  }
-                }
+                "example": {}
               }
             }
           },
@@ -2307,9 +2038,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Query parameter \"tag\" is required"
-                }
+                "example": {}
               }
             }
           },
@@ -2328,9 +2057,7 @@
                     "error"
                   ]
                 },
-                "example": {
-                  "error": "Tag 'unknown:tag' not found"
-                }
+                "example": {}
               }
             }
           }
