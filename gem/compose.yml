@@ -7,6 +7,12 @@ services:
     user: "${USER_ID:-1000}:${GROUP_ID:-1000}"
     environment:
       CHANGELOG_GITHUB_TOKEN: ${CHANGELOG_GITHUB_TOKEN}
+      DB_ADAPTER: postgresql
+      DB_HOST: fl_db
+      DB_PORT: 5432
+      DB_NAME: "${DB_NAME:-teneo}"
+      DB_USER: "${DB_USER:-teneo}"
+      DB_PASSWORD: "${DB_PASSWORD:-teneo}"
     networks:
       - db_net
     volumes:
