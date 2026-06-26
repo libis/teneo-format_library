@@ -150,9 +150,7 @@ module Teneo
         tree_structure.transform do |tag, children|
           r = DeepHash.new
           r[:tags] = children if children.present?
-          r[:formats] = Tag.find(tag: tag)&.formats&.each_with_object(DeepHash.new) do |format, h|
-            h[format.uid] = format
-          end
+          r[:formats] = Tag.find(tag: tag)&.formats&.map(&:uid)
           r.clear_empty.compact
         end
       end
