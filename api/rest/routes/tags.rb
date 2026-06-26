@@ -101,6 +101,20 @@ module Routes
         end
       end
 
+      r.on 'tree' do
+        r.get do
+          tag_id = r.params['tag']
+          r.halt(400, { error: 'Query parameter "tag" is required' }) unless tag_id
+
+          tag = Teneo::FormatLibrary::Tag[tag_id]
+          r.halt(404, { error: "Tag '#{tag_id}' not found" }) unless tag
+
+          include_formats = r.params['include_formats'] == 'true'
+
+          Serializers::TagSerializer.tree_structure(tag, include_formats:)
+        end
+      end
+
       r.on 'formats' do
         r.get do
           tag_id = r.params['tag']
