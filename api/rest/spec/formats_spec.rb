@@ -4,110 +4,86 @@ require_relative 'spec_helper'
 require 'securerandom'
 require 'tempfile'
 
-RSpec.describe 'Formats API', type: :request do
-  describe 'GET /library/api/rest/v1/formats' do
+RSpec.describe 'Formats API', openapi: { tags: ['Formats'] }, type: :request do
+  def build_payload
+    {
+      uid: 'test-fmt-test',
+      name: 'Test Format',
+      source: 'TEST',
+      mimetypes: ['application/test'],
+      extensions: ['test']
+    }
+  end
+
+  before(:example, with_payload: true) do
+    @payload = build_payload
+  end
+
+  before(:example, with_format: true) do
+    @payload = build_payload
+    @format = Teneo::FormatLibrary::Format.from_hash_(data: @payload.transform_keys(&:to_s))
+  end
+
+  after(:example) do
+    Teneo::FormatLibrary::Format[@payload&.fetch(:uid)]&.destroy
+  end
+
+  describe 'GET /library/api/rest/v1/formats', openapi: { summary: 'Get a list of formats' } do
     it 'returns paginated list of formats' do
-      get '/library/api/rest/v1/formats?per_page=5'
+      get '/library/api/rest/v1/formats?page=1&per_page=2'
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['items']).to be_an(Array)
-      expect(json['items'].size).to eq(5)
+      expect(json['items'].size).to eq(2)
       expect(json['pagination']).to include('page', 'per_page', 'total', 'total_pages')
     end
 
-    it 'filters by source' do
-      get '/library/api/rest/v1/formats?source=PRONOM&per_page=10'
+    it 'filters by source', with_format: true do
+      get "/library/api/rest/v1/formats?source=#{@format.source}&per_page=2"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
-        expect(item['source']).to eq('PRONOM')
+        expect(item['source']).to eq(@format.source)
       end
     end
 
-    it 'filters by mimetype' do
-      get '/library/api/rest/v1/formats?mimetype=image/jpeg&per_page=10'
+    it 'filters by mimetype', with_format: true do
+      get "/library/api/rest/v1/formats?mimetype=#{@format.mimetypes.first}&per_page=2"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
-        expect(item['mimetypes']).to include('image/jpeg')
+        expect(item['mimetypes']).to include(@format.mimetypes.first)
       end
     end
 
-    it 'filters by extension' do
-      get '/library/api/rest/v1/formats?extension=pdf&per_page=10'
+    it 'filters by extension', with_format: true do
+      get "/library/api/rest/v1/formats?extension=#{@format.extensions.first}&per_page=2"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
-        expect(item['extensions']).to include('pdf')
+        expect(item['extensions']).to include(@format.extensions.first)
       end
     end
 
-    it 'searches by query' do
-      get '/library/api/rest/v1/formats?q=WAVE&per_page=10'
+    it 'searches by query', with_format: true do
+      get "/library/api/rest/v1/formats?q=#{@format.name}&per_page=2"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       json['items'].each do |item|
-        expect(item['name'].downcase).to include('wave')
+        expect(item['name']).to include(@format.name)
       end
     end
   end
 
-  it 'creates a new format' do
-    uid = "test-fmt-#{SecureRandom.hex(6)}"
-    payload = { uid:, name: 'Test Format', source: 'TEST' }
-    post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
-    expect(last_response).to be_ok
-    json = JSON.parse(last_response.body)
-    expect(json['uid']).to eq(uid)
-    expect(json['name']).to eq('Test Format')
-    expect(json['source']).to eq('TEST')
-  end
-
-  it 'returns 400 if payload is invalid' do
-    payload = { name: 'Test Format', source: 'TEST' }
-    post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
-    expect(last_response.status).to eq(400)
-    json = JSON.parse(last_response.body)
-    expect(json['error']).to include('required')
-  end
-
-  describe 'GET /library/api/rest/v1/formats/search' do
-    it 'requires q parameter' do
-      get '/library/api/rest/v1/formats/search'
-      expect(last_response.status).to eq(400)
-      json = JSON.parse(last_response.body)
-      expect(json['error']).to include('required')
-    end
-
-    it 'returns search results' do
-      get '/library/api/rest/v1/formats/search?q=Broadcast'
+  describe 'GET /library/api/rest/v1/formats/detail', openapi: { summary: 'Get format details' } do
+    it 'returns format details', with_format: true do
+      get "/library/api/rest/v1/formats/detail?uid=#{@format.uid}"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
-      expect(json['items']).to be_an(Array)
-      expect(json['items'].size).to be > 0
-    end
-  end
-
-  describe 'GET /library/api/rest/v1/formats/detail' do
-    it 'returns format details' do
-      uid = "test-fmt-detail-#{SecureRandom.hex(6)}"
-      payload = {
-        uid:,
-        name: 'Detail Format',
-        source: 'TEST',
-        mimetypes: ['application/x-detail'],
-        extensions: ['detail']
-      }
-      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
-      expect(last_response).to be_ok
-
-      get "/library/api/rest/v1/formats/detail?uid=#{uid}"
-      expect(last_response).to be_ok
-      json = JSON.parse(last_response.body)
-      expect(json['uid']).to eq(uid)
-      expect(json['name']).to eq('Detail Format')
-      expect(json['mimetypes']).to be_an(Array)
-      expect(json['extensions']).to be_an(Array)
+      expect(json['uid']).to eq(@format.uid)
+      expect(json['name']).to eq(@format.name)
+      expect(json['mimetypes']).to eq(@format.mimetypes)
+      expect(json['extensions']).to eq(@format.extensions)
     end
 
     it 'returns 400 without uid parameter' do
@@ -125,82 +101,209 @@ RSpec.describe 'Formats API', type: :request do
     end
   end
 
-  describe 'GET /library/api/rest/v1/formats/relations' do
-    it 'returns format relations' do
-      get '/library/api/rest/v1/formats/relations?uid=x-fmt/1'
+  describe 'POST /library/api/rest/v1/formats', openapi: { summary: 'Create a new format' } do
+    it 'creates a new format', with_payload: true do
+      post '/library/api/rest/v1/formats', @payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
-      expect(json).to be_a(Hash)
+      expect(json['uid']).to eq(@payload[:uid])
+      expect(json['name']).to eq(@payload[:name])
+      expect(json['source']).to eq(@payload[:source])
+      expect(json['mimetypes']).to eq(@payload[:mimetypes])
+      expect(json['extensions']).to eq(@payload[:extensions])
+
+      format = Teneo::FormatLibrary::Format[@payload[:uid]]
+      expect(format).not_to be_nil
+      expect(format.name).to eq(@payload[:name])
+      expect(format.source).to eq(@payload[:source])
+      expect(format.mimetypes).to eq(@payload[:mimetypes])
+      expect(format.extensions).to eq(@payload[:extensions])
+      format.destroy
     end
 
-    it 'filters relations by type' do
-      get '/library/api/rest/v1/formats/relations?uid=x-fmt/1&relation_types=has_format'
-      expect(last_response).to be_ok
-      json = JSON.parse(last_response.body)
-      expect(json).to be_a(Hash)
-    end
-  end
-
-  describe 'GET /library/api/rest/v1/formats/related' do
-    it 'returns related formats' do
-      get '/library/api/rest/v1/formats/related?uid=x-fmt/1'
-      expect(last_response).to be_ok
-      json = JSON.parse(last_response.body)
-      expect(json).to be_a(Hash)
-    end
-  end
-
-  describe 'GET /library/api/rest/v1/formats/tags' do
-    it 'returns format tags' do
-      get '/library/api/rest/v1/formats/tags?uid=x-fmt/1'
-      expect(last_response).to be_ok
-      json = JSON.parse(last_response.body)
-      expect(json).to be_an(Array)
-    end
-  end
-
-  describe 'PUT /library/api/rest/v1/formats/detail' do
-    it 'updates an existing format' do
-      uid = "test-fmt-#{SecureRandom.hex(6)}"
-      payload = { uid:, name: 'Old Name', source: 'TEST' }
+    it 'returns 400 if payload is invalid', with_payload: true do
+      payload = @payload.dup
+      payload.delete(:uid)
       post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
-      expect(last_response).to be_ok
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
 
+    it 'returns 400 if format already exists', with_format: true do
+      payload = @payload.dup
+      payload.delete(:uid)
+      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+  end
+
+  describe 'PUT /library/api/rest/v1/formats/detail', openapi: { summary: 'Update an existing format' } do
+    it 'updates an existing format', with_format: true do
+      uid = @format.uid
       update_payload = { uid:, name: 'Updated Name' }
       put "/library/api/rest/v1/formats/detail?uid=#{uid}", update_payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['uid']).to eq(uid)
       expect(json['name']).to eq('Updated Name')
+
+      format = Teneo::FormatLibrary::Format[uid]
+      expect(format.name).to eq('Updated Name')
+    end
+
+    it 'returns 400 without uid parameter' do
+      put '/library/api/rest/v1/formats/detail', { name: 'Updated Name' }.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 404 for unknown format' do
+      put '/library/api/rest/v1/formats/detail?uid=unknown/uid', { name: 'Updated Name' }.to_json, { 'CONTENT_TYPE' => 'application/json' }
+      expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('not found')
     end
   end
 
-  describe 'DELETE /library/api/rest/v1/formats/detail' do
-    it 'deletes an existing format' do
-      uid = "test-fmt-#{SecureRandom.hex(6)}"
-      payload = { uid:, name: 'ToDelete', source: 'TEST' }
-      post '/library/api/rest/v1/formats', payload.to_json, { 'CONTENT_TYPE' => 'application/json' }
-      expect(last_response).to be_ok
-
-      delete "/library/api/rest/v1/formats/detail?uid=#{uid}"
+  describe 'DELETE /library/api/rest/v1/formats/detail', openapi: { summary: 'Delete an existing format' } do
+    it 'deletes an existing format', with_format: true do
+      delete "/library/api/rest/v1/formats/detail?uid=#{@format.uid}"
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
-      expect(json['deleted']).to eq(uid)
+      expect(json['deleted']).to eq(@format.uid)
 
-      get "/library/api/rest/v1/formats/detail?uid=#{uid}"
+      format = Teneo::FormatLibrary::Format[@format.uid]
+      expect(format).to be_nil
+    end
+
+    it 'returns 400 without uid parameter' do
+      delete '/library/api/rest/v1/formats/detail'
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 404 for unknown format' do
+      delete '/library/api/rest/v1/formats/detail?uid=unknown/uid'
       expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('not found')
     end
   end
 
-  describe 'POST /library/api/rest/v1/formats/upload' do
-    it 'uploads formats from YAML file' do
-      uid = "test-fmt-upload-yaml-#{SecureRandom.hex(6)}"
+  describe 'GET /library/api/rest/v1/formats/search', openapi: { summary: 'Search formats' } do
+    it 'requires q parameter' do
+      get '/library/api/rest/v1/formats/search'
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns search results', with_format: true do
+      get "/library/api/rest/v1/formats/search?q=#{@format.name}"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json['items']).to be_an(Array)
+      expect(json['items'].size).to be > 0
+    end
+  end
+
+  describe 'GET /library/api/rest/v1/formats/relations', openapi: { summary: 'Get format relations' } do
+    it 'returns format relations', with_format: true do
+      get "/library/api/rest/v1/formats/relations?uid=#{@format.uid}"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json).to be_a(Hash)
+    end
+
+    it 'filters relations by type', with_format: true do
+      get "/library/api/rest/v1/formats/relations?uid=#{@format.uid}&relation_types=has_format"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json).to be_a(Hash)
+    end
+
+    it 'returns 400 without uid parameter' do
+      get '/library/api/rest/v1/formats/relations'
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 404 for unknown format' do
+      get '/library/api/rest/v1/formats/relations?uid=unknown/uid'
+      expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('not found')
+    end
+  end
+
+  describe 'GET /library/api/rest/v1/formats/related', openapi: { summary: 'Get related formats' } do
+    it 'returns related formats', with_format: true do
+      get "/library/api/rest/v1/formats/related?uid=#{@format.uid}"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json).to be_a(Hash)
+    end
+
+    it 'returns 400 without uid parameter' do
+      get '/library/api/rest/v1/formats/related'
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 404 for unknown format' do
+      get '/library/api/rest/v1/formats/related?uid=unknown/uid'
+      expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('not found')
+    end
+  end
+
+  describe 'GET /library/api/rest/v1/formats/tags', openapi: { summary: 'Get format tags' } do
+    it 'returns format tags', with_format: true do
+      get "/library/api/rest/v1/formats/tags?uid=#{@format.uid}"
+      expect(last_response).to be_ok
+      json = JSON.parse(last_response.body)
+      expect(json).to be_an(Array)
+    end
+
+    it 'returns 400 without uid parameter' do
+      get '/library/api/rest/v1/formats/tags'
+      expect(last_response.status).to eq(400)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('required')
+    end
+
+    it 'returns 404 for unknown format' do
+      get '/library/api/rest/v1/formats/tags?uid=unknown/uid'
+      expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to include('not found')
+    end
+  end
+
+  describe 'POST /library/api/rest/v1/formats/upload', openapi: {
+    summary: 'Upload formats from a file',
+    example_mode: :none,
+    enum: {
+      format: %w[yaml json]
+    }
+  } do
+    it 'uploads formats from YAML file', with_payload: true do
       yaml = <<~YAML
-        - uid: #{uid}
-          name: Uploaded YAML Format
-          source: TEST
+        - uid: #{@payload[:uid]}
+          name: #{@payload[:name]}
+          source: #{@payload[:source]}
           mimetypes:
-            - application/x-upload-yaml
+            - #{@payload[:mimetypes].first}
+          extensions:
+            - #{@payload[:extensions].first}
       YAML
 
       Tempfile.create(['formats', '.yml']) do |file|
@@ -214,14 +317,24 @@ RSpec.describe 'Formats API', type: :request do
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['count']).to eq(1)
-      expect(json['items'].first['uid']).to eq(uid)
-      expect(json['items'].first['name']).to eq('Uploaded YAML Format')
+      expect(json['items'].first['uid']).to eq(@payload[:uid])
+      expect(json['items'].first['name']).to eq(@payload[:name])
+      expect(json['items'].first['source']).to eq(@payload[:source])
+      expect(json['items'].first['mimetypes']).to eq(@payload[:mimetypes])
+      expect(json['items'].first['extensions']).to eq(@payload[:extensions])
+
+      format = Teneo::FormatLibrary::Format[@payload[:uid]]
+      expect(format).not_to be_nil
+      expect(format.name).to eq(@payload[:name])
+      expect(format.source).to eq(@payload[:source])
+      expect(format.mimetypes).to eq(@payload[:mimetypes])
+      expect(format.extensions).to eq(@payload[:extensions])
+
+      format.destroy
     end
 
-    it 'uploads formats from JSON file' do
-      uid = "test-fmt-upload-json-#{SecureRandom.hex(6)}"
-      payload = [{ uid:, name: 'Uploaded JSON Format', source: 'TEST', extensions: ['upjson'] }]
-
+    it 'uploads formats from JSON file', with_payload: true do
+      payload = [@payload]
       Tempfile.create(['formats', '.json']) do |file|
         file.write(payload.to_json)
         file.rewind
@@ -233,8 +346,20 @@ RSpec.describe 'Formats API', type: :request do
       expect(last_response).to be_ok
       json = JSON.parse(last_response.body)
       expect(json['count']).to eq(1)
-      expect(json['items'].first['uid']).to eq(uid)
-      expect(json['items'].first['name']).to eq('Uploaded JSON Format')
+      expect(json['items'].first['uid']).to eq(@payload[:uid])
+      expect(json['items'].first['name']).to eq(@payload[:name])
+      expect(json['items'].first['source']).to eq(@payload[:source])
+      expect(json['items'].first['mimetypes']).to eq(@payload[:mimetypes])
+      expect(json['items'].first['extensions']).to eq(@payload[:extensions])
+
+      format = Teneo::FormatLibrary::Format[@payload[:uid]]
+      expect(format).not_to be_nil
+      expect(format.name).to eq(@payload[:name])
+      expect(format.source).to eq(@payload[:source])
+      expect(format.mimetypes).to eq(@payload[:mimetypes])
+      expect(format.extensions).to eq(@payload[:extensions])
+
+      format.destroy
     end
 
     it 'returns 400 for invalid YAML payload' do
