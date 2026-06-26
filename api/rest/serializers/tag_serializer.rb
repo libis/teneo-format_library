@@ -7,14 +7,22 @@ module Serializers
         tag: tag.tag,
         name: tag.name,
         profile: tag.profile,
-        namespace: tag.namespace
+        properties: tag.properties || {},
+        info: tag.info || {}
       }
 
-      result[:formats] = tag.formats.map { |f| { uid: f.uid, name: f.name, version: f.version }.compact } if include_formats
+      if include_formats
+        formats = tag.all_formats_hash
+        formats = formats.values if formats.respond_to?(:values)
+        result[:formats] = formats.map do |format|
+          format = format.last if format.is_a?(Array)
+          { uid: format.uid, name: format.name, version: format.version }.compact
+        end
+      end
 
-      result[:ancestors] = tag.ancestors_hash.map { |_, t| { tag: t.tag, name: t.name, profile: t.profile } } if include_ancestors
+      result[:ancestors] = tag.ancestors_ds.all.map { |t| t.slice(:tag, :path, :name, :profile) } if include_ancestors
 
-      result[:descendants] = tag.descendants_hash.map { |_, t| { tag: t.tag, name: t.name, profile: t.profile } } if include_descendants
+      result[:descendants] = tag.descendants_ds.all if include_descendants
 
       result
     end
@@ -23,7 +31,9 @@ module Serializers
       tags.map { |t| call(t) }
     end
 
-    def self.tree_structure(tag)
+    def self.tree_structure(tag, include_formats: false)
+      return tree_formats(tag) if include_formats
+
       tag.tree_structure
     end
 
