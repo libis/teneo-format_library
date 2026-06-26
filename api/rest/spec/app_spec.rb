@@ -40,4 +40,13 @@ RSpec.describe 'API', type: :request do
       expect(last_response.body).not_to be_empty
     end
   end
+
+  describe 'GET /library/api/rest/v1/doc/:file', openapi: false, type: :request do
+    it 'returns 404 when doc file does not exist' do
+      get '/library/api/rest/v1/doc/does-not-exist.js'
+      expect(last_response.status).to eq(404)
+      json = JSON.parse(last_response.body)
+      expect(json['error']).to eq('Document not found')
+    end
+  end
 end

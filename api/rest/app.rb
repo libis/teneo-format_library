@@ -34,20 +34,6 @@ class App < BaseApp
             r.on 'doc' do
               r.run Routes::Doc
             end
-
-            r.on 'openapi' do
-              r.get 'json' do
-                response['Content-Type'] = 'application/json'
-                response['Content-Disposition'] = 'attachment; filename="openapi.json"'
-                File.read(File.join(__dir__, 'doc', 'openapi.json'))
-              end
-
-              r.get 'yaml' do
-                response['Content-Type'] = 'application/yaml'
-                response['Content-Disposition'] = 'attachment; filename="openapi.yaml"'
-                File.read(File.join(__dir__, 'doc', 'openapi.yaml'))
-              end
-            end
           end
         end
       end
