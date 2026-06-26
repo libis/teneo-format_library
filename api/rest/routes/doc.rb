@@ -17,6 +17,10 @@ module Routes
 
     route do |r|
       r.is do
+        r.redirect 'doc/index.html'
+      end
+
+      r.is 'index.html' do
         r.get do
           serve_doc_file('index.html')
         end

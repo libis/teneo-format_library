@@ -2,8 +2,8 @@
 
 require_relative 'spec_helper'
 
-RSpec.describe 'API', type: :request do
-  describe 'GET /library/api/rest/v1' do
+RSpec.describe 'API', openapi: { tags: ['API'] }, type: :request do
+  describe 'GET /library/api/rest/v1', openapi: { summary: 'Get API info' } do
     it 'returns API info' do
       get '/library/api/rest/v1'
       expect(last_response).to be_ok
@@ -13,7 +13,7 @@ RSpec.describe 'API', type: :request do
     end
   end
 
-  describe 'GET /library/api/rest/v1/health', type: :request do
+  describe 'GET /library/api/rest/v1/health', openapi: { summary: 'Get API health status' }, type: :request do
     it 'returns health status' do
       get '/library/api/rest/v1/health'
       expect(last_response).to be_ok
@@ -23,16 +23,28 @@ RSpec.describe 'API', type: :request do
     end
   end
 
-  describe 'GET /library/api/rest/v1/doc', type: :request do
+  describe 'GET /library/api/rest/v1/doc/index.html', openapi: false, type: :request do
     it 'serves the documentation index page' do
-      get '/library/api/rest/v1/doc'
+      get '/library/api/rest/v1/doc/index.html'
       expect(last_response).to be_ok
       expect(last_response.headers['Content-Type']).to include('text/html')
       expect(last_response.body).to include('<!DOCTYPE html>')
     end
   end
 
-  describe 'GET /library/api/rest/v1/doc/bundle.css', type: :request do
+  describe 'GET /library/api/rest/v1/doc', openapi: false, type: :request do
+    it 'serves the documentation index page' do
+      get '/library/api/rest/v1/doc'
+      expect(last_response).to be_redirect
+      follow_redirect!
+      expect(last_request.path).to eq('/library/api/rest/v1/doc/index.html')
+      expect(last_response).to be_ok
+      expect(last_response.headers['Content-Type']).to include('text/html')
+      expect(last_response.body).to include('<!DOCTYPE html>')
+    end
+  end
+
+  describe 'GET /library/api/rest/v1/doc/bundle.css', openapi: false, type: :request do
     it 'serves static documentation assets' do
       get '/library/api/rest/v1/doc/bundle.css'
       expect(last_response).to be_ok
