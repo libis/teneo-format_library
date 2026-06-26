@@ -6,22 +6,22 @@ export
 .DEFAULT_GOAL := helpstack
 STACK := rest
 
-RUN_DEV := docker compose run --rm dev
+RUN_DEV := docker compose exec dev
 
-install: .make/.install ## install the dependencies
+install: up .make/.install ## install the dependencies
 
 .make/.install: image-dev Gemfile
 	$(RUN_DEV) bundle install
 	mkdir -p .make
 	touch .make/.install
 
-update: ### update the dependencies
+update: up ### update the dependencies
 	$(RUN_DEV) bundle update --all
 
-console: install ## start an interactive console
-	$(RUN_DEV) irb
+console: up install ## start an interactive console
+	$(RUN_DEV) irb -I . -r teneo/format_library
 
-up: image-dev install ## start the REST API server
+up: image-dev ## start the REST API server
 	docker compose up -d dev
 
 status: ## check status of REST API server
@@ -35,11 +35,8 @@ logs: ## show logs of REST API server
 
 restart: down up ## restart the REST API server
 
-test: image-dev ## run the REST API tests
-	docker compose exec dev bundle exec rspec
-
-openapi: image-dev ## generate OpenAPI spec by running the the REST API tests
-	docker compose exec -e OPENAPI_FORMAT=both dev bundle exec rspec
+test: up install ## run the REST API tests
+	$(RUN_DEV) bundle exec rspec
 
 image-dev: .make/.image-dev ### Build docker image for development
 
@@ -63,7 +60,7 @@ SRC_FILES := Gemfile Gemfile.lock app.rb config.ru $(wildcard config/*.rb) $(wil
 	mkdir -p .make
 	touch .make/.image-prod
 
-shell: image-dev ### Start shell in development container
+shell: up ### Start shell in development container
 	$(RUN_DEV) bash
 
-.PHONY: up test image-dev
+.PHONY: update console up status down logs restart test shell

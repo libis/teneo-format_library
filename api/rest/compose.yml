@@ -13,6 +13,7 @@ services:
       DB_USER: "${DB_USER:-teneo}"
       DB_PASSWORD: "${DB_PASSWORD:-teneo}"
       OPENAPI: 1
+      OPENAPI_FORMAT: "both"
     ports:
       - "${API_REST_PORT}:3000"
       - "${API_REST_CTRL_PORT}:9292"
